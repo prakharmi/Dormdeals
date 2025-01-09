@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dorm Deals</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Link to the external CSS file -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body>
+    <header>
+        <img src="dormdealslogo.webp" alt="Logo" class="logo">
+        <div class="navbar-text">DormDeals</div>
+        <div id="google-signin-button">
+            <!-- Google Sign-In button -->
+            <button class="login-btn" id="google-login-btn">Login with Google</button>
+        </div>
+    </header>
+
+    <main>
+        <div class="center-container">
+            <div>
+                <h1>Enter your college</h1>
+                <select id="college" class="college-select">
+                    <option value="" disabled selected>Select your college</option>
+                    <option value="college1">IIIT Surat</option>
+                    <option value="college2">IIIT Pune</option>
+                    <option value="college3">IIIT Bhopal</option>
+                    <option value="college4">IIIT Nagpur</option>
+                    <option value="college5">IIIT Vadodara</option>
+                </select>
+                <button>See results</button>
+            </div>
+        </div>
+    </main>
+
+    <script src="google-login.js"></script>
+
+    <script>
+        // When the "Login with Google" button is clicked, redirect to the Node.js backend for login
+        document.getElementById('google-login-btn').addEventListener('click', function() {
+            window.location.href = 'http://localhost:3000/login';  // Redirect to the Node.js server for Google login
+        });
+    </script>
+</body>
+</html>
