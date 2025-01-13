@@ -1,0 +1,9 @@
+USE dormdealsuser;
+
+CREATE TABLE users(
+id INT AUTO_INCREMENT PRIMARY KEY,
+name VARCHAR(255) NOT NULL,
+college VARCHAR(255) NOT NULL,
+mobile_number VARCHAR(15) NOT NULL UNIQUE
+);
+
