@@ -4,17 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dorm Deals</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Link to the external CSS file -->
+    <link rel="stylesheet" href="styles.css">
     <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="script.js" defer></script>    
 </head>
 <body>
     <header>
-        <img src="dormdealslogo.webp" alt="Logo" class="logo">
+        <img src="dormdealslogo.jpg" alt="Logo" class="logo">
         <div class="navbar-text">DormDeals</div>
-        <div id="google-signin-button">
-            <!-- Google Sign-In button -->
-            <button class="login-btn" id="google-login-btn">Login with Google</button>
-        </div>
+        <div id="google-signin-button"></div>      
     </header>
 
     <main>
@@ -33,14 +31,5 @@
             </div>
         </div>
     </main>
-
-    <script src="google-login.js"></script>
-
-    <script>
-        // When the "Login with Google" button is clicked, redirect to the Node.js backend for login
-        document.getElementById('google-login-btn').addEventListener('click', function() {
-            window.location.href = 'http://localhost:3000/login';  // Redirect to the Node.js server for Google login
-        });
-    </script>
 </body>
 </html>
