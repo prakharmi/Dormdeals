@@ -5,7 +5,7 @@ function handleCredentialResponse(response) {
   console.log("User Info:", payload);
   alert(`Hello, ${payload.name}!`);
   
-  window.location.href = "detailspage.html";
+  window.location.href = "http://127.0.0.1:5500/User%20Info/userinfo.html";
 }
 
 window.onload = () => {
