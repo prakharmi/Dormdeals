@@ -29,7 +29,7 @@ db.connect((err) => {
 });
 
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "detailspage.html"));
+  res.sendFile(path.join(__dirname, "public", "userinfo.html"));
 });
 
 app.post("/submit-form", (req, res) => {
