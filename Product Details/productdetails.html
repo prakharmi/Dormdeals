@@ -1,61 +1,110 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Add Product</title>
-    <link rel="stylesheet" href="productdetails.css">
-</head>
-<body>
-
+    <link rel="stylesheet" href="productdetails.css" />
+  </head>
+  <body>
     <div class="form-container">
-        <h1>Add a New Product</h1>
-        <form action="/submit-product" method="post" enctype="multipart/form-data">
-            <div class="form-group">
-                <label for="productName">Product Name:</label>
-                <input type="text" id="productName" name="productName" placeholder="Enter product name" required>
-            </div>
+      <h1>Add a New Product</h1>
+      <form
+        action="/submit-product"
+        method="post"
+        enctype="multipart/form-data"
+      >
+        <div class="form-group">
+          <label for="productName">Product Name:</label>
+          <input
+            type="text"
+            id="productName"
+            name="productName"
+            placeholder="Enter product name"
+            required
+          />
+        </div>
 
-            <div class="form-group">
-                <label for="category">Category:</label>
-                <select id="category" name="category" required>
-                    <option value="">Select a category</option>
-                    <option value="electronics">Electronics</option>
-                    <option value="clothing">Clothing</option>
-                    <option value="home">Home & Garden</option>
-                    <option value="sports">Sports & Outdoors</option>
-                    <option value="other">Other</option>
-                </select>
-            </div>
+        <div class="form-group">
+          <label for="category">Category:</label>
+          <select id="category" name="category" required>
+            <option value="">Select a category</option>
+            <option value="electronics">Electronics</option>
+            <option value="clothing">Clothing</option>
+            <option value="home">Home & Garden</option>
+            <option value="sports">Sports & Outdoors</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
 
-            <div class="form-group">
-                <label for="description">Description:</label>
-                <textarea id="description" name="description" placeholder="Enter product description" required></textarea>
-            </div>
+        <div class="form-group">
+          <label for="description">Description:</label>
+          <textarea
+            id="description"
+            name="description"
+            placeholder="Enter product description"
+            required
+          ></textarea>
+        </div>
 
-            <div class="form-group">
-                <label for="details">Details:</label>
-                <textarea id="details" name="details" placeholder="Enter product details" required></textarea>
-            </div>
+        <div class="form-group">
+          <label for="details">Details:</label>
+          <textarea
+            id="details"
+            name="details"
+            placeholder="Enter product details"
+            required
+          ></textarea>
+        </div>
 
-            <div class="form-group">
-                <label for="price">Price:</label>
-                <input type="number" id="price" name="price" step="0.01" placeholder="Enter product price" required>
-            </div>
+        <div class="form-group">
+          <label for="price">Price:</label>
+          <input
+            type="number"
+            id="price"
+            name="price"
+            step="0.01"
+            placeholder="Enter product price"
+            required
+          />
+        </div>
 
-            <div class="form-group">
-                <label class="file-upload-label">Upload Photos:</label>
-                <div class="file-upload">
-                    <span>Click to upload or drag and drop</span>
-                    <input type="file" id="photos" name="photos" multiple accept="image/*" required>
-                </div>
-            </div>
+        <!-- File Upload Section -->
+        <div class="form-group">
+          <label class="file-upload-label">Upload Photos (Max 10):</label>
+          <input
+            type="file"
+            id="photos"
+            name="photos"
+            multiple
+            accept="image/*"
+            onchange="previewImages()"
+          />
+        </div>
 
-            <div class="form-group">
-                <button type="submit">Add Product</button>
-            </div>
-        </form>
+        <!-- Upload from URL Section -->
+        <div class="form-group">
+          <label for="imageURL">Or Enter Image URL:</label>
+          <input
+            type="url"
+            id="imageURL"
+            placeholder="Paste image URL here..."
+          />
+          <button type="button" id="fetchImageButton">Fetch Image</button>
+        </div>
+
+        <!-- Preview Images Section -->
+        <div class="form-group image-preview-container">
+          <h3>Image Preview</h3>
+          <div id="imagePreview"></div>
+        </div>
+
+        <div class="form-group">
+          <button type="submit">Add Product</button>
+        </div>
+      </form>
     </div>
 
-</body>
+    <script src="productdetails.js"></script>
+  </body>
 </html>
