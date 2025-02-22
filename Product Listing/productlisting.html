@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dorm Deals</title>
+    <link rel="stylesheet" href="productlisting.css">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="productlisting.js" defer></script>    
+</head>
+<body>
+    <header>
+        <div class="navbar-brand">
+            <img src="dormdealslogo.png" alt="Logo" class="logo">
+            <span class="navbar-text">DormDeals</span>
+        </div>        
+        <div class="search-container">
+            <input type="text" class="search-bar" placeholder="Search for products...">
+        </div>
+        <div id="google-signin-button"></div>
+    </header>
+    <main class="products-container">
+        <div class="filters">
+            <button class="filter-button">All Products</button>
+            <button class="filter-button">Electronics</button>
+            <button class="filter-button">Table and Chair</button>
+            <button class="filter-button">Kitchen</button>
+            <button class="filter-button">Books</button>
+        </div>
+
+        <div class="product-grid">
+            <!-- Product Card 1 -->
+            <div class="product-card">
+                <img src="/api/placeholder/250/200" alt="Smartphone" class="product-image">
+                <h3 class="product-title">Latest Smartphone</h3>
+                <div class="product-price">$699.99</div>
+                <button class="cart-button">Add to Cart</button>
+            </div>
+
+            <!-- Product Card 2 -->
+            <div class="product-card">
+                <img src="/api/placeholder/250/200" alt="Laptop" class="product-image">
+                <h3 class="product-title">Ultra-thin Laptop</h3>
+                <div class="product-price">$1299.99</div>
+                <button class="cart-button">Add to Cart</button>
+            </div>
+
+            <!-- Product Card 3 -->
+            <div class="product-card">
+                <img src="/api/placeholder/250/200" alt="Headphones" class="product-image">
+                <h3 class="product-title">Wireless Headphones</h3>
+                <div class="product-price">$199.99</div>
+                <button class="cart-button">Add to Cart</button>
+            </div>
+
+            <!-- Product Card 4 -->
+            <div class="product-card">
+                <img src="/api/placeholder/250/200" alt="Smart Watch" class="product-image">
+                <h3 class="product-title">Smart Watch Pro</h3>
+                <div class="product-price">$299.99</div>
+                <button class="cart-button">Add to Cart</button>
+            </div>
+
+            <!-- Product Card 5 -->
+            <div class="product-card">
+                <img src="/api/placeholder/250/200" alt="Camera" class="product-image">
+                <h3 class="product-title">Digital Camera</h3>
+                <div class="product-price">$599.99</div>
+                <button class="cart-button">Add to Cart</button>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-column">
+            <h3>Information</h3>
+            <ul>
+                <li><a href="#">FAQ</a></li>
+                <li><a href="#">Terms and Conditions</a></li>
+                <li><a href="#">Privacy Policy</a></li>
+            </ul>
+        </div>
+    
+        <div class="footer-column">
+            <h3>Company</h3>
+            <ul>
+                <li><a href="#">Contact Us</a></li>
+            </ul>
+        </div>
+    
+        <div class="footer-column">
+            <h3>Socials</h3>
+            <ul>
+                <li><a href="https://www.linkedin.com/in/prakhar-mishraa">LinkedIn</a></li>
+                <li><a href="https://www.instagram.com/prakharmishraaaa">Instagram</a></li>
+                <li><a href="https://github.com/prakharmi/Dormdeals">Github</a></li>
+            </ul>
+        </div>
+    
+        <div style="width: 100%; text-align: center; margin-top: 20px;">
+            <p>© 2025 Dorm Deals | All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
