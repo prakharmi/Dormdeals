@@ -18,4 +18,25 @@ window.onload = () => {
       { theme: "outline", size: "large" }
   );
   google.accounts.id.prompt();
+
+  const collegeSelect = document.querySelector('#college');
+  const seeResultsButton = document.querySelector('button');
+
+  seeResultsButton.addEventListener('click', () => {
+      const selectedCollege = collegeSelect.value;
+
+      if (!selectedCollege) {
+          alert('Please select a college first!');
+          return;
+      }
+
+      const collegeUrls = {
+          'college1': '/products/iiit-surat.html',
+          'college2': '/products/iiit-pune.html',
+          'college3': '/products/iiit-bhopal.html',
+          'college4': '/products/iiit-nagpur.html',
+          'college5': '/products/iiit-vadodara.html'
+      };
+      window.location.href = collegeUrls[selectedCollege];
+    });
 };
