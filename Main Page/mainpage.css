@@ -1,45 +1,41 @@
 body {
-    background-color:rgb(20,20,20);
+    background-color: #f8f9fa;
     margin: 0;
     font-family: "Manrope", sans-serif;
-    color: rgb(208, 227, 255);
+    color: #212529;
 }
 
 header {
-    position: relative;
-    height: 80px;
-    background-color: rgb(30, 30, 30);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 20px;
+    background-color: #0f172a;
+    padding: 15px 50px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Adjust space between logo and text */
+}
+
 .logo {
-    width: 60px;
+    width: 50px;
     height: auto;
 }
 
 .navbar-text {
-    color: rgb(208, 227, 255);
-    font-size: 2rem;
-    text-align: center;
-    flex-grow: 1;
+    color: white;
+    font-size: 1.8rem;
     font-weight: bold;
 }
 
-.login-btn {
-    background-color: rgb(155, 199, 255);
-    color: black;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
 
-.login-btn:hover {
-    background-color: #0056b3;
+#google-signin-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .center-container {
@@ -51,6 +47,10 @@ header {
 
 .center-container div {
     text-align: center;
+    background: white;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .college-select {
@@ -64,21 +64,64 @@ header {
 }
 
 h1 {
-    margin-bottom: 10px;
+    margin-bottom: 20px;
     font-family: "Manrope", sans-serif;
-    color: rgb(208, 227, 255);
+    color: #0f172a;
 }
 
 button {
-    background-color: rgb(155, 199, 255);
-    color: black;
+    background-color: #1d4ed8;
+    color: white;
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    font-size: 16px;
     margin-top: 20px;
 }
 
 button:hover {
-    background-color: #218838;
+    background-color: #1e40af;
+}
+
+footer {
+    background-color: #0f172a;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    font-size: 14px;
+    padding: 40px 50px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.footer-column {
+    flex: 1;
+    min-width: 200px;
+}
+
+.footer-column h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: white;
+}
+
+.footer-column ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-column ul li {
+    margin-bottom: 8px;
+}
+
+.footer-column ul li a {
+    color: #d1d5db;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.footer-column ul li a:hover {
+    color: white;
 }
