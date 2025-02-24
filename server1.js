@@ -1,22 +1,25 @@
 const express = require("express");
 const mysql = require("mysql2");
 const bodyParser = require("body-parser");
-const cors = require("cors");
 const path = require("path");
+const cors = require("cors");
 
 const app = express();
 const port = 5000;
 
-app.use(express.static(path.join(__dirname, "public")));
+app.use(cors({
+  origin: "http://127.0.0.1:5500",
+  methods: ["GET", "POST"]
+}));
 
-app.use(cors());
+app.use(express.static(path.join(__dirname, "User Info")));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 const db = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "root",
+  password: "sherlockholmes@mysql",
   database: "dormdealsuser",
 });
 
@@ -29,15 +32,14 @@ db.connect((err) => {
 });
 
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "userinfo.html"));
+  res.sendFile(path.join(__dirname, "User Info", "userinfo.html"));
 });
 
 app.post("/submit-form", (req, res) => {
   const { name, college, mobile } = req.body;
   console.log("Data being sent to the database:", { name, college, mobile });
 
-  const query =
-    "INSERT INTO users (name, college, mobile_number) VALUES (?, ?, ?)";
+  const query = "INSERT INTO users (name, college, mobile_number) VALUES (?, ?, ?)";
   db.query(query, [name, college, mobile], (err, result) => {
     if (err) {
       console.error("Error inserting data into MySQL:", err);
