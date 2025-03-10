@@ -31,16 +31,46 @@ db.connect((err) => {
   console.log("Successfully connected to the database");
 });
 
+app.get("/check-user/:email", (req, res) => {
+  const email = decodeURIComponent(req.params.email);
+  console.log("Checking if user exists with email:", email);
+
+  const query = "SELECT * FROM users WHERE email = ?";
+  db.query(query, [email], (err, results) => {
+    if (err) {
+      console.error("Error checking user:", err);
+      return res.status(500).json({ message: "Database error", error: err });
+    }
+
+    console.log(`Found ${results.length} users with this email`);
+
+    if (results.length > 0) {
+      // User exists
+      res.status(200).json({ exists: true, user: results[0] });
+    } else {
+      // User doesn't exist
+      res.status(200).json({ exists: false });
+    }
+  });
+});
+
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "User Info", "userinfo.html"));
 });
 
 app.post("/submit-form", (req, res) => {
-  const { name, college, mobile } = req.body;
-  console.log("Data being sent to the database:", { name, college, mobile });
+  const { name, college, mobile, email } = req.body;
+  console.log("Data being sent to the database:", {
+    name,
+    college,
+    mobile,
+    email,
+  });
 
-  const query = "INSERT INTO users (name, college, mobile_number) VALUES (?, ?, ?)";
-  db.query(query, [name, college, mobile], (err, result) => {
+  // Update the query to include email
+  const query =
+    "INSERT INTO users (name, college, mobile_number, email) VALUES (?, ?, ?, ?)";
+  db.query(query, [name, college, mobile, email], (err, result) => {
     if (err) {
       console.error("Error inserting data into MySQL:", err);
       return res.status(500).json({ message: "Database error", error: err });
