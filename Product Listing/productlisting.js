@@ -8,20 +8,20 @@ function handleCredentialResponse(response) {
   localStorage.setItem("userEmail", payload.email);
   localStorage.setItem("userName", payload.name);
 
-  fetch(`http://localhost:5000/check-user/${encodeURIComponent(payload.email)}`)
+  fetch(`/check-user/${encodeURIComponent(payload.email)}`)
     .then((response) => response.json())
     .then((data) => {
       if (data.exists) {
         window.location.href =
-          "http://127.0.0.1:5500/Product%20Listing/productlisting.html";
+          "../Product%20Listing/productlisting.html";
       } else {
         window.location.href =
-          "http://127.0.0.1:5500/User%20Info/userinfo.html";
+          "../User%20Info/userinfo.html";
       }
     })
     .catch((error) => {
       console.error("Error checking user:", error);
-      window.location.href = "http://127.0.0.1:5500/User%20Info/userinfo.html";
+      window.location.href = "../User%20Info/userinfo.html";
     });
 }
 

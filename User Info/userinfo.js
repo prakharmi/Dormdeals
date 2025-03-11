@@ -55,7 +55,7 @@ document
         localStorage.removeItem("userEmail");
         localStorage.removeItem("userName");
         window.location.href =
-          "http://127.0.0.1:5500/Product%20Listing/productlisting.html";
+          "../Product%20Listing/productlisting.html";
       })
       .catch((error) => console.error("Error submitting form:", error));
   });
