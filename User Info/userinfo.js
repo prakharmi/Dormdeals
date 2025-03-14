@@ -16,13 +16,6 @@ window.onload = function () {
   if (email) {
     emailField.value = email;
   }
-
-  if (name) {
-    const nameField = document.getElementById("name");
-    if (nameField) {
-      nameField.value = name;
-    }
-  }
 };
 
 document
@@ -51,9 +44,7 @@ document
       .then((data) => {
         console.log("Response from server:", data);
         alert(data.message);
-        
-        localStorage.removeItem("userEmail");
-        localStorage.removeItem("userName");
+
         window.location.href =
           "../Product%20Listing/productlisting.html";
       })
