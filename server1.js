@@ -45,10 +45,8 @@ app.get("/check-user/:email", (req, res) => {
     console.log(`Found ${results.length} users with this email`);
 
     if (results.length > 0) {
-      // User exists
       res.status(200).json({ exists: true, user: results[0] });
     } else {
-      // User doesn't exist
       res.status(200).json({ exists: false });
     }
   });
@@ -60,14 +58,6 @@ app.get("/", (req, res) => {
 
 app.post("/submit-form", (req, res) => {
   const { name, college, mobile, email } = req.body;
-  console.log("Data being sent to the database:", {
-    name,
-    college,
-    mobile,
-    email,
-  });
-
-  // Update the query to include email
   const query =
     "INSERT INTO users (name, college, mobile_number, email) VALUES (?, ?, ?, ?)";
   db.query(query, [name, college, mobile, email], (err, result) => {
