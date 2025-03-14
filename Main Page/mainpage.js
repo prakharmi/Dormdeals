@@ -9,7 +9,7 @@ function handleCredentialResponse(response) {
   localStorage.setItem("userName", payload.name);
 
   // Check if user exists in database
-  fetch(`/check-user/${encodeURIComponent(payload.email)}`)
+  fetch(`http://127.0.0.1:5000/check-user/${encodeURIComponent(payload.email)}`)
     .then((response) => response.json())
     .then((data) => {
       if (data.exists) {
@@ -75,7 +75,7 @@ window.onload = () => {
       college1: "../Product%20Listing/productlisting.html",
       college2: "../Product%20Listing/productlisting.html",
       college3: "../Product%20Listing/productlisting.html",
-      college4: "../productlisting.html",
+      college4: "../Product%20Listing/productlisting.html",
       college5: "../Product%20Listing/productlisting.html",
     };
     window.location.href = collegeUrls[selectedCollege];
