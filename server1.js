@@ -3,6 +3,7 @@ const mysql = require("mysql2");
 const bodyParser = require("body-parser");
 const path = require("path");
 const cors = require("cors");
+const multer = require("multer");
 
 const app = express();
 const port = 5000;
@@ -13,6 +14,7 @@ app.use(cors({
 }));
 
 app.use(express.static(path.join(__dirname, "User Info")));
+app.use(express.static(path.join(__dirname, "Product Info")));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -43,12 +45,7 @@ app.get("/check-user/:email", (req, res) => {
     }
 
     console.log(`Found ${results.length} users with this email`);
-
-    if (results.length > 0) {
-      res.status(200).json({ exists: true, user: results[0] });
-    } else {
-      res.status(200).json({ exists: false });
-    }
+    res.status(200).json({ exists: results.length > 0, user: results[0] || null });
   });
 });
 
@@ -58,15 +55,57 @@ app.get("/", (req, res) => {
 
 app.post("/submit-form", (req, res) => {
   const { name, college, mobile, email } = req.body;
-  const query =
-    "INSERT INTO users (name, college, mobile_number, email) VALUES (?, ?, ?, ?)";
+  const query = "INSERT INTO users (name, college, mobile_number, email) VALUES (?, ?, ?, ?)";
   db.query(query, [name, college, mobile, email], (err, result) => {
     if (err) {
       console.error("Error inserting data into MySQL:", err);
       return res.status(500).json({ message: "Database error", error: err });
     }
-    console.log("Insertion result:", result);
+    console.log("User inserted:", result);
     res.status(200).json({ message: "Successfully saved user data" });
+  });
+});
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads/");
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + "-" + file.originalname);
+  }
+});
+
+const upload = multer({ storage: storage });
+
+app.post("/submit-product", upload.array("photos", 10), (req, res) => {
+  const { productName, category, description, price } = req.body;
+  const imageFiles = req.files;
+
+  if (!productName || !category || !description || !price || imageFiles.length === 0) {
+    return res.status(400).json({ message: "All fields and at least one image are required" });
+  }
+
+  const productQuery = "INSERT INTO products (name, category, description, price) VALUES (?, ?, ?, ?)";
+  db.query(productQuery, [productName, category, description, price], (err, result) => {
+    if (err) {
+      console.error("Error inserting product:", err);
+      return res.status(500).json({ message: "Database error", error: err });
+    }
+
+    const productId = result.insertId;
+    console.log("Product inserted with ID:", productId);
+
+    const imageQuery = "INSERT INTO product_images (product_id, image_url) VALUES ?";
+    const imageValues = imageFiles.map(file => [productId, file.filename]);
+
+    db.query(imageQuery, [imageValues], (err, imageResult) => {
+      if (err) {
+        console.error("Error inserting images:", err);
+        return res.status(500).json({ message: "Database error", error: err });
+      }
+      console.log("Images inserted:", imageResult);
+      res.status(200).json({ message: "Product added successfully" });
+    });
   });
 });
 
