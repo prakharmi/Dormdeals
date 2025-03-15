@@ -1,91 +1,99 @@
 document.addEventListener("DOMContentLoaded", () => {
-  document
-    .getElementById("fetchImageButton")
-    .addEventListener("click", function () {
-      const imageUrl = document.getElementById("imageURL").value;
-      if (imageUrl) {
-        addImage(imageUrl);
+    const fileInput = document.getElementById("photos");
+    const previewContainer = document.getElementById("image-preview");
+    const fileLimitMessage = document.getElementById("file-limit-message");
+    const productForm = document.getElementById("product-form");
+  
+    fileInput.addEventListener("change", function () {
+      const files = fileInput.files;
+      if (files.length + previewContainer.childElementCount > 10) {
+        fileInput.value = "";
+        fileLimitMessage.style.display = "block";
+        return;
       } else {
-        alert("Please enter a valid image URL.");
+        fileLimitMessage.style.display = "none";
+      }
+  
+      Array.from(files).forEach((file) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          addImage(e.target.result);
+        };
+        reader.readAsDataURL(file);
+      });
+    });
+  
+    productForm.addEventListener("submit", async function (event) {
+      event.preventDefault();
+  
+      if (!validateForm()) return;
+  
+      const formData = new FormData(this);
+  
+      try {
+        const response = await fetch("http://localhost:5000/submit-product", {
+          method: "POST",
+          body: formData,
+        });
+  
+        const result = await response.json();
+  
+        if (response.ok) {
+          alert("Product added successfully!");
+          productForm.reset();
+          previewContainer.innerHTML = ""; // Clear image previews
+        } else {
+          alert("Error: " + result.message);
+        }
+      } catch (error) {
+        console.error("Error submitting product:", error);
+        alert("An error occurred. Please try again.");
       }
     });
-
-  document.querySelector("form").addEventListener("submit", function (event) {
-    event.preventDefault();
-    if (validateForm()) {
-      alert("Product added successfully!");
-      this.submit();
+  });
+  
+  function addImage(src) {
+    const previewContainer = document.getElementById("image-preview");
+  
+    if (previewContainer.childElementCount >= 10) {
+      alert("Maximum of 10 images allowed.");
+      return;
     }
-  });
-});
-
-// Function to Preview Uploaded Images
-function previewImages() {
-  const fileInput = document.getElementById("photos");
-  const previewContainer = document.getElementById("imagePreview");
-  const files = fileInput.files;
-
-  if (files.length + previewContainer.childElementCount > 10) {
-    alert("You can only upload a maximum of 10 images.");
-    fileInput.value = ""; // Clear the input
-    return;
-  }
-
-  Array.from(files).forEach((file) => {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      addImage(e.target.result);
+  
+    const imageWrapper = document.createElement("div");
+    imageWrapper.classList.add("image-wrapper");
+  
+    const img = document.createElement("img");
+    img.src = src;
+    img.classList.add("preview-image");
+    img.style.width = "100px";
+    img.style.margin = "5px";
+  
+    const deleteButton = document.createElement("button");
+    deleteButton.textContent = "X";
+    deleteButton.style.backgroundColor = "#ff4d4d";
+    deleteButton.classList.add("delete-button");
+    deleteButton.onclick = () => {
+      imageWrapper.remove();
+      document.getElementById("file-limit-message").style.display = "none";
     };
-    reader.readAsDataURL(file);
-  });
-}
-
-// Function to Add Image to Preview with Delete Option
-function addImage(src) {
-  const previewContainer = document.getElementById("imagePreview");
-
-  if (previewContainer.childElementCount >= 10) {
-    alert("Maximum of 10 images allowed.");
-    return;
+  
+    imageWrapper.appendChild(img);
+    imageWrapper.appendChild(deleteButton);
+    previewContainer.appendChild(imageWrapper);
   }
-
-  const imageWrapper = document.createElement("div");
-  imageWrapper.classList.add("image-wrapper");
-
-  const img = document.createElement("img");
-  img.src = src;
-  img.classList.add("preview-image");
-
-  const deleteButton = document.createElement("button");
-  deleteButton.textContent = "X";
-  deleteButton.classList.add("delete-button");
-  deleteButton.onclick = () => imageWrapper.remove();
-
-  imageWrapper.appendChild(img);
-  imageWrapper.appendChild(deleteButton);
-  previewContainer.appendChild(imageWrapper);
-}
-
-// Function to Validate Form Before Submission
-function validateForm() {
-  const productName = document.getElementById("productName").value.trim();
-  const category = document.getElementById("category").value;
-  const description = document.getElementById("description").value.trim();
-  const details = document.getElementById("details").value.trim();
-  const price = document.getElementById("price").value.trim();
-  const imagePreview =
-    document.getElementById("imagePreview").childElementCount;
-
-  if (
-    !productName ||
-    !category ||
-    !description ||
-    !details ||
-    !price ||
-    imagePreview === 0
-  ) {
-    alert("Please fill in all required fields and upload at least one image.");
-    return false;
+  
+  function validateForm() {
+    const productName = document.getElementById("productName").value.trim();
+    const category = document.getElementById("category").value;
+    const description = document.getElementById("description").value.trim();
+    const price = document.getElementById("price").value.trim();
+    const imagePreview = document.getElementById("image-preview").childElementCount;
+  
+    if (!productName || !category || !description || !price || imagePreview === 0) {
+      alert("Please fill in all required fields and upload at least one image.");
+      return false;
+    }
+    return true;
   }
-  return true;
-}
+  
