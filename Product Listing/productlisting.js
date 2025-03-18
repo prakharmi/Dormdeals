@@ -40,6 +40,7 @@ function displaySignOutButton() {
     const userNameSpan = document.createElement("span");
     userNameSpan.textContent = `Welcome, ${localStorage.getItem("userName") || "User"}`;
     userNameSpan.style.marginRight = "10px";
+    userNameSpan.style.color = "white";
 
     signInButtonContainer.appendChild(userNameSpan);
     signInButtonContainer.appendChild(signOutButton);
