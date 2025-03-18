@@ -1,5 +1,4 @@
 window.onload = function () {
-  
   const email = localStorage.getItem("userEmail");
   const name = localStorage.getItem("userName");
 
@@ -45,8 +44,8 @@ document
         console.log("Response from server:", data);
         alert(data.message);
 
-        window.location.href =
-          "../Product%20Listing/productlisting.html";
+        localStorage.setItem("userCollege", college);
+        window.location.href = "../Product%20Listing/productlisting.html";
       })
       .catch((error) => console.error("Error submitting form:", error));
   });

@@ -12,11 +12,10 @@ function handleCredentialResponse(response) {
     .then((response) => response.json())
     .then((data) => {
       if (data.exists) {
-        window.location.href =
-          "../Product%20Listing/productlisting.html";
+        localStorage.setItem("userCollege", data.college);
+        window.location.href = "../Product%20Listing/productlisting.html";
       } else {
-        window.location.href =
-          "../User%20Info/userinfo.html";
+        window.location.href = "../User%20Info/userinfo.html";
       }
     })
     .catch((error) => {
@@ -50,6 +49,7 @@ function displaySignOutButton() {
       localStorage.removeItem("userToken");
       localStorage.removeItem("userEmail");
       localStorage.removeItem("userName");
+      localStorage.removeItem("userCollege");
       window.location.reload();
     });
   }
@@ -87,6 +87,96 @@ function initializeGoogleSignIn() {
   }
 }
 
-window.onload = () => {
+document.addEventListener("DOMContentLoaded", () => {
   initializeGoogleSignIn();
-};
+  loadProducts();
+  setupFilters();
+  setupSearch();
+});
+
+async function loadProducts() {
+  const college = localStorage.getItem("userCollege");
+  if (!college) {
+    console.error("No college found in localStorage.");
+    return;
+  }
+
+  try {
+    const response = await fetch(
+      `http://127.0.0.1:5000/products?college=${encodeURIComponent(college)}`,
+    );
+    const products = await response.json();
+
+    displayProducts(products);
+  } catch (error) {
+    console.error("Error loading products:", error);
+  }
+}
+
+function displayProducts(products) {
+  const productGrid = document.querySelector(".product-grid");
+  productGrid.innerHTML = "";
+
+  products.forEach((product) => {
+    const productCard = document.createElement("div");
+    productCard.classList.add("product-card");
+    productCard.dataset.category = product.category.toLowerCase();
+
+    productCard.innerHTML = `
+      <img src="${product.image}" alt="${product.name}" class="product-image">
+      <h3 class="product-title">${product.name}</h3>
+      <p class="product-price">$${product.price}</p>
+      <button class="cart-button">Add to Cart</button>
+    `;
+
+    productGrid.appendChild(productCard);
+  });
+}
+
+function setupFilters() {
+  const filterButtons = document.querySelectorAll(".filter-button");
+
+  filterButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const category = button.textContent.toLowerCase();
+      filterProducts(category);
+    });
+  });
+}
+
+function filterProducts(category) {
+  const products = document.querySelectorAll(".product-card");
+
+  products.forEach((product) => {
+    if (category === "all products" || product.dataset.category === category) {
+      product.classList.remove("hidden");
+    } else {
+      product.classList.add("hidden");
+    }
+  });
+}
+
+function setupSearch() {
+  const searchBar = document.querySelector(".search-bar");
+
+  searchBar.addEventListener("input", (event) => {
+    const query = event.target.value.toLowerCase();
+    searchProducts(query);
+  });
+}
+
+function searchProducts(query) {
+  const products = document.querySelectorAll(".product-card");
+
+  products.forEach((product) => {
+    const title = product
+      .querySelector(".product-title")
+      .textContent.toLowerCase();
+
+    if (title.includes(query)) {
+      product.classList.remove("hidden");
+    } else {
+      product.classList.add("hidden");
+    }
+  });
+}

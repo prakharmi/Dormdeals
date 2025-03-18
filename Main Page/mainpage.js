@@ -13,11 +13,10 @@ function handleCredentialResponse(response) {
     .then((response) => response.json())
     .then((data) => {
       if (data.exists) {
-        window.location.href =
-          "../Product%20Listing/productlisting.html";
+        localStorage.setItem("userCollege", data.college);
+        window.location.href = "../Product%20Listing/productlisting.html";
       } else {
-        window.location.href =
-          "../User%20Info/userinfo.html";
+        window.location.href = "../User%20Info/userinfo.html";
       }
     })
     .catch((error) => {
@@ -27,21 +26,17 @@ function handleCredentialResponse(response) {
 }
 
 function checkUserAuthStatus() {
-
   const userToken = localStorage.getItem("userToken");
 
   if (userToken) {
-    window.location.href =
-      "../Product%20Listing/productlisting.html";
+    window.location.href = "../Product%20Listing/productlisting.html";
   }
 
   return false;
 }
 
 function initializeGoogleSignIn() {
-  
   if (!checkUserAuthStatus()) {
-    
     google.accounts.id.initialize({
       client_id:
         "866863334708-6o7pat7hkajrhve0s50tv1cpks0fnvbu.apps.googleusercontent.com",
@@ -71,13 +66,7 @@ window.onload = () => {
       return;
     }
 
-    const collegeUrls = {
-      college1: "../Product%20Listing/productlisting.html",
-      college2: "../Product%20Listing/productlisting.html",
-      college3: "../Product%20Listing/productlisting.html",
-      college4: "../Product%20Listing/productlisting.html",
-      college5: "../Product%20Listing/productlisting.html",
-    };
-    window.location.href = collegeUrls[selectedCollege];
+    localStorage.setItem("userCollege", selectedCollege);
+    window.location.href = "../Product%20Listing/productlisting.html";
   });
 };

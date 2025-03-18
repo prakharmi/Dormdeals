@@ -8,10 +8,12 @@ const multer = require("multer");
 const app = express();
 const port = 5000;
 
-app.use(cors({
-  origin: "http://127.0.0.1:5500",
-  methods: ["GET", "POST"]
-}));
+app.use(
+  cors({
+    origin: "http://127.0.0.1:5500",
+    methods: ["GET", "POST"],
+  }),
+);
 
 app.use(express.static(path.join(__dirname, "User Info")));
 app.use(express.static(path.join(__dirname, "Product Info")));
@@ -45,7 +47,9 @@ app.get("/check-user/:email", (req, res) => {
     }
 
     console.log(`Found ${results.length} users with this email`);
-    res.status(200).json({ exists: results.length > 0, user: results[0] || null });
+    res
+      .status(200)
+      .json({ exists: results.length > 0, user: results[0] || null });
   });
 });
 
@@ -55,7 +59,8 @@ app.get("/", (req, res) => {
 
 app.post("/submit-form", (req, res) => {
   const { name, college, mobile, email } = req.body;
-  const query = "INSERT INTO users (name, college, mobile_number, email) VALUES (?, ?, ?, ?)";
+  const query =
+    "INSERT INTO users (name, college, mobile_number, email) VALUES (?, ?, ?, ?)";
   db.query(query, [name, college, mobile, email], (err, result) => {
     if (err) {
       console.error("Error inserting data into MySQL:", err);
@@ -72,41 +77,93 @@ const storage = multer.diskStorage({
   },
   filename: (req, file, cb) => {
     cb(null, Date.now() + "-" + file.originalname);
-  }
+  },
 });
 
 const upload = multer({ storage: storage });
 
 app.post("/submit-product", upload.array("photos", 10), (req, res) => {
-  const { productName, category, description, price } = req.body;
+  const { productName, category, description, price, college } = req.body;
   const imageFiles = req.files;
 
-  if (!productName || !category || !description || !price || imageFiles.length === 0) {
-    return res.status(400).json({ message: "All fields and at least one image are required" });
+  if (
+    !productName ||
+    !category ||
+    !description ||
+    !price ||
+    !college ||
+    imageFiles.length === 0
+  ) {
+    return res
+      .status(400)
+      .json({ message: "All fields and at least one image are required" });
   }
 
-  const productQuery = "INSERT INTO products (name, category, description, price) VALUES (?, ?, ?, ?)";
-  db.query(productQuery, [productName, category, description, price], (err, result) => {
-    if (err) {
-      console.error("Error inserting product:", err);
-      return res.status(500).json({ message: "Database error", error: err });
-    }
-
-    const productId = result.insertId;
-    console.log("Product inserted with ID:", productId);
-
-    const imageQuery = "INSERT INTO product_images (product_id, image_url) VALUES ?";
-    const imageValues = imageFiles.map(file => [productId, file.filename]);
-
-    db.query(imageQuery, [imageValues], (err, imageResult) => {
+  const productQuery =
+    "INSERT INTO products (name, category, description, price, college) VALUES (?, ?, ?, ?, ?)";
+  db.query(
+    productQuery,
+    [productName, category, description, price, college],
+    (err, result) => {
       if (err) {
-        console.error("Error inserting images:", err);
+        console.error("Error inserting product:", err);
         return res.status(500).json({ message: "Database error", error: err });
       }
-      console.log("Images inserted:", imageResult);
-      res.status(200).json({ message: "Product added successfully" });
+
+      const productId = result.insertId;
+      console.log("Product inserted with ID:", productId);
+
+      const imageQuery =
+        "INSERT INTO product_images (product_id, image_url) VALUES ?";
+      const imageValues = imageFiles.map((file) => [productId, file.filename]);
+
+      db.query(imageQuery, [imageValues], (err, imageResult) => {
+        if (err) {
+          console.error("Error inserting images:", err);
+          return res
+            .status(500)
+            .json({ message: "Database error", error: err });
+        }
+        console.log("Images inserted:", imageResult);
+        res.status(200).json({ message: "Product added successfully" });
+      });
+    },
+  );
+});
+
+app.get("/products", async (req, res) => {
+  const college = req.query.college;
+  console.log("College received in request:", college);
+
+  if (!college) {
+    return res.status(400).json({ error: "College is required" });
+  }
+
+  try {
+    const query = "SELECT * FROM products WHERE college = ?";
+
+    db.query(query, [college], (error, results) => {
+      if (error) {
+        console.error("Database error:", error);
+        return res
+          .status(500)
+          .json({ error: "Database error", details: error.message });
+      }
+
+      if (!Array.isArray(results)) {
+        return res
+          .status(500)
+          .json({ error: "Unexpected database response format" });
+      }
+
+      res.json(results);
     });
-  });
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    res
+      .status(500)
+      .json({ error: "Internal Server Error", details: error.message });
+  }
 });
 
 app.listen(port, () => {
