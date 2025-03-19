@@ -13,8 +13,7 @@ function handleCredentialResponse(response) {
     .then((response) => response.json())
     .then((data) => {
       if (data.exists) {
-        localStorage.setItem("userCollege", data.college);
-        window.location.href = "../Product%20Listing/productlisting.html";
+        localStorage.setItem("userCollege", data.user.college);
       } else {
         window.location.href = "../User%20Info/userinfo.html";
       }
