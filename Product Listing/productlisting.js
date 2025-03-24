@@ -97,9 +97,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const redirectButton = document.getElementById('redirect-button');
   if (redirectButton) {
     redirectButton.addEventListener('click', function() {
-      const college = localStorage.getItem("userCollege");
+      const userToken = localStorage.getItem("userToken");
       
-      if (college) {
+      if (userToken) {
         window.location.href = '../Product%20Details/productdetails.html';
       } else {
         alert('Please login first to continue.');
