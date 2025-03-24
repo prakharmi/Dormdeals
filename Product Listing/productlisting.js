@@ -93,6 +93,19 @@ document.addEventListener("DOMContentLoaded", () => {
   loadProducts();
   setupFilters();
   setupSearch();
+
+  const redirectButton = document.getElementById('redirect-button');
+  if (redirectButton) {
+    redirectButton.addEventListener('click', function() {
+      const college = localStorage.getItem("userCollege");
+      
+      if (college) {
+        window.location.href = '../Product%20Details/productdetails.html';
+      } else {
+        alert('Please login first to continue.');
+      }
+    });
+  }
 });
 
 async function loadProducts() {
