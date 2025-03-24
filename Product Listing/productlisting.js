@@ -94,15 +94,15 @@ document.addEventListener("DOMContentLoaded", () => {
   setupFilters();
   setupSearch();
 
-  const redirectButton = document.getElementById('redirect-button');
+  const redirectButton = document.getElementById("redirect-button");
   if (redirectButton) {
-    redirectButton.addEventListener('click', function() {
+    redirectButton.addEventListener("click", function () {
       const userToken = localStorage.getItem("userToken");
-      
+
       if (userToken) {
-        window.location.href = '../Product%20Details/productdetails.html';
+        window.location.href = "../Product%20Details/productdetails.html";
       } else {
-        alert('Please login first to continue.');
+        alert("Please login first to continue.");
       }
     });
   }
@@ -139,10 +139,12 @@ function displayProducts(products) {
   products.forEach((product) => {
     const placeholderImage = "placeholder.jpg";
     const imageSrc = product.image || placeholderImage;
-    
+
     const productCard = document.createElement("div");
     productCard.classList.add("product-card");
-    productCard.dataset.category = product.category ? product.category.toLowerCase() : "uncategorized";
+    productCard.dataset.category = product.category
+      ? product.category.toLowerCase()
+      : "uncategorized";
 
     productCard.innerHTML = `
       <img src="${imageSrc}" alt="${product.name}" class="product-image" onerror="this.src='${placeholderImage}'">
@@ -150,9 +152,9 @@ function displayProducts(products) {
       <p class="product-price">$${product.price}</p>
     `;
 
-    productCard.addEventListener('click', function() {
+    productCard.addEventListener("click", function () {
       localStorage.setItem("selectedProductId", product.id);
-      window.location.href = 'page.html';
+      window.location.href = "../Product%20Page/productpage.html";
     });
 
     productGrid.appendChild(productCard);

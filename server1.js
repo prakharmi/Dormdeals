@@ -17,7 +17,7 @@ app.use(
 
 app.use(express.static(path.join(__dirname, "User Info")));
 app.use(express.static(path.join(__dirname, "Product Info")));
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -161,16 +161,121 @@ app.get("/products", async (req, res) => {
           .status(500)
           .json({ error: "Unexpected database response format" });
       }
-      
-      const productsWithImages = results.map(product => {
+
+      const productsWithImages = results.map((product) => {
         if (product.image) {
-          // Make sure the image URL is a complete path
           product.image = `http://127.0.0.1:5000/uploads/${product.image}`;
         }
         return product;
       });
 
       res.json(results);
+    });
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    res
+      .status(500)
+      .json({ error: "Internal Server Error", details: error.message });
+  }
+});
+
+app.get("/product/:id", (req, res) => {
+  const productId = req.params.id;
+
+  if (!productId) {
+    return res.status(400).json({ error: "Product ID is required" });
+  }
+
+  try {
+    const productQuery = "SELECT * FROM products WHERE id = ?";
+
+    db.query(productQuery, [productId], (error, productResults) => {
+      if (error) {
+        console.error("Database error:", error);
+        return res
+          .status(500)
+          .json({ error: "Database error", details: error.message });
+      }
+
+      if (!productResults || productResults.length === 0) {
+        return res.status(404).json({ error: "Product not found" });
+      }
+
+      const product = productResults[0];
+
+      const imagesQuery =
+        "SELECT image_url FROM product_images WHERE product_id = ?";
+
+      db.query(imagesQuery, [productId], (imgError, imageResults) => {
+        if (imgError) {
+          console.error("Database error fetching images:", imgError);
+          return res
+            .status(500)
+            .json({ error: "Database error", details: imgError.message });
+        }
+
+        const imageUrls = imageResults.map(
+          (img) => `http://127.0.0.1:5000/uploads/${img.image_url}`,
+        );
+        product.images = imageUrls;
+
+        res.json(product);
+      });
+    });
+  } catch (error) {
+    console.error("Error fetching product:", error);
+    res
+      .status(500)
+      .json({ error: "Internal Server Error", details: error.message });
+  }
+});
+
+app.get("/products", async (req, res) => {
+  const college = req.query.college;
+  const category = req.query.category;
+
+  console.log("College received in request:", college);
+
+  if (!college) {
+    return res.status(400).json({ error: "College is required" });
+  }
+
+  try {
+    let query = `
+      SELECT p.*, 
+             (SELECT pi.image_url FROM product_images pi WHERE pi.product_id = p.id LIMIT 1) AS image 
+      FROM products p 
+      WHERE p.college = ?
+    `;
+    const queryParams = [college];
+
+    if (category) {
+      query += " AND p.category = ?";
+      queryParams.push(category);
+    }
+
+    db.query(query, queryParams, (error, results) => {
+      if (error) {
+        console.error("Database error:", error);
+        return res
+          .status(500)
+          .json({ error: "Database error", details: error.message });
+      }
+
+      if (!Array.isArray(results)) {
+        return res
+          .status(500)
+          .json({ error: "Unexpected database response format" });
+      }
+
+      const productsWithImages = results.map((product) => {
+        if (product.image) {
+          product.image = `http://127.0.0.1:5000/uploads/${product.image}`;
+        }
+        return product;
+      });
+
+      res.json(productsWithImages);
     });
   } catch (error) {
     console.error("Error fetching products:", error);

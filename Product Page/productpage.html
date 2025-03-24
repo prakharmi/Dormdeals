@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Product Details - Dorm Deals</title>
+    <link rel="stylesheet" href="productpage.css" />
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="productpage.js" defer></script>
+  </head>
+  <body>
+    <header>
+      <div class="navbar-brand">
+        <img
+          src="dormdealslogo.png"
+          alt="Logo"
+          class="logo"
+        />
+        <span class="navbar-text">DormDeals</span>
+      </div>
+      <div class="search-container">
+        <input
+          type="text"
+          class="search-bar"
+          placeholder="Search for products..."
+        />
+      </div>
+      <div id="google-signin-button"></div>
+    </header>
+
+    <main class="product-container">
+      <div class="breadcrumb">
+        <a href="../Product%20Listing/productlisting.html">Home</a> &gt;
+        <span id="product-category">Category</span> &gt;
+        <span id="product-name-breadcrumb">Product Name</span>
+      </div>
+
+      <div class="product-details">
+        <div class="product-images">
+          <div class="main-image-container">
+            <img
+              id="main-product-image"
+              src="placeholder.jpg"
+              alt="Product Image"
+            />
+          </div>
+          <div class="thumbnail-container" id="thumbnail-container">
+          </div>
+        </div>
+
+        <div class="product-info">
+          <h1 id="product-name">Product Name</h1>
+          <div class="product-meta">
+            <p class="product-price" id="product-price">$0.00</p>
+            <p class="product-category-tag" id="product-category-tag">
+              Category
+            </p>
+          </div>
+
+          <div class="seller-info">
+            <p>College: <span id="product-college">College Name</span></p>
+          </div>
+
+          <div class="description-container">
+            <h2>Description</h2>
+            <p id="product-description">Loading product description...</p>
+          </div>
+
+          <div class="action-buttons">
+            <button class="contact-seller-btn">Contact Seller</button>
+            <button
+              class="back-btn"
+              onclick="window.location.href='../Product%20Listing/productlisting.html'"
+            >
+              Back to Products
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="similar-products">
+        <h2>Similar Products</h2>
+        <div class="similar-products-grid" id="similar-products-container">
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <div class="footer-column">
+        <h3>Information</h3>
+        <ul>
+          <li><a href="#">FAQ</a></li>
+          <li><a href="#">Terms and Conditions</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-column">
+        <h3>Company</h3>
+        <ul>
+          <li><a href="#">Contact Us</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-column">
+        <h3>Socials</h3>
+        <ul>
+          <li>
+            <a href="https://www.linkedin.com/in/prakhar-mishraa">LinkedIn</a>
+          </li>
+          <li>
+            <a href="https://www.instagram.com/prakharmishraaaa">Instagram</a>
+          </li>
+          <li><a href="https://github.com/prakharmi/Dormdeals">Github</a></li>
+        </ul>
+      </div>
+
+      <div style="width: 100%; text-align: center; margin-top: 20px">
+        <p>© 2025 Dorm Deals | All rights reserved.</p>
+      </div>
+    </footer>
+  </body>
+</html>
