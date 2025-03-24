@@ -131,17 +131,29 @@ function displayProducts(products) {
   const productGrid = document.querySelector(".product-grid");
   productGrid.innerHTML = "";
 
+  if (!products || products.length === 0) {
+    productGrid.innerHTML = `<p>No products found for your college.</p>`;
+    return;
+  }
+
   products.forEach((product) => {
+    const placeholderImage = "placeholder.jpg";
+    const imageSrc = product.image || placeholderImage;
+    
     const productCard = document.createElement("div");
     productCard.classList.add("product-card");
-    productCard.dataset.category = product.category.toLowerCase();
+    productCard.dataset.category = product.category ? product.category.toLowerCase() : "uncategorized";
 
     productCard.innerHTML = `
-      <img src="${product.image}" alt="${product.name}" class="product-image">
+      <img src="${imageSrc}" alt="${product.name}" class="product-image" onerror="this.src='${placeholderImage}'">
       <h3 class="product-title">${product.name}</h3>
       <p class="product-price">$${product.price}</p>
-      <button class="cart-button">Add to Cart</button>
     `;
+
+    productCard.addEventListener('click', function() {
+      localStorage.setItem("selectedProductId", product.id);
+      window.location.href = 'page.html';
+    });
 
     productGrid.appendChild(productCard);
   });

@@ -17,6 +17,7 @@ app.use(
 
 app.use(express.static(path.join(__dirname, "User Info")));
 app.use(express.static(path.join(__dirname, "Product Info")));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -140,7 +141,12 @@ app.get("/products", async (req, res) => {
   }
 
   try {
-    const query = "SELECT * FROM products WHERE college = ?";
+    const query = `
+    SELECT p.*, 
+           (SELECT pi.image_url FROM product_images pi WHERE pi.product_id = p.id LIMIT 1) AS image 
+    FROM products p 
+    WHERE p.college = ?
+  `;
 
     db.query(query, [college], (error, results) => {
       if (error) {
@@ -155,6 +161,14 @@ app.get("/products", async (req, res) => {
           .status(500)
           .json({ error: "Unexpected database response format" });
       }
+      
+      const productsWithImages = results.map(product => {
+        if (product.image) {
+          // Make sure the image URL is a complete path
+          product.image = `http://127.0.0.1:5000/uploads/${product.image}`;
+        }
+        return product;
+      });
 
       res.json(results);
     });
