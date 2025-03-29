@@ -52,7 +52,8 @@ document.addEventListener("DOMContentLoaded", () => {
       if (response.ok) {
         alert("Product added successfully!");
         productForm.reset();
-        previewContainer.innerHTML = ""; // Clear image previews
+        previewContainer.innerHTML = "";
+        window.location.href = "../Product%20Listing/productlisting.html";
       } else {
         alert("Error: " + result.message);
       }

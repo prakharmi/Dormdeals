@@ -14,6 +14,7 @@ function handleCredentialResponse(response) {
     .then((data) => {
       if (data.exists) {
         localStorage.setItem("userCollege", data.user.college);
+        window.location.href = "../Product%20Listing/productlisting.html";
       } else {
         window.location.href = "../User%20Info/userinfo.html";
       }
