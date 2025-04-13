@@ -1,4 +1,4 @@
-const API_BASE_URL = 'https://your-render-app-name.onrender.com';
+const API_BASE_URL = 'https://dormdeals-backend.onrender.com';
 
 function handleCredentialResponse(response) {
   console.log("Encoded JWT ID token: " + response.credential);

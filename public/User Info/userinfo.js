@@ -1,4 +1,4 @@
-const API_BASE_URL = 'https://your-render-app-name.onrender.com';
+const API_BASE_URL = 'https://dormdeals-backend.onrender.com';
 
 window.onload = function () {
   const email = localStorage.getItem("userEmail");

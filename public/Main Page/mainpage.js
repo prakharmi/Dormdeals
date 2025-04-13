@@ -9,7 +9,7 @@ function handleCredentialResponse(response) {
   localStorage.setItem("userName", payload.name);
 
   // Check if user exists in database
-  const API_BASE_URL = 'https://your-render-app-name.onrender.com';
+  const API_BASE_URL = 'https://dormdeals-backend.onrender.com';
 
   fetch(`${API_BASE_URL}/check-user/${encodeURIComponent(payload.email)}`)
     .then((response) => response.json())
