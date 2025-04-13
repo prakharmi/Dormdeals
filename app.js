@@ -27,8 +27,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Serve static files
-app.use(express.static(path.join(__dirname, "User Info")));
-app.use(express.static(path.join(__dirname, "Product Info")));
+app.use(express.static(path.join(__dirname, "public")));
 app.use(
   "/uploads",
   express.static(path.join(__dirname, process.env.UPLOAD_PATH)),
@@ -40,7 +39,7 @@ app.use("/", productRoutes);
 
 // Default route
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "User Info", "userinfo.html"));
+  res.sendFile(path.join(__dirname, "public", "User Info", "userinfo.html"));
 });
 
 // Error handling middleware
