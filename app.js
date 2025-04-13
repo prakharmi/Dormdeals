@@ -47,3 +47,8 @@ app.get("/", (req, res) => {
 app.use(errorHandler);
 
 module.exports = app;
+
+const fs = require('fs');
+if (!fs.existsSync('tmp/uploads')) {
+  fs.mkdirSync('tmp/uploads', { recursive: true });
+}

@@ -9,7 +9,9 @@ function handleCredentialResponse(response) {
   localStorage.setItem("userName", payload.name);
 
   // Check if user exists in database
-  fetch(`http://127.0.0.1:5000/check-user/${encodeURIComponent(payload.email)}`)
+  const API_BASE_URL = 'https://your-render-app-name.onrender.com';
+
+  fetch(`${API_BASE_URL}/check-user/${encodeURIComponent(payload.email)}`)
     .then((response) => response.json())
     .then((data) => {
       if (data.exists) {

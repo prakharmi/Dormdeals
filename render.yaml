@@ -1,0 +1,35 @@
+services:
+  - type: web
+    name: dormdeals
+    env: node
+    buildCommand: npm install
+    startCommand: node index.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: DB_HOST
+        fromDatabase:
+          name: dormdeals-db
+          property: host
+      - key: DB_USER
+        fromDatabase:
+          name: dormdeals-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: dormdeals-db
+          property: password
+      - key: DB_NAME
+        fromDatabase:
+          name: dormdeals-db
+          property: database
+      - key: CORS_ORIGIN
+        value: https://dormdeals.onrender.com
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false

@@ -1,3 +1,5 @@
+const API_BASE_URL = 'https://your-render-app-name.onrender.com';
+
 function handleCredentialResponse(response) {
   console.log("Encoded JWT ID token: " + response.credential);
 
@@ -8,7 +10,7 @@ function handleCredentialResponse(response) {
   localStorage.setItem("userEmail", payload.email);
   localStorage.setItem("userName", payload.name);
 
-  fetch(`http://127.0.0.1:5000/check-user/${encodeURIComponent(payload.email)}`)
+  fetch(`${API_BASE_URL}/check-user/${encodeURIComponent(payload.email)}`)
     .then((response) => response.json())
     .then((data) => {
       if (data.exists) {
@@ -29,10 +31,8 @@ function displaySignOutButton() {
   const signInButtonContainer = document.getElementById("google-signin-button");
 
   if (signInButtonContainer) {
-    // Clear the sign-in button container
     signInButtonContainer.innerHTML = "";
 
-    // Create sign-out button in the same container
     const signOutButton = document.createElement("button");
     signOutButton.id = "sign-out-button";
     signOutButton.className = "sign-out-btn";
@@ -46,7 +46,6 @@ function displaySignOutButton() {
     signInButtonContainer.appendChild(userNameSpan);
     signInButtonContainer.appendChild(signOutButton);
 
-    // Add sign out functionality
     signOutButton.addEventListener("click", function () {
       localStorage.removeItem("userToken");
       localStorage.removeItem("userEmail");
@@ -63,7 +62,7 @@ function displayUserInfo() {
   const userCollege = localStorage.getItem("userCollege");
 
   console.log(
-    `User: ${userName}, Email: ${userEmail}, College: ${userCollege}`,
+    `User: ${userName}, Email: ${userEmail}, College: ${userCollege}`
   );
 }
 
@@ -75,25 +74,30 @@ function checkUserAuthStatus() {
     displaySignOutButton();
     return true;
   }
-
   return false;
 }
 
 function initializeGoogleSignIn() {
   if (!checkUserAuthStatus()) {
-    google.accounts.id.initialize({
-      client_id:
-        "866863334708-6o7pat7hkajrhve0s50tv1cpks0fnvbu.apps.googleusercontent.com",
-      callback: handleCredentialResponse,
-    });
+     try {
+        google.accounts.id.initialize({
+        client_id:
+          "866863334708-6o7pat7hkajrhve0s50tv1cpks0fnvbu.apps.googleusercontent.com",
+        callback: handleCredentialResponse,
+        });
 
-    const signInButton = document.getElementById("google-signin-button");
-    if (signInButton) {
-      google.accounts.id.renderButton(signInButton, {
-        theme: "outline",
-        size: "large",
-      });
-    }
+        const signInButton = document.getElementById("google-signin-button");
+        if (signInButton) {
+        google.accounts.id.renderButton(signInButton, {
+          theme: "outline",
+          size: "large",
+        });
+        } else {
+            console.error("Sign-in button container not found.");
+        }
+     } catch(error) {
+         console.error("Google Sign-In initialization failed:", error);
+     }
   }
 }
 
@@ -101,87 +105,106 @@ async function loadProductDetails() {
   const productId = localStorage.getItem("selectedProductId");
 
   if (!productId) {
-    console.error("No product ID found");
-    showError("Product not found.");
+    console.error("No product ID found in localStorage.");
+    showError("Product not found. Please go back and select a product.");
     return;
   }
 
   try {
-    const response = await fetch(`http://127.0.0.1:5000/product/${productId}`);
+    const response = await fetch(`${API_BASE_URL}/product/${productId}`);
 
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+       let errorData;
+       try {
+           errorData = await response.json();
+       } catch(e) {
+       }
+       const errorMessage = errorData?.message || `Product not found or server error (Status: ${response.status})`;
+       throw new Error(errorMessage);
     }
 
     const productData = await response.json();
     displayProductDetails(productData);
 
-    if (productData.category) {
+    if (productData.id && productData.category && productData.college) {
       loadSimilarProducts(
         productData.id,
         productData.category,
-        productData.college,
+        productData.college
       );
+    } else {
+        console.warn("Missing data required for loading similar products (ID, category, or college).");
+        document.querySelector(".similar-products").style.display = "none";
     }
+
   } catch (error) {
     console.error("Error loading product details:", error);
-    showError("Failed to load product details. Please try again later.");
+    showError(`Failed to load product details: ${error.message}`);
   }
 }
 
 function displayProductDetails(product) {
-  document.getElementById("product-name").textContent = product.name;
-  document.getElementById("product-name-breadcrumb").textContent = product.name;
-  document.getElementById("product-price").textContent = `$${product.price}`;
-  document.getElementById("product-description").textContent =
-    product.description;
-  document.getElementById("product-category").textContent = product.category;
-  document.getElementById("product-category-tag").textContent =
-    product.category;
-  document.getElementById("product-college").textContent = product.college;
+  document.getElementById("product-name").textContent = product.name || "N/A";
+  document.getElementById("product-name-breadcrumb").textContent = product.name || "Product";
+  document.getElementById("product-price").textContent = product.price !== undefined ? `$${product.price}` : "Price not available";
+  document.getElementById("product-description").textContent = product.description || "No description available.";
+  document.getElementById("product-category").textContent = product.category || "Uncategorized";
+  document.getElementById("product-category-tag").textContent = product.category || "Uncategorized";
+  document.getElementById("product-college").textContent = product.college || "College not specified";
 
-  if (product.images && product.images.length > 0) {
-    document.getElementById("main-product-image").src = product.images[0];
-    document.getElementById("main-product-image").alt = product.name;
+  const mainImageElement = document.getElementById("main-product-image");
+  const thumbnailContainer = document.getElementById("thumbnail-container");
+  const placeholderImage = "placeholder.jpg";
 
-    const thumbnailContainer = document.getElementById("thumbnail-container");
-    thumbnailContainer.innerHTML = "";
+  mainImageElement.src = placeholderImage;
+  mainImageElement.alt = product.name || "Product Image";
+  thumbnailContainer.innerHTML = ""; 
 
-    product.images.forEach((imageUrl, index) => {
+  const images = product.images || (product.imageUrl ? [product.imageUrl] : []);
+
+  if (images && images.length > 0) {
+    mainImageElement.src = images[0];
+
+    images.forEach((imageUrl, index) => {
       const thumbnail = document.createElement("img");
       thumbnail.src = imageUrl;
-      thumbnail.alt = `${product.name} - Image ${index + 1}`;
+      thumbnail.alt = `${product.name || 'Product'} - Image ${index + 1}`;
       thumbnail.classList.add("thumbnail");
       if (index === 0) thumbnail.classList.add("active");
 
       thumbnail.addEventListener("click", () => {
-        document.getElementById("main-product-image").src = imageUrl;
-
-        document.querySelectorAll(".thumbnail").forEach((thumb) => {
-          thumb.classList.remove("active");
-        });
+        mainImageElement.src = imageUrl;
+        document.querySelectorAll(".thumbnail").forEach(thumb => thumb.classList.remove("active"));
         thumbnail.classList.add("active");
       });
 
       thumbnailContainer.appendChild(thumbnail);
     });
   } else {
-    document.getElementById("main-product-image").src = "placeholder.jpg";
-    document.getElementById("main-product-image").alt = product.name;
+     mainImageElement.src = placeholderImage;
   }
+   mainImageElement.onerror = function() { this.onerror=null; this.src=placeholderImage; };
 
   const contactButton = document.querySelector(".contact-seller-btn");
-  contactButton.addEventListener("click", () => {
-    alert(
-      `Contact the seller at: ${product.sellerEmail || "No contact information available"}`,
-    );
-  });
+  if (contactButton) {
+      contactButton.replaceWith(contactButton.cloneNode(true));
+      const newContactButton = document.querySelector(".contact-seller-btn");
+      newContactButton.addEventListener("click", () => {
+          const contactInfo = product.sellerEmail || "No contact information available";
+          alert(`Contact the seller at: ${contactInfo}`);
+      });
+  }
 }
 
 async function loadSimilarProducts(currentProductId, category, college) {
+  const similarProductsSection = document.querySelector(".similar-products");
+  if (!similarProductsSection) return;
+
+  similarProductsSection.style.display = 'block';
+
   try {
     const response = await fetch(
-      `http://127.0.0.1:5000/products?college=${encodeURIComponent(college)}&category=${encodeURIComponent(category)}`,
+      `${API_BASE_URL}/products?college=${encodeURIComponent(college)}&category=${encodeURIComponent(category)}`
     );
 
     if (!response.ok) {
@@ -191,22 +214,27 @@ async function loadSimilarProducts(currentProductId, category, college) {
     const products = await response.json();
 
     const similarProducts = products
-      .filter((product) => product.id != currentProductId)
+      .filter((product) => (product.id || product._id) != currentProductId)
       .slice(0, 4);
 
     displaySimilarProducts(similarProducts);
+
   } catch (error) {
     console.error("Error loading similar products:", error);
-    document.querySelector(".similar-products").style.display = "none";
+    similarProductsSection.style.display = "none";
   }
 }
 
 function displaySimilarProducts(products) {
   const container = document.getElementById("similar-products-container");
+  const similarProductsSection = document.querySelector(".similar-products");
+
+  if (!container || !similarProductsSection) return;
+
   container.innerHTML = "";
 
   if (products.length === 0) {
-    document.querySelector(".similar-products").style.display = "none";
+    similarProductsSection.style.display = "none";
     return;
   }
 
@@ -214,17 +242,28 @@ function displaySimilarProducts(products) {
     const productCard = document.createElement("div");
     productCard.classList.add("similar-product-card");
 
-    const imageSrc = product.image || "placeholder.jpg";
+    let imageSrc = "placeholder.jpg";
+    if (product.imageUrl) {
+        imageSrc = product.imageUrl;
+    } else if (product.images && product.images.length > 0) {
+        imageSrc = product.images[0];
+    }
+
 
     productCard.innerHTML = `
-        <img src="${imageSrc}" alt="${product.name}" class="similar-product-image" onerror="this.src='placeholder.jpg'">
-        <h3 class="similar-product-title">${product.name}</h3>
-        <p class="similar-product-price">$${product.price}</p>
+        <img src="${imageSrc}" alt="${product.name || 'Similar Product'}" class="similar-product-image" onerror="this.onerror=null; this.src='placeholder.jpg';">
+        <h3 class="similar-product-title">${product.name || 'Unnamed Product'}</h3>
+        <p class="similar-product-price">$${product.price !== undefined ? product.price : 'N/A'}</p>
       `;
 
     productCard.addEventListener("click", () => {
-      localStorage.setItem("selectedProductId", product.id);
-      window.location.reload();
+      const productId = product.id || product._id;
+      if (productId) {
+          localStorage.setItem("selectedProductId", productId);
+          window.location.reload();
+      } else {
+          console.error("Similar product ID is missing.");
+      }
     });
 
     container.appendChild(productCard);
@@ -233,15 +272,20 @@ function displaySimilarProducts(products) {
 
 function showError(message) {
   const container = document.querySelector(".product-container");
-  container.innerHTML = `
-      <div class="error-message" style="text-align: center; padding: 50px 20px;">
-        <h2>Oops!</h2>
-        <p>${message}</p>
-        <button class="back-btn" style="margin-top: 20px;" onclick="window.location.href='../Product%20Listing/productlisting.html'">
-          Back to Products
-        </button>
-      </div>
-    `;
+  if (container) {
+      container.innerHTML = `
+          <div class="error-message" style="text-align: center; padding: 50px 20px; color: #dc3545;">
+            <h2>Oops! Something went wrong.</h2>
+            <p>${message}</p>
+            <button class="back-btn" style="margin-top: 20px; padding: 10px 20px; cursor: pointer;" onclick="window.location.href='../Product%20Listing/productlisting.html'">
+              Back to Products
+            </button>
+          </div>
+        `;
+  } else {
+      console.error("Error container not found to display message:", message);
+      alert(message);
+  }
 }
 
 document.addEventListener("DOMContentLoaded", () => {

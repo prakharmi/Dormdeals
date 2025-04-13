@@ -2,10 +2,10 @@ const multer = require("multer");
 const path = require("path");
 require("dotenv").config();
 
-// Configure storage
+// Configure temporary storage
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, process.env.UPLOAD_PATH);
+    cb(null, 'tmp/uploads'); // Store temporarily before uploading to Cloudinary
   },
   filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);

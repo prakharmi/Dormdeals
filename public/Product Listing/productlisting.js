@@ -1,3 +1,5 @@
+const API_BASE_URL = 'https://your-render-app-name.onrender.com';
+
 function handleCredentialResponse(response) {
   console.log("Encoded JWT ID token: " + response.credential);
 
@@ -8,7 +10,7 @@ function handleCredentialResponse(response) {
   localStorage.setItem("userEmail", payload.email);
   localStorage.setItem("userName", payload.name);
 
-  fetch(`http://127.0.0.1:5000/check-user/${encodeURIComponent(payload.email)}`)
+  fetch(`${API_BASE_URL}/check-user/${encodeURIComponent(payload.email)}`)
     .then((response) => response.json())
     .then((data) => {
       if (data.exists) {
@@ -61,29 +63,33 @@ function checkUserAuthStatus() {
 
   if (userToken) {
     console.log("User already signed in");
-
     displaySignOutButton();
-
     return true;
   }
-
+  console.log("User not signed in");
   return false;
 }
 
 function initializeGoogleSignIn() {
   if (!checkUserAuthStatus()) {
-    google.accounts.id.initialize({
-      client_id:
-        "866863334708-6o7pat7hkajrhve0s50tv1cpks0fnvbu.apps.googleusercontent.com",
-      callback: handleCredentialResponse,
-    });
+    try {
+        google.accounts.id.initialize({
+        client_id:
+          "866863334708-6o7pat7hkajrhve0s50tv1cpks0fnvbu.apps.googleusercontent.com",
+        callback: handleCredentialResponse,
+        });
 
-    const signInButton = document.getElementById("google-signin-button");
-    if (signInButton) {
-      google.accounts.id.renderButton(signInButton, {
-        theme: "outline",
-        size: "large",
-      });
+        const signInButton = document.getElementById("google-signin-button");
+        if (signInButton) {
+        google.accounts.id.renderButton(signInButton, {
+          theme: "outline",
+          size: "large",
+        });
+        } else {
+          console.error("Google Sign-In button container not found.");
+        }
+    } catch (error) {
+        console.error("Error initializing Google Sign-In:", error);
     }
   }
 }
@@ -110,51 +116,74 @@ document.addEventListener("DOMContentLoaded", () => {
 
 async function loadProducts() {
   const college = localStorage.getItem("userCollege");
-  if (!college) {
-    console.error("No college found in localStorage.");
-    return;
+   let fetchUrl = `${API_BASE_URL}/products`;
+  if (college) {
+      fetchUrl += `?college=${encodeURIComponent(college)}`;
   }
+  console.log(`Workspaceing products from: ${fetchUrl}`);
 
   try {
-    const response = await fetch(
-      `http://127.0.0.1:5000/products?college=${encodeURIComponent(college)}`,
-    );
-    const products = await response.json();
+    const response = await fetch(fetchUrl);
 
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const products = await response.json();
     displayProducts(products);
+
   } catch (error) {
     console.error("Error loading products:", error);
+     const productGrid = document.querySelector(".product-grid");
+     if(productGrid) {
+         productGrid.innerHTML = `<p class="error-message">Could not load products. Please try again later.</p>`;
+     }
   }
 }
 
 function displayProducts(products) {
   const productGrid = document.querySelector(".product-grid");
+  if (!productGrid) {
+      console.error("Product grid container not found");
+      return;
+  }
   productGrid.innerHTML = "";
 
   if (!products || products.length === 0) {
-    productGrid.innerHTML = `<p>No products found for your college.</p>`;
+    const college = localStorage.getItem("userCollege");
+    if (college) {
+        productGrid.innerHTML = `<p>No products found for your college (${college}).</p>`;
+    } else {
+        productGrid.innerHTML = `<p>No products found. Please log in and set your college to see relevant items.</p>`;
+    }
     return;
   }
 
   products.forEach((product) => {
     const placeholderImage = "placeholder.jpg";
-    const imageSrc = product.image || placeholderImage;
+    const imageSrc = product.imageUrl || product.image || placeholderImage;
 
     const productCard = document.createElement("div");
     productCard.classList.add("product-card");
     productCard.dataset.category = product.category
       ? product.category.toLowerCase()
       : "uncategorized";
+    productCard.dataset.productId = product.id || product._id;
 
     productCard.innerHTML = `
-      <img src="${imageSrc}" alt="${product.name}" class="product-image" onerror="this.src='${placeholderImage}'">
-      <h3 class="product-title">${product.name}</h3>
-      <p class="product-price">$${product.price}</p>
-    `;
+      <img src="${imageSrc}" alt="${product.name || 'Product Image'}" class="product-image" onerror="this.onerror=null; this.src='${placeholderImage}';">
+      <h3 class="product-title">${product.name || 'Unnamed Product'}</h3>
+      <p class="product-price">$${product.price !== undefined ? product.price : 'N/A'}</p>
+      `;
 
     productCard.addEventListener("click", function () {
-      localStorage.setItem("selectedProductId", product.id);
-      window.location.href = "../Product%20Page/productpage.html";
+      const productId = product.id || product._id;
+      if (productId) {
+          localStorage.setItem("selectedProductId", productId);
+          window.location.href = "../Product%20Page/productpage.html";
+      } else {
+          console.error("Product ID is missing, cannot navigate to details page.");
+      }
     });
 
     productGrid.appendChild(productCard);
@@ -166,45 +195,79 @@ function setupFilters() {
 
   filterButtons.forEach((button) => {
     button.addEventListener("click", () => {
-      const category = button.textContent.toLowerCase();
+      const category = button.textContent.toLowerCase().trim();
       filterProducts(category);
+
+      filterButtons.forEach(btn => btn.classList.remove('active-filter'));
+      button.classList.add('active-filter');
     });
   });
 }
 
 function filterProducts(category) {
   const products = document.querySelectorAll(".product-card");
+  let productsFound = false;
 
   products.forEach((product) => {
-    if (category === "all products" || product.dataset.category === category) {
+    const matchesCategory = category === "all products" || product.dataset.category === category;
+
+    if (matchesCategory) {
       product.classList.remove("hidden");
+      productsFound = true;
     } else {
       product.classList.add("hidden");
     }
   });
+
+  const productGrid = document.querySelector(".product-grid");
+  const noMatchMessage = document.getElementById("no-match-message");
+  if (!productsFound && productGrid && !noMatchMessage) {
+      const messageElement = document.createElement('p');
+      messageElement.id = 'no-match-message';
+      messageElement.textContent = `No products found in the category: ${category}`;
+      productGrid.appendChild(messageElement);
+  } else if (productsFound && noMatchMessage) {
+      noMatchMessage.remove();
+  }
+
 }
 
 function setupSearch() {
   const searchBar = document.querySelector(".search-bar");
+  if (!searchBar) return;
 
   searchBar.addEventListener("input", (event) => {
-    const query = event.target.value.toLowerCase();
+    const query = event.target.value.toLowerCase().trim();
     searchProducts(query);
   });
 }
 
 function searchProducts(query) {
   const products = document.querySelectorAll(".product-card");
+  let productsFound = false;
 
   products.forEach((product) => {
-    const title = product
-      .querySelector(".product-title")
-      .textContent.toLowerCase();
+    const titleElement = product.querySelector(".product-title");
+    const title = titleElement ? titleElement.textContent.toLowerCase() : "";
 
     if (title.includes(query)) {
       product.classList.remove("hidden");
+      productsFound = true;
     } else {
       product.classList.add("hidden");
     }
   });
+
+   const productGrid = document.querySelector(".product-grid");
+   const noMatchMessage = document.getElementById("no-search-match-message");
+   if (!productsFound && productGrid && !noMatchMessage) {
+       const messageElement = document.createElement('p');
+       messageElement.id = 'no-search-match-message';
+       messageElement.textContent = `No products found matching your search: "${query}"`;
+       productGrid.appendChild(messageElement);
+   } else if (productsFound && noMatchMessage) {
+       noMatchMessage.remove();
+   } else if (!productsFound && noMatchMessage) {
+        noMatchMessage.textContent = `No products found matching your search: "${query}"`;
+   }
 }

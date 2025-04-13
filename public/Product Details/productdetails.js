@@ -1,3 +1,5 @@
+const API_BASE_URL = 'https://your-render-app-name.onrender.com';
+
 document.addEventListener("DOMContentLoaded", () => {
   const fileInput = document.getElementById("photos");
   const previewContainer = document.getElementById("image-preview");
@@ -42,7 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
     formData.append("college", college);
 
     try {
-      const response = await fetch("http://localhost:5000/submit-product", {
+      const response = await fetch(`${API_BASE_URL}/submit-product`, {
         method: "POST",
         body: formData,
       });
