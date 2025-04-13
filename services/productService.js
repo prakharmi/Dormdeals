@@ -1,5 +1,5 @@
-const Product = require("../models/Product");
-const ProductImage = require("../models/ProductImage");
+const Product = require("../models/product");
+const ProductImage = require("../models/productimage");
 const cloudinary = require("../config/cloudinary");
 const fs = require('fs');
 const path = require('path');
