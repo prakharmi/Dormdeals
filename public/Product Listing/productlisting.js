@@ -173,7 +173,7 @@ function displayProducts(products) {
     productCard.innerHTML = `
       <img src="${imageSrc}" alt="${product.name || 'Product Image'}" class="product-image" onerror="this.onerror=null; this.src='${placeholderImage}';">
       <h3 class="product-title">${product.name || 'Unnamed Product'}</h3>
-      <p class="product-price">$${product.price !== undefined ? product.price : 'N/A'}</p>
+      <p class="product-price">Rs.${product.price !== undefined ? product.price : 'N/A'}</p>
       `;
 
     productCard.addEventListener("click", function () {
