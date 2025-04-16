@@ -146,7 +146,7 @@ async function loadProductDetails() {
 function displayProductDetails(product) {
   document.getElementById("product-name").textContent = product.name || "N/A";
   document.getElementById("product-name-breadcrumb").textContent = product.name || "Product";
-  document.getElementById("product-price").textContent = product.price !== undefined ? `$${product.price}` : "Price not available";
+  document.getElementById("product-price").textContent = product.price !== undefined ? `Rs${product.price}` : "Price not available";
   document.getElementById("product-description").textContent = product.description || "No description available.";
   document.getElementById("product-category").textContent = product.category || "Uncategorized";
   document.getElementById("product-category-tag").textContent = product.category || "Uncategorized";
@@ -253,7 +253,7 @@ function displaySimilarProducts(products) {
     productCard.innerHTML = `
         <img src="${imageSrc}" alt="${product.name || 'Similar Product'}" class="similar-product-image" onerror="this.onerror=null; this.src='placeholder.jpg';">
         <h3 class="similar-product-title">${product.name || 'Unnamed Product'}</h3>
-        <p class="similar-product-price">$${product.price !== undefined ? product.price : 'N/A'}</p>
+        <p class="similar-product-price">Rs.${product.price !== undefined ? product.price : 'N/A'}</p>
       `;
 
     productCard.addEventListener("click", () => {
