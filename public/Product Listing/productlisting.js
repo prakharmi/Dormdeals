@@ -192,13 +192,22 @@ function displayProducts(products) {
 
 function setupFilters() {
   const filterButtons = document.querySelectorAll(".filter-button");
+  
+  // Set "All Products" as active by default
+  const allProductsButton = document.querySelector(".filter-button:first-child");
+  if (allProductsButton) {
+    allProductsButton.classList.add('active-filter');
+  }
 
   filterButtons.forEach((button) => {
     button.addEventListener("click", () => {
       const category = button.textContent.toLowerCase().trim();
       filterProducts(category);
 
+      // Remove active class from all buttons
       filterButtons.forEach(btn => btn.classList.remove('active-filter'));
+      
+      // Add active class to clicked button
       button.classList.add('active-filter');
     });
   });

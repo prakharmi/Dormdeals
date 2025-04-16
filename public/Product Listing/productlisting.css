@@ -223,3 +223,9 @@ footer {
   transform: translateY(-2px);
   box-shadow: 0 6px 12px rgba(59, 130, 246, 0.35);
 }
+
+.filter-button.active-filter {
+  background-color: #0f172a;
+  color: white;
+  border-color: #0f172a;
+}
