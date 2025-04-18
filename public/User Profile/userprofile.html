@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Profile - DormDeals</title>
+    <link rel="stylesheet" href="userprofile.css" />
+  </head>
+  <body>
+    <header>
+      <a href="../Main Page/mainpage.html" style="display: flex; align-items: center; gap: 10px; text-decoration: none;">
+        <img src="../Product Listing/dormdealslogo.png" alt="Logo" class="logo" />
+        <span class="navbar-text">DormDeals</span>
+      </a>
+      <div class="search-container">
+        <input
+          type="text"
+          class="search-bar"
+          placeholder="Search your products..."
+        />
+      </div>
+      <div id="google-signin-button"></div>
+    </header>
+
+    <main class="profile-container">
+      <div class="profile-header">
+        <div class="user-info">
+          <h1 id="user-name">User Profile</h1>
+          <p id="user-college">Loading college information...</p>
+          <p id="user-email">Loading email...</p>
+        </div>
+        <div class="profile-actions">
+          <a href="../Product Details/productdetails.html" class="action-button add-product-btn">Add New Product</a>
+          <a href="../Product Listing/productlisting.html" class="action-button browse-btn">Browse Products</a>
+        </div>
+      </div>
+
+      <div class="content-wrapper">
+        <div class="filter-tabs">
+          <button class="tab-button active" data-filter="all">All Products</button>
+          <button class="tab-button" data-filter="available">Available</button>
+          <button class="tab-button" data-filter="sold">Sold</button>
+        </div>
+
+        <div class="product-section">
+          <h2>My Products</h2>
+          <div id="user-products-container" class="product-grid">
+            <!-- Products will be loaded here -->
+            <div class="loading-spinner">Loading your products...</div>
+          </div>
+        </div>
+
+        <!-- Edit Product Modal -->
+        <div id="edit-modal" class="modal">
+          <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Edit Product</h2>
+            <form id="edit-product-form">
+              <input type="hidden" id="edit-product-id">
+              <div class="form-group">
+                <label for="edit-product-name">Product Name:</label>
+                <input type="text" id="edit-product-name" name="productName" required>
+              </div>
+              <div class="form-group">
+                <label for="edit-category">Category:</label>
+                <select id="edit-category" name="category" required>
+                  <option value="" disabled>Select a category</option>
+                  <option value="furniture">Furniture</option>
+                  <option value="electronics">Electronics</option>
+                  <option value="education">Books, Notes</option>
+                  <option value="cooler">Cooler, Fan, AC</option>
+                  <option value="home">Home</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="edit-description">Description:</label>
+                <textarea id="edit-description" name="description" required></textarea>
+              </div>
+              <div class="form-group">
+                <label for="edit-price">Price:</label>
+                <input type="number" id="edit-price" name="price" required>
+              </div>
+              <div class="form-actions">
+                <button type="submit" class="save-button">Save Changes</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Confirmation Modal -->
+        <div id="confirm-modal" class="modal">
+          <div class="modal-content confirm-content">
+            <h2>Confirm Action</h2>
+            <p id="confirm-message">Are you sure you want to proceed?</p>
+            <div class="confirm-actions">
+              <button id="confirm-cancel" class="cancel-button">Cancel</button>
+              <button id="confirm-proceed" class="proceed-button">Proceed</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <div class="footer-column">
+        <h3>Information</h3>
+        <ul>
+          <li><a href="#">FAQ</a></li>
+          <li><a href="#">Terms and Conditions</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-column">
+        <h3>Company</h3>
+        <ul>
+          <li><a href="#">Contact Us</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-column">
+        <h3>Socials</h3>
+        <ul>
+          <li>
+            <a href="https://www.linkedin.com/in/prakhar-mishraa">LinkedIn</a>
+          </li>
+          <li>
+            <a href="https://www.instagram.com/prakharmishraaaa">Instagram</a>
+          </li>
+          <li><a href="https://github.com/prakharmi/Dormdeals">Github</a></li>
+        </ul>
+      </div>
+
+      <div style="width: 100%; text-align: center; margin-top: 20px">
+        <p>© 2025 Dorm Deals | All rights reserved.</p>
+      </div>
+    </footer>
+
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="userprofile.js"></script>
+  </body>
+</html>
