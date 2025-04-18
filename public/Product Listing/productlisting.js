@@ -94,11 +94,30 @@ function initializeGoogleSignIn() {
   }
 }
 
+function setupProfileButton() {
+  const profileButton = document.getElementById('profile-button');
+  if (profileButton) {
+    // Show profile button only if user is logged in
+    const userToken = localStorage.getItem("userToken");
+    if (!userToken) {
+      profileButton.classList.add('hidden');
+    } else {
+      profileButton.classList.remove('hidden');
+    }
+    
+    // Add click event to navigate to profile page
+    profileButton.addEventListener('click', function() {
+      window.location.href = "../User Profile/userprofile.html";
+    });
+  }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   initializeGoogleSignIn();
   loadProducts();
   setupFilters();
   setupSearch();
+  setupProfileButton();
 
   const redirectButton = document.getElementById("redirect-button");
   if (redirectButton) {

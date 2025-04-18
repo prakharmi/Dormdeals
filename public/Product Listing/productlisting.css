@@ -229,3 +229,29 @@ footer {
   color: white;
   border-color: #0f172a;
 }
+
+.nav-buttons {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.profile-btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 15px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s;
+}
+
+.profile-btn:hover {
+  background-color: #0056b3;
+}
+
+/* Hide the profile button when not logged in */
+.profile-btn.hidden {
+  display: none;
+}
