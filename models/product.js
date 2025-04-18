@@ -2,11 +2,11 @@ const db = require("../config/database").pool;
 
 class Product {
   static async create(productData) {
-    const { name, category, description, price, college } = productData;
+    const { name, category, description, price, college, user_email } = productData;
     try {
       const [result] = await db.query(
-        "INSERT INTO products (name, category, description, price, college) VALUES (?, ?, ?, ?, ?)",
-        [name, category, description, price, college],
+        "INSERT INTO products (name, category, description, price, college, user_email) VALUES (?, ?, ?, ?, ?, ?)",
+        [name, category, description, price, college, user_email],
       );
       return result.insertId;
     } catch (error) {
