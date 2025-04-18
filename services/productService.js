@@ -60,8 +60,7 @@ class ProductService {
   static async getProductsByCollege(college, category) {
     try {
       const products = await Product.findByCollege(college, category);
-      
-      // No need to modify image URLs as they're now complete Cloudinary URLs
+      // Products will now only include those that are not marked as sold
       return products;
     } catch (error) {
       throw error;

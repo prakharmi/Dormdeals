@@ -152,7 +152,7 @@ function displayProducts(products) {
   if (!products || products.length === 0) {
     const college = localStorage.getItem("userCollege");
     if (college) {
-        productGrid.innerHTML = `<p>No products found for your college (${college}).</p>`;
+        productGrid.innerHTML = `<p>No available products found for your college (${college}).</p>`;
     } else {
         productGrid.innerHTML = `<p>No products found. Please log in and set your college to see relevant items.</p>`;
     }
@@ -160,33 +160,37 @@ function displayProducts(products) {
   }
 
   products.forEach((product) => {
-    const placeholderImage = "placeholder.jpg";
-    const imageSrc = product.imageUrl || product.image || placeholderImage;
+    // Only display products that aren't sold (this check is now redundant since the backend filters it)
+    // but keeping it for frontend validation just in case
+    if (!product.is_sold) {
+      const placeholderImage = "placeholder.jpg";
+      const imageSrc = product.imageUrl || product.image || placeholderImage;
 
-    const productCard = document.createElement("div");
-    productCard.classList.add("product-card");
-    productCard.dataset.category = product.category
-      ? product.category.toLowerCase()
-      : "uncategorized";
-    productCard.dataset.productId = product.id || product._id;
+      const productCard = document.createElement("div");
+      productCard.classList.add("product-card");
+      productCard.dataset.category = product.category
+        ? product.category.toLowerCase()
+        : "uncategorized";
+      productCard.dataset.productId = product.id || product._id;
 
-    productCard.innerHTML = `
-      <img src="${imageSrc}" alt="${product.name || 'Product Image'}" class="product-image" onerror="this.onerror=null; this.src='${placeholderImage}';">
-      <h3 class="product-title">${product.name || 'Unnamed Product'}</h3>
-      <p class="product-price">Rs.${product.price !== undefined ? product.price : 'N/A'}</p>
-      `;
+      productCard.innerHTML = `
+        <img src="${imageSrc}" alt="${product.name || 'Product Image'}" class="product-image" onerror="this.onerror=null; this.src='${placeholderImage}';">
+        <h3 class="product-title">${product.name || 'Unnamed Product'}</h3>
+        <p class="product-price">Rs.${product.price !== undefined ? product.price : 'N/A'}</p>
+        `;
 
-    productCard.addEventListener("click", function () {
-      const productId = product.id || product._id;
-      if (productId) {
-          localStorage.setItem("selectedProductId", productId);
-          window.location.href = "../Product%20Page/productpage.html";
-      } else {
-          console.error("Product ID is missing, cannot navigate to details page.");
-      }
-    });
+      productCard.addEventListener("click", function () {
+        const productId = product.id || product._id;
+        if (productId) {
+            localStorage.setItem("selectedProductId", productId);
+            window.location.href = "../Product%20Page/productpage.html";
+        } else {
+            console.error("Product ID is missing, cannot navigate to details page.");
+        }
+      });
 
-    productGrid.appendChild(productCard);
+      productGrid.appendChild(productCard);
+    }
   });
 }
 

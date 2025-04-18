@@ -20,15 +20,15 @@ class Product {
         SELECT p.*, 
                (SELECT pi.image_url FROM product_images pi WHERE pi.product_id = p.id LIMIT 1) AS image 
         FROM products p 
-        WHERE p.college = ?
+        WHERE p.college = ? AND p.is_sold = 0
       `;
       const params = [college];
-
+  
       if (category) {
         query += " AND p.category = ?";
         params.push(category);
       }
-
+  
       const [rows] = await db.query(query, params);
       return rows;
     } catch (error) {
