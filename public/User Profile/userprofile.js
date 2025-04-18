@@ -94,15 +94,10 @@ async function loadUserProducts() {
   }
   
   try {
-    // In a real implementation, you'd fetch user's products
-    // For now we'll simulate this with a GET request
     const response = await fetch(`${API_BASE_URL}/user-products?email=${encodeURIComponent(userEmail)}`);
     
-    // If the endpoint doesn't exist, fall back to mocked data
     if (!response.ok) {
-      // Mock some products for demonstration
-      mockUserProducts();
-      return;
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
     
     const products = await response.json();
@@ -111,44 +106,8 @@ async function loadUserProducts() {
     
   } catch (error) {
     console.error("Error loading user products:", error);
-    // Fall back to mock data if API call fails
-    mockUserProducts();
+    productContainer.innerHTML = `<div class="error-message">Failed to load your products. Please try again later.</div>`;
   }
-}
-
-function mockUserProducts() {
-  // Mock data for demonstration
-  userProducts = [
-    {
-      id: 1,
-      name: "Study Table",
-      category: "furniture",
-      description: "Sturdy wooden study table, 2 years old but in good condition",
-      price: "1200",
-      image: "../Product Listing/placeholder.jpg",
-      is_sold: false
-    },
-    {
-      id: 2,
-      name: "Physics Textbook",
-      category: "education",
-      description: "HC Verma Physics part 1 and 2, slightly used",
-      price: "400",
-      image: "../Product Listing/placeholder.jpg",
-      is_sold: true
-    },
-    {
-      id: 3,
-      name: "Table Fan",
-      category: "cooler",
-      description: "Usha table fan, 1 year old, works perfectly",
-      price: "800",
-      image: "../Product Listing/placeholder.jpg",
-      is_sold: false
-    }
-  ];
-  
-  displayUserProducts(userProducts);
 }
 
 function displayUserProducts(products, filter = 'all') {
@@ -187,7 +146,8 @@ function displayUserProducts(products, filter = 'all') {
     
     productCard.innerHTML = `
       <div class="product-image-container">
-        <img src="${product.image}" alt="${product.name}" class="product-image">
+        <img src="${product.image || '../Product Listing/placeholder.jpg'}" alt="${product.name}" class="product-image"
+             onerror="this.onerror=null; this.src='../Product Listing/placeholder.jpg';">
       </div>
       <div class="product-details">
         <span class="product-status ${statusClass}">${statusText}</span>
@@ -346,5 +306,113 @@ function handleDeleteProduct(event) {
 
 function handleToggleStatus(event) {
   const productId = event.currentTarget.getAttribute('data-id');
-  const isSold = event.currentTarget.getAttribute('data-sold')
+  const isSold = event.currentTarget.getAttribute('data-sold') === 'true';
+  const product = userProducts.find(p => p.id == productId);
+  
+  if (!product) return;
+  
+  // Set current action and product ID
+  currentAction = 'toggle-status';
+  currentProductId = productId;
+  
+  // Show confirmation modal
+  const statusText = isSold ? 'available' : 'sold';
+  document.getElementById('confirm-message').textContent = 
+    `Are you sure you want to mark "${product.name}" as ${statusText}?`;
+  document.getElementById('confirm-modal').style.display = 'block';
+}
+
+async function handleEditFormSubmit(event) {
+  event.preventDefault();
+  
+  const productId = document.getElementById('edit-product-id').value;
+  const name = document.getElementById('edit-product-name').value;
+  const category = document.getElementById('edit-category').value;
+  const description = document.getElementById('edit-description').value;
+  const price = document.getElementById('edit-price').value;
+  
+  try {
+    const response = await fetch(`${API_BASE_URL}/product/${productId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name,
+        category,
+        description,
+        price
+      })
+    });
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    // Close the modal
+    document.getElementById('edit-modal').style.display = 'none';
+    
+    // Show success message
+    alert('Product updated successfully!');
+    
+    // Reload the products
+    loadUserProducts();
+  } catch (error) {
+    console.error('Error updating product:', error);
+    alert('Failed to update product. Please try again.');
+  }
+}
+
+async function deleteProduct(productId) {
+  try {
+    const response = await fetch(`${API_BASE_URL}/product/${productId}`, {
+      method: 'DELETE'
+    });
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    // Show success message
+    alert('Product deleted successfully!');
+    
+    // Reload the products
+    loadUserProducts();
+  } catch (error) {
+    console.error('Error deleting product:', error);
+    alert('Failed to delete product. Please try again.');
+  }
+}
+
+async function toggleProductStatus(productId) {
+  const product = userProducts.find(p => p.id == productId);
+  
+  if (!product) return;
+  
+  const newStatus = !product.is_sold;
+  
+  try {
+    const response = await fetch(`${API_BASE_URL}/product/${productId}/status`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        is_sold: newStatus
+      })
+    });
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    // Show success message
+    alert(`Product marked as ${newStatus ? 'sold' : 'available'} successfully!`);
+    
+    // Reload the products
+    loadUserProducts();
+  } catch (error) {
+    console.error('Error updating product status:', error);
+    alert('Failed to update product status. Please try again.');
+  }
 }

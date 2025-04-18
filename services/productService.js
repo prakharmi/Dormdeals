@@ -8,9 +8,9 @@ class ProductService {
   static async createProduct(productData, files) {
     try {
       // Validate data
-      const { productName, category, description, price, college } = productData;
+      const { productName, category, description, price, college, email } = productData;
 
-      if (!productName || !category || !description || !price || !college || files.length === 0) {
+      if (!productName || !category || !description || !price || !college || !email || files.length === 0) {
         throw new Error("All fields and at least one image are required");
       }
 
@@ -21,6 +21,7 @@ class ProductService {
         description,
         price,
         college,
+        user_email: email,
       });
 
       // Upload images to Cloudinary

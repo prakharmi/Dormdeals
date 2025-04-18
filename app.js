@@ -7,6 +7,7 @@ require("dotenv").config();
 // Import routes
 const userRoutes = require("./routes/userRoutes");
 const productRoutes = require("./routes/productRoutes");
+const userProductRoutes = require("./routes/userProductRoutes"); // Add the new routes
 
 // Import middleware
 const errorHandler = require("./middleware/errorHandler");
@@ -18,7 +19,7 @@ const app = express();
 app.use(
   cors({
     origin: process.env.CORS_ORIGIN,
-    methods: ["GET", "POST"],
+    methods: ["GET", "POST", "PUT", "DELETE"], // Add PUT and DELETE methods
   }),
 );
 
@@ -36,6 +37,7 @@ app.use(
 // Use routes
 app.use("/", userRoutes);
 app.use("/", productRoutes);
+app.use("/", userProductRoutes); // Use the new routes
 
 // Default route
 app.get("/", (req, res) => {
