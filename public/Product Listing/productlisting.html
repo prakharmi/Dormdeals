@@ -1,82 +1,93 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dorm Deals</title>
-    <link rel="stylesheet" href="productlisting.css" />
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
-    <script src="productlisting.js" defer></script>
-  </head>
-  <body>
-    <header>
-      <div class="navbar-brand">
-        <a href="../Main Page/mainpage.html" style="display: flex; align-items: center; gap: 10px; text-decoration: none;">
-          <img src="dormdealslogo.png" alt="Logo" class="logo" />
-          <span class="navbar-text">DormDeals</span>
-        </a>
-      </div>
-      <div class="search-container">
-        <input
-          type="text"
-          class="search-bar"
-          placeholder="Search for products..."
-        />
-      </div>
-      <div class="nav-buttons">
-        <button id="profile-button" class="profile-btn">My Profile</button>
-        <div id="google-signin-button"></div>
-      </div>
-    </header>
-    <main class="products-container">
-      <div class="filters">
-        <button class="filter-button">All Products</button>
-        <button class="filter-button">furniture</button>
-        <button class="filter-button">electronics</button>
-        <button class="filter-button">education</button>
-        <button class="filter-button">cooler</button>
-        <button class="filter-button">home</button>
-        <button class="filter-button">other</button>
-
-        <a class="redirect-button" id="redirect-button">ADD PRODUCT</a>
-      </div>
-
-      <div class="product-grid"></div>
-    </main>
-
-    <footer>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DormDeals | Find Great Deals for Your Dorm</title>
+  <link rel="stylesheet" href="productlisting.css" />
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script src="productlisting.js" defer></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <header>
+    <a href="../Main Page/mainpage.html" class="navbar-brand">
+      <img src="dormdealslogo.png" alt="DormDeals Logo" class="logo" />
+      <span class="navbar-text">DormDeals</span>
+    </a>
+    
+    <div class="search-container">
+      <input type="text" class="search-bar" placeholder="Search for products..." />
+    </div>
+    
+    <div class="nav-buttons">
+      <button id="profile-button" class="profile-btn hidden">
+        <i class="fas fa-user"></i> My Profile
+      </button>
+      <div id="google-signin-button"></div>
+    </div>
+  </header>
+  
+  <main class="products-container">
+    <div class="filters">
+      <button class="filter-button">All Products</button>
+      <button class="filter-button">Furniture</button>
+      <button class="filter-button">Electronics</button>
+      <button class="filter-button">Education</button>
+      <button class="filter-button">Cooler</button>
+      <button class="filter-button">Home</button>
+      <button class="filter-button">Other</button>
+      
+      <a id="redirect-button" class="redirect-button">Add Product</a>
+    </div>
+    
+    <div class="product-grid">
+      <!-- Products will be populated here by JavaScript -->
+    </div>
+  </main>
+  
+  <footer>
+    <div class="footer-content">
       <div class="footer-column">
         <h3>Information</h3>
         <ul>
-          <li><a href="#">FAQ</a></li>
-          <li><a href="#">Terms and Conditions</a></li>
-          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#"><i class="fas fa-circle-question"></i> FAQ</a></li>
+          <li><a href="#"><i class="fas fa-file-contract"></i> Terms and Conditions</a></li>
+          <li><a href="#"><i class="fas fa-shield-alt"></i> Privacy Policy</a></li>
         </ul>
       </div>
-
+      
       <div class="footer-column">
         <h3>Company</h3>
         <ul>
-          <li><a href="#">Contact Us</a></li>
+          <li><a href="#"><i class="fas fa-envelope"></i> Contact Us</a></li>
+          <li><a href="#"><i class="fas fa-info-circle"></i> About Us</a></li>
+          <li><a href="#"><i class="fas fa-bullhorn"></i> Press</a></li>
         </ul>
       </div>
-
+      
       <div class="footer-column">
-        <h3>Socials</h3>
+        <h3>Connect</h3>
         <ul>
-          <li>
-            <a href="https://www.linkedin.com/in/prakhar-mishraa">LinkedIn</a>
-          </li>
-          <li>
-            <a href="https://www.instagram.com/prakharmishraaaa">Instagram</a>
-          </li>
-          <li><a href="https://github.com/prakharmi/Dormdeals">Github</a></li>
+          <li><a href="https://www.linkedin.com/in/prakhar-mishraa"><i class="fab fa-linkedin"></i> LinkedIn</a></li>
+          <li><a href="https://www.instagram.com/prakharmishraaaa"><i class="fab fa-instagram"></i> Instagram</a></li>
+          <li><a href="https://github.com/prakharmi/Dormdeals"><i class="fab fa-github"></i> GitHub</a></li>
         </ul>
       </div>
-
-      <div style="width: 100%; text-align: center; margin-top: 20px">
-        <p>© 2025 Dorm Deals | All rights reserved.</p>
+      
+      <div class="footer-column">
+        <h3>Resources</h3>
+        <ul>
+          <li><a href="#"><i class="fas fa-book"></i> Student Guide</a></li>
+          <li><a href="#"><i class="fas fa-university"></i> Campus Directory</a></li>
+          <li><a href="#"><i class="fas fa-map-marker-alt"></i> Find Campus</a></li>
+        </ul>
       </div>
-    </footer>
-  </body>
+    </div>
+    
+    <div class="copyright">
+      <p>© 2025 DormDeals | The Marketplace for Campus Living | All Rights Reserved</p>
+    </div>
+  </footer>
+</body>
 </html>
