@@ -33,6 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const formData = new FormData(this);
 
     const college = localStorage.getItem("userCollege");
+    const email = localStorage.getItem("userEmail"); 
 
     if (!college) {
       alert(
@@ -40,8 +41,14 @@ document.addEventListener("DOMContentLoaded", () => {
       );
       return;
     }
+  
+    if (!email) {
+      alert("User email is missing. Please login again.");
+      return;
+    }
 
     formData.append("college", college);
+    formData.append("email", email);
 
     try {
       const response = await fetch(`${API_BASE_URL}/submit-product`, {

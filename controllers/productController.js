@@ -5,12 +5,14 @@ class ProductController {
     try {
       const productData = req.body;
       const files = req.files;
-
+  
       // Make sure the user's email is included (should be sent from frontend)
       if (!productData.email) {
         return res.status(400).json({ error: "User email is required" });
       }
-
+  
+      console.log("Creating product with email:", productData.email);
+      
       await ProductService.createProduct(productData, files);
       return res.status(200).json({ message: "Product added successfully" });
     } catch (error) {

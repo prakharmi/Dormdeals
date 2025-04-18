@@ -40,10 +40,9 @@ class Product {
     try {
       const query = `
         SELECT p.*, 
-               (SELECT pi.image_url FROM product_images pi WHERE pi.product_id = p.id LIMIT 1) AS image 
+              (SELECT pi.image_url FROM product_images pi WHERE pi.product_id = p.id LIMIT 1) AS image 
         FROM products p 
-        JOIN users u ON p.user_email = u.email 
-        WHERE u.email = ?
+        WHERE p.user_email = ?
       `;
       
       const [rows] = await db.query(query, [email]);

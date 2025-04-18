@@ -14,14 +14,14 @@ class ProductService {
         throw new Error("All fields and at least one image are required");
       }
 
-      // Create product
+      // Create product with user_email
       const productId = await Product.create({
         name: productName,
         category,
         description,
         price,
         college,
-        user_email: email,
+        user_email: email, // Make sure this is passed to the database
       });
 
       // Upload images to Cloudinary
