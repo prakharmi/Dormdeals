@@ -130,6 +130,28 @@ async function loadProductDetails() {
     // Check if seller information is available
     if (!productData.sellerMobile) {
       console.warn("Seller mobile number is missing from product data");
+      
+      // If there's an email but no seller mobile, try to fetch user details directly
+      if (productData.user_email) {
+        try {
+          console.log("Attempting to fetch seller details directly:", productData.user_email);
+          const userResponse = await fetch(`${API_BASE_URL}/user/${encodeURIComponent(productData.user_email)}`);
+          
+          if (userResponse.ok) {
+            const userData = await userResponse.json();
+            console.log("User data fetched directly:", userData);
+            
+            if (userData && userData.mobile_number) {
+              productData.sellerMobile = userData.mobile_number;
+              productData.sellerName = userData.name || "Seller";
+              productData.sellerCollege = userData.college;
+              console.log("Added seller information to product data:", productData);
+            }
+          }
+        } catch (userError) {
+          console.error("Failed to fetch seller details:", userError);
+        }
+      }
     }
     
     displayProductDetails(productData);
@@ -221,13 +243,46 @@ function handleContactSeller(product) {
     return;
   }
   
-  // Proceed with contacting seller
+  // Check if seller mobile is available
   if (!product.sellerMobile) {
-    alert("Seller contact information is not available. Please try again later.");
-    console.error("Missing seller mobile number", product);
+    console.error("Missing seller mobile number:", product);
+    
+    // If seller email is available but not mobile, try fetching user info again
+    if (product.user_email) {
+      alert("Getting seller contact information...");
+      
+      fetch(`${API_BASE_URL}/user/${encodeURIComponent(product.user_email)}`)
+        .then(response => {
+          if (!response.ok) throw new Error("Failed to fetch seller information");
+          return response.json();
+        })
+        .then(userData => {
+          if (userData && userData.mobile_number) {
+            // Update product data with seller info
+            product.sellerMobile = userData.mobile_number;
+            if (!product.sellerName) product.sellerName = userData.name || "Seller";
+            
+            // Now proceed with WhatsApp
+            openWhatsAppChat(product, userName);
+          } else {
+            alert("Seller contact information is not available. Please try again later.");
+          }
+        })
+        .catch(error => {
+          console.error("Error fetching seller details:", error);
+          alert("Failed to get seller contact information. Please try again later.");
+        });
+    } else {
+      alert("Seller contact information is not available. Please try again later.");
+    }
     return;
   }
   
+  // If we have the mobile number, proceed with WhatsApp
+  openWhatsAppChat(product, userName);
+}
+
+function openWhatsAppChat(product, userName) {
   // Format WhatsApp number (remove any non-digit characters)
   const whatsappNumber = product.sellerMobile.replace(/\D/g, "");
   
@@ -365,8 +420,9 @@ function displaySimilarProducts(products) {
         imageSrc = product.imageUrl;
     } else if (product.images && product.images.length > 0) {
         imageSrc = product.images[0];
+    } else if (product.image) {
+        imageSrc = product.image;
     }
-
 
     productCard.innerHTML = `
         <img src="${imageSrc}" alt="${product.name || 'Similar Product'}" class="similar-product-image" onerror="this.onerror=null; this.src='placeholder.jpg';">

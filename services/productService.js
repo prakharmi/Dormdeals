@@ -86,14 +86,27 @@ class ProductService {
       if (product.user_email) {
         const seller = await User.findByEmail(product.user_email);
         if (seller) {
+          // Explicitly assign seller properties including mobile number
           product.sellerName = seller.name;
           product.sellerMobile = seller.mobile_number;
           product.sellerCollege = seller.college;
+          
+          // Log to verify data
+          console.log("Seller information retrieved:", {
+            name: seller.name,
+            mobile: seller.mobile_number,
+            college: seller.college
+          });
+        } else {
+          console.warn(`Seller with email ${product.user_email} not found in database`);
         }
+      } else {
+        console.warn(`Product ${productId} has no associated user_email`);
       }
 
       return product;
     } catch (error) {
+      console.error("Error getting product by ID:", error);
       throw error;
     }
   }

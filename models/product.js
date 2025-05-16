@@ -1,3 +1,4 @@
+// models/product.js
 const db = require("../config/database").pool;
 
 class Product {
@@ -18,8 +19,10 @@ class Product {
     try {
       let query = `
         SELECT p.*, 
-               (SELECT pi.image_url FROM product_images pi WHERE pi.product_id = p.id LIMIT 1) AS image 
+               (SELECT pi.image_url FROM product_images pi WHERE pi.product_id = p.id LIMIT 1) AS image,
+               u.name as sellerName, u.mobile_number as sellerMobile
         FROM products p 
+        LEFT JOIN users u ON p.user_email = u.email
         WHERE p.college = ? AND p.is_sold = 0
       `;
       const params = [college];
@@ -40,8 +43,10 @@ class Product {
     try {
       const query = `
         SELECT p.*, 
-              (SELECT pi.image_url FROM product_images pi WHERE pi.product_id = p.id LIMIT 1) AS image 
+              (SELECT pi.image_url FROM product_images pi WHERE pi.product_id = p.id LIMIT 1) AS image,
+              u.name as sellerName, u.mobile_number as sellerMobile
         FROM products p 
+        LEFT JOIN users u ON p.user_email = u.email
         WHERE p.user_email = ?
       `;
       
@@ -56,15 +61,31 @@ class Product {
     try {
       // Updated query to include seller information from the users table
       const query = `
-        SELECT p.*, u.name as sellerName, u.mobile_number as sellerMobile, u.college as sellerCollege 
+        SELECT p.*, 
+               u.name as sellerName, 
+               u.mobile_number as sellerMobile, 
+               u.college as sellerCollege,
+               u.email as sellerEmail
         FROM products p 
         LEFT JOIN users u ON p.user_email = u.email
         WHERE p.id = ?
       `;
       
       const [rows] = await db.query(query, [id]);
+      
+      if (rows.length > 0) {
+        // Log to debug
+        console.log("Product found with seller info:", {
+          id: rows[0].id,
+          name: rows[0].name,
+          sellerName: rows[0].sellerName,
+          sellerMobile: rows[0].sellerMobile
+        });
+      }
+      
       return rows.length ? rows[0] : null;
     } catch (error) {
+      console.error("Error in Product.findById:", error);
       throw error;
     }
   }
