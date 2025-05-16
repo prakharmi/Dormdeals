@@ -111,6 +111,7 @@ async function loadProductDetails() {
   }
 
   try {
+    console.log(`Loading product details for ID: ${productId}`);
     const response = await fetch(`${API_BASE_URL}/product/${productId}`);
 
     if (!response.ok) {
@@ -124,6 +125,13 @@ async function loadProductDetails() {
     }
 
     const productData = await response.json();
+    console.log("Product data received:", productData);
+    
+    // Check if seller information is available
+    if (!productData.sellerMobile) {
+      console.warn("Seller mobile number is missing from product data");
+    }
+    
     displayProductDetails(productData);
 
     if (productData.id && productData.category && productData.college) {
@@ -216,6 +224,7 @@ function handleContactSeller(product) {
   // Proceed with contacting seller
   if (!product.sellerMobile) {
     alert("Seller contact information is not available. Please try again later.");
+    console.error("Missing seller mobile number", product);
     return;
   }
   
@@ -243,6 +252,15 @@ function displayProductDetails(product) {
   document.getElementById("product-category").textContent = product.category || "Uncategorized";
   document.getElementById("product-category-tag").textContent = product.category || "Uncategorized";
   document.getElementById("product-college").textContent = product.college || "College not specified";
+
+  // Display seller information if available
+  if (product.sellerName) {
+    const sellerInfoDiv = document.querySelector(".seller-info");
+    sellerInfoDiv.innerHTML = `
+      <p>College: <span id="product-college">${product.college || "Not specified"}</span></p>
+      <p>Seller: <span id="product-seller">${product.sellerName}</span></p>
+    `;
+  }
 
   const mainImageElement = document.getElementById("main-product-image");
   const thumbnailContainer = document.getElementById("thumbnail-container");
@@ -275,14 +293,23 @@ function displayProductDetails(product) {
   } else {
      mainImageElement.src = placeholderImage;
   }
-   mainImageElement.onerror = function() { this.onerror=null; this.src=placeholderImage; };
+  mainImageElement.onerror = function() { this.onerror=null; this.src=placeholderImage; };
+
+  // Store the current product data for use with the contact button
+  window.currentProductData = product;
 
   const contactButton = document.querySelector(".contact-seller-btn");
   if (contactButton) {
+      // Update the button text to reflect contacting via WhatsApp
+      contactButton.textContent = "Contact Seller via WhatsApp";
+      
+      // Remove any existing event listeners with clone
       contactButton.replaceWith(contactButton.cloneNode(true));
+      
+      // Add new event listener with the correct product data
       const newContactButton = document.querySelector(".contact-seller-btn");
       newContactButton.addEventListener("click", () => {
-          handleContactSeller(product);
+          handleContactSeller(window.currentProductData);
       });
   }
 }

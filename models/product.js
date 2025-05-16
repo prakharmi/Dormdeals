@@ -54,9 +54,15 @@ class Product {
 
   static async findById(id) {
     try {
-      const [rows] = await db.query("SELECT * FROM products WHERE id = ?", [
-        id,
-      ]);
+      // Updated query to include seller information from the users table
+      const query = `
+        SELECT p.*, u.name as sellerName, u.mobile_number as sellerMobile, u.college as sellerCollege 
+        FROM products p 
+        LEFT JOIN users u ON p.user_email = u.email
+        WHERE p.id = ?
+      `;
+      
+      const [rows] = await db.query(query, [id]);
       return rows.length ? rows[0] : null;
     } catch (error) {
       throw error;

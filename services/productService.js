@@ -1,5 +1,6 @@
 const Product = require("../models/product");
 const ProductImage = require("../models/productimage");
+const User = require("../models/user");
 const cloudinary = require("../config/cloudinary");
 const fs = require('fs');
 const path = require('path');
@@ -80,6 +81,16 @@ class ProductService {
       
       // We don't need to modify the URLs as they're already Cloudinary URLs
       product.images = images.map(img => img.image_url);
+
+      // Get seller information
+      if (product.user_email) {
+        const seller = await User.findByEmail(product.user_email);
+        if (seller) {
+          product.sellerName = seller.name;
+          product.sellerMobile = seller.mobile_number;
+          product.sellerCollege = seller.college;
+        }
+      }
 
       return product;
     } catch (error) {
