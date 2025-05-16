@@ -143,6 +143,98 @@ async function loadProductDetails() {
   }
 }
 
+function handleContactSeller(product) {
+  // Check if user is signed in
+  const userToken = localStorage.getItem("userToken");
+  const userName = localStorage.getItem("userName");
+  
+  if (!userToken) {
+    // User not signed in, show sign-in prompt
+    const signInPrompt = document.createElement("div");
+    signInPrompt.className = "sign-in-modal";
+    signInPrompt.innerHTML = `
+      <div class="sign-in-modal-content">
+        <span class="close-modal">&times;</span>
+        <h2>Sign In Required</h2>
+        <p>Please sign in to contact the seller.</p>
+        <div id="modal-google-signin-button"></div>
+      </div>
+    `;
+    
+    document.body.appendChild(signInPrompt);
+    
+    // Add styles for the modal
+    const style = document.createElement("style");
+    style.textContent = `
+      .sign-in-modal {
+        display: block;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.5);
+      }
+      .sign-in-modal-content {
+        background-color: white;
+        margin: 15% auto;
+        padding: 30px;
+        border-radius: 8px;
+        width: 300px;
+        text-align: center;
+        position: relative;
+      }
+      .close-modal {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        font-size: 24px;
+        cursor: pointer;
+      }
+    `;
+    document.head.appendChild(style);
+    
+    // Initialize Google Sign-In in the modal
+    try {
+      google.accounts.id.renderButton(
+        document.getElementById("modal-google-signin-button"), 
+        { theme: "outline", size: "large" }
+      );
+    } catch (error) {
+      console.error("Failed to render Google Sign-In button in modal:", error);
+    }
+    
+    // Add close functionality
+    document.querySelector(".close-modal").addEventListener("click", () => {
+      document.body.removeChild(signInPrompt);
+    });
+    
+    return;
+  }
+  
+  // Proceed with contacting seller
+  if (!product.sellerMobile) {
+    alert("Seller contact information is not available. Please try again later.");
+    return;
+  }
+  
+  // Format WhatsApp number (remove any non-digit characters)
+  const whatsappNumber = product.sellerMobile.replace(/\D/g, "");
+  
+  // Create personalized message
+  const productUrl = window.location.href;
+  const message = encodeURIComponent(
+    `Hi${product.sellerName ? ' ' + product.sellerName : ''}! I'm ${userName || 'a user'} from DormDeals. I'm interested in buying your "${product.name}" listed for Rs${product.price}. Is it still available? Product link: ${productUrl}`
+  );
+  
+  // Generate WhatsApp URL
+  const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${message}`;
+  
+  // Open WhatsApp in a new tab
+  window.open(whatsappUrl, "_blank");
+}
+
 function displayProductDetails(product) {
   document.getElementById("product-name").textContent = product.name || "N/A";
   document.getElementById("product-name-breadcrumb").textContent = product.name || "Product";
@@ -190,8 +282,7 @@ function displayProductDetails(product) {
       contactButton.replaceWith(contactButton.cloneNode(true));
       const newContactButton = document.querySelector(".contact-seller-btn");
       newContactButton.addEventListener("click", () => {
-          const contactInfo = product.sellerEmail || "No contact information available";
-          alert(`Contact the seller at: ${contactInfo}`);
+          handleContactSeller(product);
       });
   }
 }

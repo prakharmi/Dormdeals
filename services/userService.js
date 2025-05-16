@@ -13,6 +13,14 @@ class UserService {
     }
   }
 
+  static async getUserByEmail(email) {
+    try {
+      return await User.findByEmail(email);
+    } catch (error) {
+      throw error;
+    }
+  }
+
   static async createUser(userData) {
     try {
       // Validate data
