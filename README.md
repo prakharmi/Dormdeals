@@ -223,7 +223,7 @@ Don't forget to give the project a star! Thanks again!
 ```text
 MIT License
 
-Copyright (c) [Year] [Prakhar Mishra]
+Copyright (c) [Year] [Dorm Deals]
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
