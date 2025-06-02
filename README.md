@@ -11,7 +11,6 @@
 - [ Key Features](#-key-features)
 - [ Tech Stack](#️-tech-stack)
 - [ System Architecture](#️-system-architecture)
-- [Screenshots](#-screenshots)
 - [ Getting Started](#-getting-started)
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
