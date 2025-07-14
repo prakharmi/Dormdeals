@@ -10,6 +10,13 @@ class ProductController {
       if (!productData.email) {
         return res.status(400).json({ error: "User email is required" });
       }
+
+      // Validate email domain
+      if (!productData.email.endsWith("@iiitsurat.ac.in")) {
+        return res.status(403).json({ 
+          error: "Only users with @iiitsurat.ac.in email addresses can add products" 
+        });
+      }
   
       console.log("Creating product with email:", productData.email);
       
