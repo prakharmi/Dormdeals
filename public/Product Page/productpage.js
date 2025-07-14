@@ -283,21 +283,21 @@ function handleContactSeller(product) {
 }
 
 function openWhatsAppChat(product, userName) {
-  // Format WhatsApp number (remove any non-digit characters)
-  const whatsappNumber = product.sellerMobile.replace(/\D/g, "");
-  
-  // Create personalized message
+  let whatsappNumber = product.sellerMobile.replace(/\D/g, "");
+
+  if (!whatsappNumber.startsWith("91") && whatsappNumber.length === 10) {
+    whatsappNumber = "91" + whatsappNumber;
+  }
+
   const productUrl = window.location.href;
   const message = encodeURIComponent(
     `Hi${product.sellerName ? ' ' + product.sellerName : ''}! I'm ${userName || 'a user'} from DormDeals. I'm interested in buying your "${product.name}" listed for Rs${product.price}. Is it still available? Product link: ${productUrl}`
   );
-  
-  // Generate WhatsApp URL
+
   const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${message}`;
-  
-  // Open WhatsApp in a new tab
   window.open(whatsappUrl, "_blank");
 }
+
 
 function displayProductDetails(product) {
   document.getElementById("product-name").textContent = product.name || "N/A";
