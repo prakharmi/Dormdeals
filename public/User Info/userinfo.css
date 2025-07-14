@@ -1,107 +1,345 @@
-body {
-  font-family: Arial, sans-serif;
-  background-color: rgb(20, 20, 20);
-  color: rgb(208, 227, 255);
+/* Modern Font Import */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --primary: #0f172a;
+  --primary-light: #1e293b;
+  --accent: #1d4ed8;
+  --accent-hover: #1e40af;
+  --text-light: #f8f9fa;
+  --text-dark: #212529;
+  --background-light: #ffffff;
+  --background-gray: #f8f9fa;
+  --background-dark: #1e1e1e;
+  --background-form: #2a2a2a;
+  --shadow-soft: rgba(0, 0, 0, 0.1);
+  --shadow-medium: rgba(0, 0, 0, 0.2);
+  --shadow-dark: rgba(0, 0, 0, 0.3);
+}
+
+* {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  background-color: var(--background-dark);
+  color: var(--text-light);
+  line-height: 1.6;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
+  padding: 1rem;
 }
 
+/* Responsive Header */
 header {
   text-align: center;
-  padding: 20px 0;
+  padding: 2rem 1rem;
   background: none;
   width: 100%;
   margin: 0;
+  max-width: 600px;
 }
 
 h1 {
   margin: 0;
-  font-size: 26px;
-  color: rgb(255, 255, 255);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-light);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  letter-spacing: 0.5px;
 }
 
+/* Responsive Main Container */
 main {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
-  padding: 20px;
+  padding: 1rem;
+  flex: 1;
 }
 
 .form-container {
-  background-color: rgb(30, 30, 30);
-  padding: 30px;
-  border-radius: 10px;
+  background-color: var(--background-form);
+  padding: 2.5rem;
+  border-radius: 16px;
   width: 100%;
-  max-width: 400px;
-  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+  max-width: 450px;
+  box-shadow: 0 10px 40px var(--shadow-dark);
   text-align: center;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 form {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 1.5rem;
 }
 
 label {
-  font-weight: bold;
-  font-size: 16px;
-  color: rgb(155, 199, 255);
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--text-light);
+  text-align: left;
+  margin-bottom: 0.5rem;
+  display: block;
 }
 
 input,
 select {
-  padding: 12px;
-  border: 1px solid #555;
+  padding: 1rem;
+  border: 2px solid #444;
   border-radius: 8px;
-  font-size: 16px;
+  font-size: 1rem;
   width: 100%;
-  background-color: rgb(40, 40, 40);
-  color: rgb(208, 227, 255);
+  background-color: #333;
+  color: var(--text-light);
+  font-family: "Poppins", sans-serif;
+  transition: all 0.3s ease;
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 0.5rem center;
+  background-repeat: no-repeat;
+  background-size: 1.5em 1.5em;
+  padding-right: 2.5rem;
 }
 
 input:focus,
 select:focus {
   outline: none;
-  border-color: rgb(155, 199, 255);
-  box-shadow: 0 0 5px rgb(155, 199, 255);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.2);
+}
+
+input::placeholder {
+  color: #888;
 }
 
 button {
-  background-color: rgb(155, 199, 255);
-  color: black;
-  padding: 12px;
+  background: linear-gradient(135deg, var(--accent), #3b82f6);
+  color: white;
+  padding: 1rem 2rem;
   border: none;
   border-radius: 8px;
-  font-size: 16px;
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: "Poppins", sans-serif;
   cursor: pointer;
-  font-weight: bold;
-  transition:
-    background-color 0.3s ease,
-    transform 0.2s ease;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(29, 78, 216, 0.3);
+  margin-top: 1rem;
 }
 
 button:hover {
-  background-color: #0056b3;
-  color: white;
+  background: linear-gradient(135deg, var(--accent-hover), #2563eb);
   transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(29, 78, 216, 0.4);
 }
 
 button:active {
   transform: translateY(0);
-  background-color: #003d80;
+  background: linear-gradient(135deg, #1e40af, #1d4ed8);
 }
 
 footer {
-  margin-top: 20px;
-  font-size: 14px;
-  color: rgb(100, 100, 100);
+  margin-top: 2rem;
+  font-size: 0.9rem;
+  color: #888;
   text-align: center;
+  max-width: 600px;
+  padding: 1rem;
+}
+
+/* Tablet Responsive Styles */
+@media (max-width: 768px) {
+  body {
+    padding: 0.5rem;
+  }
+  
+  header {
+    padding: 1.5rem 1rem;
+  }
+  
+  h1 {
+    font-size: 1.7rem;
+  }
+  
+  .form-container {
+    padding: 2rem;
+    max-width: 100%;
+    margin: 0 0.5rem;
+  }
+  
+  form {
+    gap: 1.2rem;
+  }
+  
+  label {
+    font-size: 0.95rem;
+  }
+  
+  input,
+  select {
+    padding: 0.9rem;
+    font-size: 0.95rem;
+  }
+  
+  button {
+    padding: 0.9rem 1.8rem;
+    font-size: 0.95rem;
+  }
+  
+  footer {
+    font-size: 0.85rem;
+    margin-top: 1.5rem;
+  }
+}
+
+/* Mobile Responsive Styles */
+@media (max-width: 480px) {
+  body {
+    padding: 0.3rem;
+    min-height: 100vh;
+  }
+  
+  header {
+    padding: 1rem 0.5rem;
+  }
+  
+  h1 {
+    font-size: 1.4rem;
+    line-height: 1.3;
+  }
+  
+  .form-container {
+    padding: 1.5rem;
+    margin: 0 0.25rem;
+    border-radius: 12px;
+  }
+  
+  form {
+    gap: 1rem;
+  }
+  
+  label {
+    font-size: 0.9rem;
+    margin-bottom: 0.3rem;
+  }
+  
+  input,
+  select {
+    padding: 0.8rem;
+    font-size: 0.9rem;
+  }
+  
+  button {
+    padding: 0.8rem 1.5rem;
+    font-size: 0.9rem;
+  }
+  
+  footer {
+    font-size: 0.8rem;
+    margin-top: 1rem;
+    padding: 0.5rem;
+  }
+}
+
+/* Extra Small Mobile */
+@media (max-width: 360px) {
+  h1 {
+    font-size: 1.2rem;
+  }
+  
+  .form-container {
+    padding: 1.2rem;
+  }
+  
+  input,
+  select {
+    padding: 0.7rem;
+    font-size: 0.85rem;
+  }
+  
+  button {
+    padding: 0.7rem 1.2rem;
+    font-size: 0.85rem;
+  }
+  
+  label {
+    font-size: 0.85rem;
+  }
+}
+
+/* Landscape orientation adjustments for mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+  body {
+    min-height: 100vh;
+    justify-content: flex-start;
+    padding-top: 1rem;
+  }
+  
+  header {
+    padding: 1rem;
+  }
+  
+  h1 {
+    font-size: 1.5rem;
+  }
+  
+  .form-container {
+    padding: 1.5rem;
+    margin: 0.5rem;
+  }
+  
+  form {
+    gap: 1rem;
+  }
+  
+  footer {
+    margin-top: 1rem;
+  }
+}
+
+/* Focus and accessibility improvements */
+input:focus,
+select:focus,
+button:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  input,
+  select {
+    border-color: var(--text-light);
+  }
+  
+  button {
+    background: var(--accent);
+    border: 2px solid var(--text-light);
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
