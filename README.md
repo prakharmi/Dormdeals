@@ -216,9 +216,6 @@ The application will be available at `http://localhost:5000`
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## 📝 License
-
-This project is licensed under the ISC License - see the [LICENSE](LICENSE) file for details.
 
 ## 👨‍💻 Author
 
@@ -236,7 +233,7 @@ This project is licensed under the ISC License - see the [LICENSE](LICENSE) file
 
 ## 📞 Support
 
-For support, email prakharmishra@example.com or create an issue in this repository.
+For support, email prakharmishraa30@gmail.com or create an issue in this repository.
 
 ---
 
