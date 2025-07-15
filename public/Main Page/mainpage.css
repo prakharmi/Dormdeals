@@ -25,6 +25,9 @@ body {
   font-family: "Poppins", sans-serif;
   color: var(--text-dark);
   line-height: 1.6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Responsive Header */
@@ -75,13 +78,21 @@ header {
   justify-content: center;
 }
 
+/* Main content area */
+main {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem 5%;
+}
+
 /* Responsive Center Container */
 .center-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: calc(100vh - 160px);
-  padding: 2rem 5%;
+  width: 100%;
 }
 
 .center-container > div {
@@ -158,24 +169,29 @@ button:active {
   transform: translateY(0);
 }
 
-/* Responsive Footer */
+/* Improved Footer */
 footer {
   background: linear-gradient(135deg, var(--primary-light), var(--primary));
   color: rgba(255, 255, 255, 0.8);
-  padding: 4rem 5%;
+  padding: 3rem 0;
   margin-top: auto;
 }
 
 .footer-content {
-  max-width: 1400px;
+  max-width: 1200px;
   margin: 0 auto;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 3rem;
+  padding: 0 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 2rem;
 }
 
 .footer-column {
+  flex: 1;
   min-width: 200px;
+  text-align: left;
 }
 
 .footer-column h3 {
@@ -221,11 +237,12 @@ footer {
 
 .copyright {
   text-align: center;
-  padding-top: 3rem;
-  margin-top: 3rem;
+  padding-top: 2rem;
+  margin-top: 2rem;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   color: rgba(255, 255, 255, 0.6);
   font-size: 0.85rem;
+  width: 100%;
 }
 
 /* Mobile Responsive Styles */
@@ -248,8 +265,7 @@ footer {
     width: 40px;
   }
   
-  .center-container {
-    min-height: calc(100vh - 200px);
+  main {
     padding: 1rem;
   }
   
@@ -275,13 +291,14 @@ footer {
   }
   
   .footer-content {
-    grid-template-columns: 1fr;
-    gap: 2rem;
+    flex-direction: column;
     text-align: center;
+    gap: 2rem;
   }
   
   .footer-column {
     min-width: auto;
+    text-align: center;
   }
   
   .footer-column h3::after {
@@ -303,7 +320,7 @@ footer {
     width: 35px;
   }
   
-  .center-container {
+  main {
     padding: 0.5rem;
   }
   
@@ -327,10 +344,11 @@ footer {
   }
   
   footer {
-    padding: 2rem 1rem;
+    padding: 2rem 0;
   }
   
   .footer-content {
+    padding: 0 1rem;
     gap: 1.5rem;
   }
   
@@ -345,23 +363,7 @@ footer {
   
   .copyright {
     font-size: 0.75rem;
-    padding-top: 2rem;
-    margin-top: 2rem;
-  }
-}
-
-/* Landscape orientation adjustments */
-@media (max-width: 768px) and (orientation: landscape) {
-  .center-container {
-    min-height: calc(100vh - 120px);
-  }
-  
-  .center-container > div {
-    padding: 1.5rem;
-  }
-  
-  h1 {
-    font-size: 1.4rem;
-    margin-bottom: 1rem;
+    padding-top: 1.5rem;
+    margin-top: 1.5rem;
   }
 }

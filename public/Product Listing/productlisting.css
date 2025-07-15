@@ -285,26 +285,36 @@ header {
   font-size: 1rem;
 }
 
-/* Elegant Footer */
+/* Footer */
 footer {
   background: linear-gradient(135deg, var(--primary-light), var(--primary));
   color: rgba(255, 255, 255, 0.8);
-  padding: 4rem 5%;
+  padding: 3rem 0;
+  margin-top: auto;
 }
 
 .footer-content {
-  max-width: 1400px;
+  max-width: 1200px;
   margin: 0 auto;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 3rem;
+  padding: 0 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+
+.footer-column {
+  flex: 1;
+  min-width: 200px;
+  text-align: left;
 }
 
 .footer-column h3 {
-  color: white;
   font-size: 1.1rem;
   font-weight: 600;
   margin-bottom: 1.5rem;
+  color: white;
   position: relative;
   padding-bottom: 0.8rem;
 }
@@ -321,6 +331,7 @@ footer {
 
 .footer-column ul {
   list-style: none;
+  padding: 0;
 }
 
 .footer-column ul li {
@@ -342,14 +353,20 @@ footer {
 
 .copyright {
   text-align: center;
-  padding-top: 3rem;
-  margin-top: 3rem;
+  padding-top: 2rem;
+  margin-top: 2rem;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   color: rgba(255, 255, 255, 0.6);
   font-size: 0.85rem;
+  width: 100%;
 }
 
-/* Responsive Adjustments */
+/* Hide elements with .hidden class */
+.hidden {
+  display: none;
+}
+
+/* Mobile Responsive Styles */
 @media (max-width: 768px) {
   header {
     flex-direction: column;
@@ -375,9 +392,46 @@ footer {
   .product-grid {
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   }
+  
+  .footer-content {
+    flex-direction: column;
+    text-align: center;
+    gap: 2rem;
+  }
+  
+  .footer-column {
+    min-width: auto;
+    text-align: center;
+  }
+  
+  .footer-column h3::after {
+    left: 50%;
+    transform: translateX(-50%);
+  }
 }
 
-/* Hide elements with .hidden class */
-.hidden {
-  display: none;
+@media (max-width: 480px) {
+  footer {
+    padding: 2rem 0;
+  }
+  
+  .footer-content {
+    padding: 0 1rem;
+    gap: 1.5rem;
+  }
+  
+  .footer-column h3 {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .footer-column ul li a {
+    font-size: 0.8rem;
+  }
+  
+  .copyright {
+    font-size: 0.75rem;
+    padding-top: 1.5rem;
+    margin-top: 1.5rem;
+  }
 }
