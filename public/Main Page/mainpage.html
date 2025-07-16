@@ -2,7 +2,7 @@
 <html lang="en" class="">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Dorm Deals</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
@@ -13,7 +13,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <script>
-        // Custom Tailwind CSS Configuration for Dark Mode
         tailwind.config = {
             darkMode: 'class',
             theme: {
@@ -28,20 +27,28 @@
     </script>
     
     <style>
-        /* Restored the grid background for light and dark modes */
         body {
-            background-color: #f8f9fa;
-            background-image: 
-                linear-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
-            background-size: 20px 20px;
             font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            background-color: #f8f9fa;
+            background-image: linear-gradient(rgba(0,0,0,0.03) 1px,transparent 1px), linear-gradient(90deg,rgba(0,0,0,0.03) 1px,transparent 1px);
+            background-size: 25px 25px;
         }
         .dark body {
             background-color: #0f172a;
-            background-image: 
-                linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+            background-image: linear-gradient(rgba(255,255,255,0.05) 1px,transparent 1px), linear-gradient(90deg,rgba(255,255,255,0.05) 1px,transparent 1px);
+        }
+        
+        /* --- CSS Fix for Google Button on Mobile --- */
+        @media (max-width: 420px) {
+            #google-signin-button iframe {
+                /* This shrinks the Google button to 80% of its size 
+                  and ensures it shrinks towards the right side of the header.
+                  This is a safe, visual-only change.
+                */
+                transform: scale(0.8);
+                transform-origin: right center;
+            }
         }
     </style>
 </head>
@@ -51,14 +58,15 @@
         <header class="w-full px-4 sm:px-8 py-3 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border-b border-gray-200 dark:border-slate-700 sticky top-0 z-50">
             <div class="max-w-7xl mx-auto flex items-center justify-between">
                 <a href="../Main Page/mainpage.html" class="flex items-center space-x-2">
-                    <img src="dormdealslogo.png" alt="DormDeals Logo" class="h-8 w-8">
-                    <span class="font-bold text-xl text-gray-900 dark:text-white">DormDeals</span>
+                    <img src="dormdealslogo.png" alt="DormDeals Logo" class="h-7 w-7 sm:h-8 sm:w-8">
+                    <span class="font-bold text-lg sm:text-xl text-gray-900 dark:text-white">DormDeals</span>
                 </a>
-                <div class="flex items-center space-x-2 sm:space-x-4">
-                    <div id="google-signin-button"></div>
+                <div class="flex items-center space-x-2">
+                    <div id="google-signin-button" class="flex items-center justify-center"></div>
+
                     <div class="relative">
                         <button type="button" id="theme-menu-button" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-slate-700">
-                            <svg class="h-6 w-6 text-gray-600 dark:text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+                            <svg class="h-5 w-5 sm:h-6 sm:w-6 text-gray-600 dark:text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
                         </button>
                         <div id="theme-menu" class="hidden absolute right-0 mt-2 w-36 bg-white dark:bg-slate-800 rounded-md shadow-lg ring-1 ring-black dark:ring-white ring-opacity-5 py-1 z-10">
                             <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700" data-theme="light">Light</a>
@@ -111,38 +119,40 @@
         // --- Dark Mode Logic ---
         const themeMenuButton = document.getElementById('theme-menu-button');
         const themeMenu = document.getElementById('theme-menu');
-        const themeOptions = document.querySelectorAll('[data-theme]');
-        const applyTheme = (theme) => {
-            const htmlEl = document.documentElement;
-            if (theme === 'dark') { htmlEl.classList.add('dark'); } 
-            else { htmlEl.classList.remove('dark'); }
-        };
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme) { applyTheme(savedTheme); } 
-        else if (window.matchMedia('(prefers-color-scheme: dark)').matches) { applyTheme('dark'); }
-        themeMenuButton.addEventListener('click', (e) => {
-            e.stopPropagation();
-            themeMenu.classList.toggle('hidden');
-        });
-        themeOptions.forEach(option => {
-            option.addEventListener('click', (e) => {
-                e.preventDefault();
-                const selectedTheme = e.target.getAttribute('data-theme');
-                if (selectedTheme === 'system') {
-                    localStorage.removeItem('theme');
-                    applyTheme(window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-                } else {
-                    localStorage.setItem('theme', selectedTheme);
-                    applyTheme(selectedTheme);
-                }
-                themeMenu.classList.add('hidden');
+        if (themeMenuButton) {
+            const themeOptions = themeMenu.querySelectorAll('[data-theme]');
+            const applyTheme = (theme) => {
+                const htmlEl = document.documentElement;
+                if (theme === 'dark') { htmlEl.classList.add('dark'); } 
+                else { htmlEl.classList.remove('dark'); }
+            };
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) { applyTheme(savedTheme); } 
+            else if (window.matchMedia('(prefers-color-scheme: dark)').matches) { applyTheme('dark'); }
+            themeMenuButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+                themeMenu.classList.toggle('hidden');
             });
-        });
-        window.addEventListener('click', () => {
-            if (themeMenu && !themeMenu.classList.contains('hidden')) {
-                themeMenu.classList.add('hidden');
-            }
-        });
+            themeOptions.forEach(option => {
+                option.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const selectedTheme = e.target.getAttribute('data-theme');
+                    if (selectedTheme === 'system') {
+                        localStorage.removeItem('theme');
+                        applyTheme(window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+                    } else {
+                        localStorage.setItem('theme', selectedTheme);
+                        applyTheme(selectedTheme);
+                    }
+                    themeMenu.classList.add('hidden');
+                });
+            });
+            window.addEventListener('click', () => {
+                if (!themeMenu.classList.contains('hidden')) {
+                    themeMenu.classList.add('hidden');
+                }
+            });
+        }
     </script>
 </body>
 </html>

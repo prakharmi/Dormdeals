@@ -8,7 +8,6 @@ function handleCredentialResponse(response) {
   localStorage.setItem("userEmail", payload.email);
   localStorage.setItem("userName", payload.name);
 
-  // Check if user exists in database
   const API_BASE_URL = 'https://dormdeals-backend.onrender.com';
 
   fetch(`${API_BASE_URL}/check-user/${encodeURIComponent(payload.email)}`)
@@ -16,14 +15,14 @@ function handleCredentialResponse(response) {
     .then((data) => {
       if (data.exists) {
         localStorage.setItem("userCollege", data.user.college);
-        window.location.href = "../Product%20Listing/productlisting.html";
+        window.location.href = "../Product Listing/productlisting.html";
       } else {
-        window.location.href = "../User%20Info/userinfo.html";
+        window.location.href = "../User Info/userinfo.html";
       }
     })
     .catch((error) => {
       console.error("Error checking user:", error);
-      window.location.href = "../User%20Info/userinfo.html";
+      window.location.href = "../User Info/userinfo.html";
     });
 }
 
@@ -31,20 +30,23 @@ function checkUserAuthStatus() {
   const userToken = localStorage.getItem("userToken");
 
   if (userToken) {
-    window.location.href = "../Product%20Listing/productlisting.html";
+    const userCollege = localStorage.getItem("userCollege");
+    if (userCollege) {
+      window.location.href = "../Product Listing/productlisting.html";
+    } else {
+      window.location.href = "../User Info/userinfo.html";
+    }
+    return true;
   }
-
   return false;
 }
 
 function initializeGoogleSignIn() {
   if (checkUserAuthStatus()) {
-    return; // Stop if the user is already logged in and redirected
+    return;
   }
-
-  // A check to ensure the google library is loaded before trying to use it
+  
   if (typeof google === 'undefined' || typeof google.accounts === 'undefined') {
-      console.log("Google library not loaded yet, retrying...");
       setTimeout(initializeGoogleSignIn, 100);
       return;
   }
@@ -59,8 +61,16 @@ function initializeGoogleSignIn() {
   if (signInButton) {
     google.accounts.id.renderButton(signInButton, {
       theme: "outline",
-      size: "large",
+      // Changed to 'medium' for a good balance on all screen sizes
+      size: "medium", 
     });
+    google.accounts.id.prompt();
+  } else {
+      // If the user is logged in, show their profile button
+      const authContainer = document.getElementById("auth-container");
+      if(authContainer) {
+          authContainer.innerHTML = `<a href="../User Profile/userprofile.html" class="px-3 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 dark:bg-slate-700 dark:text-gray-200 dark:hover:bg-slate-600">My Profile</a>`;
+      }
   }
 }
 
@@ -68,18 +78,15 @@ window.onload = () => {
   initializeGoogleSignIn();
   
   const collegeSelect = document.querySelector("#college");
-  
   const seeResultsButton = document.querySelector("#see-results-btn");
 
   if (seeResultsButton) {
       seeResultsButton.addEventListener("click", () => {
         const selectedCollege = collegeSelect.value;
-
         if (!selectedCollege) {
           alert("Please select a college first!");
           return;
         }
-
         localStorage.setItem("userCollege", selectedCollege);
         window.location.href = `../Product Listing/productlisting.html?college=${encodeURIComponent(selectedCollege)}`;
       });
