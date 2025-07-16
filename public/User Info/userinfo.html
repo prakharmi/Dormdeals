@@ -4,24 +4,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Details Form</title>
-    <link rel="stylesheet" href="userinfo.css">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        /* A little custom style to replicate the grid background */
+        body {
+            background-color: #ffffff;
+            background-image: 
+                linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+    </style>
 </head>
-<body>
-    <div class="form-container">
-        <div class="form-header">
-            <h1>User Details</h1>
-            <p>Please fill out your information below.</p>
+<body class="flex items-center justify-center min-h-screen p-4 sm:p-8">
+
+    <div class="w-full max-w-md p-8 space-y-6 bg-white border border-gray-200 rounded-xl shadow-lg">
+        
+        <div class="text-left">
+            <h1 class="text-2xl font-bold text-gray-900">User Details</h1>
+            <p class="mt-1 text-sm text-gray-600">Please fill out your information below.</p>
         </div>
 
-        <form id="user-details-form">
-            <div class="form-group">
-                <label for="name">Name</label>
-                <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+        <form id="user-details-form" class="space-y-6">
+            
+            <div>
+                <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+                <input 
+                    type="text" 
+                    id="name" 
+                    name="name" 
+                    placeholder="Enter your full name" 
+                    required
+                    class="block w-full px-3 py-2 mt-1 bg-gray-50 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
             </div>
 
-            <div class="form-group">
-                <label for="college">College</label>
-                <select id="college" name="college" required>
+            <div>
+                <label for="college" class="block text-sm font-medium text-gray-700">College</label>
+                <select 
+                    id="college" 
+                    name="college" 
+                    required
+                    class="block w-full px-3 py-2 mt-1 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                     <option value="" disabled selected>Select your college</option>
                     <option value="IIIT Surat">IIIT Surat</option>
                     <option value="IIIT Pune">IIIT Pune</option>
@@ -31,15 +56,26 @@
                 </select>
             </div>
 
-            <div class="form-group">
-                <label for="mobile">Whatsapp Mobile Number</label>
-                <input type="tel" id="mobile" name="mobile" placeholder="Enter your mobile number" required pattern="[0-9]{10}">
+            <div>
+                <label for="mobile" class="block text-sm font-medium text-gray-700">Whatsapp Mobile Number</label>
+                <input 
+                    type="tel" 
+                    id="mobile" 
+                    name="mobile" 
+                    placeholder="Enter your mobile number" 
+                    required 
+                    pattern="[0-9]{10}"
+                    class="block w-full px-3 py-2 mt-1 bg-gray-50 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
             </div>
 
-            <hr>
+            <hr class="border-gray-200">
 
-            <div class="form-actions">
-                <button type="submit">Submit</button>
+            <div>
+                <button 
+                    type="submit"
+                    class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-700">
+                    Submit
+                </button>
             </div>
         </form>
     </div>
