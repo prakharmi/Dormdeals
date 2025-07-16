@@ -38,37 +38,50 @@ function checkUserAuthStatus() {
 }
 
 function initializeGoogleSignIn() {
-  if (!checkUserAuthStatus()) {
-    google.accounts.id.initialize({
-      client_id:
-        "866863334708-6o7pat7hkajrhve0s50tv1cpks0fnvbu.apps.googleusercontent.com",
-      callback: handleCredentialResponse,
-    });
+  if (checkUserAuthStatus()) {
+    return; // Stop if the user is already logged in and redirected
+  }
 
-    const signInButton = document.getElementById("google-signin-button");
-    if (signInButton) {
-      google.accounts.id.renderButton(signInButton, {
-        theme: "outline",
-        size: "large",
-      });
-    }
+  // A check to ensure the google library is loaded before trying to use it
+  if (typeof google === 'undefined' || typeof google.accounts === 'undefined') {
+      console.log("Google library not loaded yet, retrying...");
+      setTimeout(initializeGoogleSignIn, 100);
+      return;
+  }
+
+  google.accounts.id.initialize({
+    client_id:
+      "866863334708-6o7pat7hkajrhve0s50tv1cpks0fnvbu.apps.googleusercontent.com",
+    callback: handleCredentialResponse,
+  });
+
+  const signInButton = document.getElementById("google-signin-button");
+  if (signInButton) {
+    google.accounts.id.renderButton(signInButton, {
+      theme: "outline",
+      size: "large",
+    });
   }
 }
 
 window.onload = () => {
   initializeGoogleSignIn();
+  
   const collegeSelect = document.querySelector("#college");
-  const seeResultsButton = document.querySelector("button");
+  
+  const seeResultsButton = document.querySelector("#see-results-btn");
 
-  seeResultsButton.addEventListener("click", () => {
-    const selectedCollege = collegeSelect.value;
+  if (seeResultsButton) {
+      seeResultsButton.addEventListener("click", () => {
+        const selectedCollege = collegeSelect.value;
 
-    if (!selectedCollege) {
-      alert("Please select a college first!");
-      return;
-    }
+        if (!selectedCollege) {
+          alert("Please select a college first!");
+          return;
+        }
 
-    localStorage.setItem("userCollege", selectedCollege);
-    window.location.href = "../Product%20Listing/productlisting.html";
-  });
+        localStorage.setItem("userCollege", selectedCollege);
+        window.location.href = `../Product Listing/productlisting.html?college=${encodeURIComponent(selectedCollege)}`;
+      });
+  }
 };

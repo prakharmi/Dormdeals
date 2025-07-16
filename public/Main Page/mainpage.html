@@ -1,77 +1,148 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<!DOCTYPE html>
+<html lang="en" class="">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dorm Deals</title>
-    <link rel="stylesheet" href="mainpage.css" />
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
-    <script src="mainpage.js" defer></script>
-  </head>
-  <body>
-    <header>
-      <div class="navbar-brand">
-        <a href="../Main Page/mainpage.html" style="display: flex; align-items: center; gap: 10px; text-decoration: none;">
-          <img src="dormdealslogo.png" alt="Logo" class="logo" />
-          <span class="navbar-text">DormDeals</span>
-        </a>
-      </div>
-      <div id="google-signin-button"></div>
-    </header>
-
-    <main>
-      <div class="center-container">
-        <div>
-          <h1>Enter your college</h1>
-          <select id="college" class="college-select">
-            <option value="">Select your college</option>
-            <option value="IIIT Surat">IIIT Surat</option>
-            <option value="IIIT Pune">IIIT Pune</option>
-            <option value="IIIT Bhopal">IIIT Bhopal</option>
-            <option value="IIIT Nagpur">IIIT Nagpur</option>
-            <option value="IIIT Vadodra">IIIT Vadodara</option>
-          </select>
-          <button>See results</button>
-        </div>
-      </div>
-    </main>
     
-    <footer>
-      <div class="footer-content">
-        <div class="footer-column">
-          <h3>Information</h3>
-          <ul>
-            <li><a href="#">FAQ</a></li>
-            <li><a href="#">Terms and Conditions</a></li>
-            <li><a href="#">Privacy Policy</a></li>
-          </ul>
-        </div>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        // Custom Tailwind CSS Configuration for Dark Mode
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Lora', 'serif'],
+                    },
+                },
+            },
+        };
+    </script>
+    
+    <style>
+        /* Restored the grid background for light and dark modes */
+        body {
+            background-color: #f8f9fa;
+            background-image: 
+                linear-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+            background-size: 20px 20px;
+            font-family: 'Inter', sans-serif;
+        }
+        .dark body {
+            background-color: #0f172a;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-slate-900 text-gray-800 dark:text-gray-200 antialiased">
+    <div class="flex flex-col min-h-screen">
 
-        <div class="footer-column">
-          <h3>Company</h3>
-          <ul>
-            <li><a href="mailto:prakharmishraa30@gmail.com">Contact Us</a></li>
-            <li><a href="https://github.com/prakharmi">About Us</a></li>
-          </ul>
-        </div>
+        <header class="w-full px-4 sm:px-8 py-3 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border-b border-gray-200 dark:border-slate-700 sticky top-0 z-50">
+            <div class="max-w-7xl mx-auto flex items-center justify-between">
+                <a href="../Main Page/mainpage.html" class="flex items-center space-x-2">
+                    <img src="dormdealslogo.png" alt="DormDeals Logo" class="h-8 w-8">
+                    <span class="font-bold text-xl text-gray-900 dark:text-white">DormDeals</span>
+                </a>
+                <div class="flex items-center space-x-2 sm:space-x-4">
+                    <div id="google-signin-button"></div>
+                    <div class="relative">
+                        <button type="button" id="theme-menu-button" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-slate-700">
+                            <svg class="h-6 w-6 text-gray-600 dark:text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+                        </button>
+                        <div id="theme-menu" class="hidden absolute right-0 mt-2 w-36 bg-white dark:bg-slate-800 rounded-md shadow-lg ring-1 ring-black dark:ring-white ring-opacity-5 py-1 z-10">
+                            <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700" data-theme="light">Light</a>
+                            <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700" data-theme="dark">Dark</a>
+                            <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700" data-theme="system">System</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
 
-        <div class="footer-column">
-          <h3>Socials</h3>
-          <ul>
-            <li>
-              <a href="https://www.linkedin.com/in/prakhar-mishraa">LinkedIn</a>
-            </li>
-            <li>
-              <a href="https://www.instagram.com/prakharmishraaaa">Instagram</a>
-            </li>
-            <li><a href="https://github.com/prakharmi/Dormdeals">Github</a></li>
-          </ul>
-        </div>
-      </div>
-      
-      <div class="copyright">
-        <p>© 2025 Dorm Deals | All rights reserved.</p>
-      </div>
-    </footer>
-  </body>
+        <main class="flex-grow flex flex-col items-center justify-center text-center px-4 py-16 sm:py-24">
+            <h1 class="text-4xl sm:text-5xl md:text-6xl font-serif font-bold text-gray-900 dark:text-white leading-tight max-w-3xl">
+                Find the best deals in your college dorm.
+            </h1>
+            <p class="mt-6 text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                Select your college to see exclusive listings from your peers. Buy, sell, and trade without leaving campus.
+            </p>
+            <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 w-full max-w-lg">
+                <select id="college" class="w-full sm:w-auto flex-grow px-4 py-3 text-base bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    <option value="">Select your college</option>
+                    <option value="IIIT Surat">IIIT Surat</option>
+                    <option value="IIIT Pune">IIIT Pune</option>
+                    <option value="IIIT Bhopal">IIIT Bhopal</option>
+                    <option value="IIIT Nagpur">IIIT Nagpur</option>
+                    <option value="IIIT Vadodara">IIIT Vadodara</option>
+                </select>
+                <button id="see-results-btn" class="w-full sm:w-auto px-8 py-3 bg-gray-800 hover:bg-gray-900 dark:bg-blue-600 dark:hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-700 dark:focus:ring-blue-500 transition-colors">
+                    See results
+                </button>
+            </div>
+        </main>
+
+        <footer class="w-full bg-white dark:bg-slate-900 border-t border-gray-200 dark:border-slate-700">
+            <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+                <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+                    <p class="text-sm text-gray-500 dark:text-gray-400">&copy; 2025 Dorm Deals | All rights reserved.</p>
+                    <div class="flex space-x-6">
+                        <a href="mailto:prakharmishraa30@gmail.com" class="text-sm text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">Contact</a>
+                        <a href="https://github.com/prakharmi" target="_blank" rel="noopener noreferrer" class="text-sm text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">About Us</a>
+                        <a href="https://github.com/prakharmi/Dormdeals" target="_blank" rel="noopener noreferrer" class="text-sm text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">GitHub</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+    
+    <script src="mainpage.js" defer></script>
+    <script>
+        // --- Dark Mode Logic ---
+        const themeMenuButton = document.getElementById('theme-menu-button');
+        const themeMenu = document.getElementById('theme-menu');
+        const themeOptions = document.querySelectorAll('[data-theme]');
+        const applyTheme = (theme) => {
+            const htmlEl = document.documentElement;
+            if (theme === 'dark') { htmlEl.classList.add('dark'); } 
+            else { htmlEl.classList.remove('dark'); }
+        };
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) { applyTheme(savedTheme); } 
+        else if (window.matchMedia('(prefers-color-scheme: dark)').matches) { applyTheme('dark'); }
+        themeMenuButton.addEventListener('click', (e) => {
+            e.stopPropagation();
+            themeMenu.classList.toggle('hidden');
+        });
+        themeOptions.forEach(option => {
+            option.addEventListener('click', (e) => {
+                e.preventDefault();
+                const selectedTheme = e.target.getAttribute('data-theme');
+                if (selectedTheme === 'system') {
+                    localStorage.removeItem('theme');
+                    applyTheme(window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+                } else {
+                    localStorage.setItem('theme', selectedTheme);
+                    applyTheme(selectedTheme);
+                }
+                themeMenu.classList.add('hidden');
+            });
+        });
+        window.addEventListener('click', () => {
+            if (themeMenu && !themeMenu.classList.contains('hidden')) {
+                themeMenu.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
 </html>
