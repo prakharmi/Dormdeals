@@ -2,7 +2,7 @@
 <html lang="en" class="">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dorm Deals</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
@@ -13,6 +13,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <script>
+        // Custom Tailwind CSS Configuration for Dark Mode
         tailwind.config = {
             darkMode: 'class',
             theme: {
@@ -27,11 +28,21 @@
     </script>
     
     <style>
+        /* Restored the grid background for light and dark modes */
         body {
+            background-color: #f8f9fa;
+            background-image: 
+                linear-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+            background-size: 20px 20px;
             font-family: 'Inter', sans-serif;
-            overflow-x: hidden; /* Prevents horizontal scrolling and zoom-out */
         }
-        .font-lora { font-family: 'Lora', serif; }
+        .dark body {
+            background-color: #0f172a;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+        }
     </style>
 </head>
 <body class="bg-gray-50 dark:bg-slate-900 text-gray-800 dark:text-gray-200 antialiased">
@@ -44,7 +55,7 @@
                     <span class="font-bold text-xl text-gray-900 dark:text-white">DormDeals</span>
                 </a>
                 <div class="flex items-center space-x-2 sm:space-x-4">
-                    <div id="google-signin-button" class="flex items-center justify-center"></div>
+                    <div id="google-signin-button"></div>
                     <div class="relative">
                         <button type="button" id="theme-menu-button" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-slate-700">
                             <svg class="h-6 w-6 text-gray-600 dark:text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>

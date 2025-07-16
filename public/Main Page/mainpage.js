@@ -16,14 +16,14 @@ function handleCredentialResponse(response) {
     .then((data) => {
       if (data.exists) {
         localStorage.setItem("userCollege", data.user.college);
-        window.location.href = "../Product Listing/productlisting.html";
+        window.location.href = "../Product%20Listing/productlisting.html";
       } else {
-        window.location.href = "../User Info/userinfo.html";
+        window.location.href = "../User%20Info/userinfo.html";
       }
     })
     .catch((error) => {
       console.error("Error checking user:", error);
-      window.location.href = "../User Info/userinfo.html";
+      window.location.href = "../User%20Info/userinfo.html";
     });
 }
 
@@ -31,15 +31,7 @@ function checkUserAuthStatus() {
   const userToken = localStorage.getItem("userToken");
 
   if (userToken) {
-    // This logic ensures if a user is logged in, they are sent away from this page
-    const userCollege = localStorage.getItem("userCollege");
-    if (userCollege) {
-      window.location.href = "../Product Listing/productlisting.html";
-    } else {
-      // If for some reason they have a token but no college, send to user info
-      window.location.href = "../User Info/userinfo.html";
-    }
-    return true; // Return true as user is being redirected
+    window.location.href = "../Product%20Listing/productlisting.html";
   }
 
   return false;
@@ -47,7 +39,7 @@ function checkUserAuthStatus() {
 
 function initializeGoogleSignIn() {
   if (checkUserAuthStatus()) {
-    return; // Stop if the user is already logged in and being redirected
+    return; // Stop if the user is already logged in and redirected
   }
 
   // A check to ensure the google library is loaded before trying to use it
@@ -67,7 +59,7 @@ function initializeGoogleSignIn() {
   if (signInButton) {
     google.accounts.id.renderButton(signInButton, {
       theme: "outline",
-      size: "medium", // Changed from 'large' to 'medium' for better mobile fit
+      size: "large",
     });
   }
 }
@@ -76,6 +68,7 @@ window.onload = () => {
   initializeGoogleSignIn();
   
   const collegeSelect = document.querySelector("#college");
+  
   const seeResultsButton = document.querySelector("#see-results-btn");
 
   if (seeResultsButton) {
