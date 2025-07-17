@@ -1,87 +1,131 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DormDeals | Find Great Deals for Your Dorm</title>
-  <link rel="stylesheet" href="productlisting.css" />
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
-  <script src="productlisting.js" defer></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Products - Dorm Deals</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = { darkMode: 'class', theme: { extend: { fontFamily: { sans: ['Inter', 'sans-serif'], serif: ['Lora', 'serif'] } } } };
+    </script>
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            background-color: #f8f9fa;
+            background-image: linear-gradient(rgba(0,0,0,0.03) 1px,transparent 1px), linear-gradient(90deg,rgba(0,0,0,0.03) 1px,transparent 1px);
+            background-size: 25px 25px;
+        }
+        .dark body {
+            background-color: #0f172a;
+            background-image: linear-gradient(rgba(255,255,255,0.05) 1px,transparent 1px), linear-gradient(90deg,rgba(255,255,255,0.05) 1px,transparent 1px);
+        }
+        @media (max-width: 420px) {
+            #google-signin-button > div {
+                transform: scale(0.85);
+                transform-origin: right center;
+            }
+        }
+    </style>
 </head>
-<body>
-  <header>
-    <a href="../Main Page/mainpage.html" class="navbar-brand">
-      <img src="dormdealslogo.png" alt="DormDeals Logo" class="logo" />
-      <span class="navbar-text">DormDeals</span>
-    </a>
+<body class="bg-gray-50 dark:bg-slate-900 text-gray-800 dark:text-gray-200 antialiased">
     
-    <div class="search-container">
-      <input type="text" class="search-bar" placeholder="Search for products..." />
-    </div>
-    
-    <div class="nav-buttons">
-      <button id="profile-button" class="profile-btn hidden">
-        <i class="fas fa-user"></i> My Profile
-      </button>
-      <div id="google-signin-button"></div>
-    </div>
-  </header>
-  
-  <main class="products-container">
-    <div class="filters">
-      <button class="filter-button">All Products</button>
-      <button class="filter-button">Furniture</button>
-      <button class="filter-button">Electronics</button>
-      <button class="filter-button">Education</button>
-      <button class="filter-button">Cooler</button>
-      <button class="filter-button">Home</button>
-      <button class="filter-button">Other</button>
-      
-      <a id="redirect-button" class="redirect-button">Add Product</a>
-    </div>
-    
-    <div class="product-grid">
-      <!-- Products will be populated here by JavaScript -->
-    </div>
-  </main>
-  
-<footer>
-    <div class="footer-content">
-      <div class="footer-column">
-        <h3>Information</h3>
-        <ul>
-          <li><a href="#">FAQ</a></li>
-          <li><a href="#">Terms and Conditions</a></li>
-          <li><a href="#">Privacy Policy</a></li>
-        </ul>
-      </div>
+    <div class="flex flex-col min-h-screen">
+        <header class="w-full px-4 sm:px-6 py-3 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border-b border-gray-200 dark:border-slate-700 sticky top-0 z-50">
+            <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+                <a href="../Main Page/mainpage.html" class="flex-shrink-0 flex items-center space-x-2">
+                    <img src="../Main Page/dormdealslogo.png" alt="DormDeals Logo" class="h-7 w-7 sm:h-8 sm:w-8">
+                    <span class="hidden sm:inline font-bold text-lg sm:text-xl text-gray-900 dark:text-white">DormDeals</span>
+                </a>
 
-      <div class="footer-column">
-        <h3>Company</h3>
-        <ul>
-          <li><a href="mailto:prakharmishraa30@gmail.com">Contact Us</a></li>
-          <li><a href="https://github.com/prakharmi">About Us</a></li>
-        </ul>
-      </div>
+                <div class="search-container flex-grow flex justify-center px-4">
+                    <div class="relative w-full max-w-lg">
+                        <input type="text" class="search-bar w-full pl-10 pr-4 py-2 text-sm border border-gray-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800 focus:ring-2 focus:ring-blue-500" placeholder="Search for products...">
+                        <svg class="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    </div>
+                </div>
 
-      <div class="footer-column">
-        <h3>Socials</h3>
-        <ul>
-          <li>
-            <a href="https://www.linkedin.com/in/prakhar-mishraa">LinkedIn</a>
-          </li>
-          <li>
-            <a href="https://www.instagram.com/prakharmishraaaa">Instagram</a>
-          </li>
-          <li><a href="https://github.com/prakharmi/Dormdeals">Github</a></li>
-        </ul>
-      </div>
+                <div class="nav-buttons flex-shrink-0 flex items-center space-x-2">
+                    <div id="google-signin-button" class="flex items-center justify-center"></div>
+                    <div id="profile-button" class="profile-btn hidden"></div>
+                    
+                    <div class="relative">
+                        <button type="button" id="theme-menu-button" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-slate-700">
+                            <svg class="h-5 w-5 sm:h-6 sm:w-6 text-gray-600 dark:text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+                        </button>
+                        <div id="theme-menu" class="hidden absolute right-0 mt-2 w-36 bg-white dark:bg-slate-800 rounded-md shadow-lg ring-1 ring-black dark:ring-white ring-opacity-5 py-1 z-10">
+                            <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300" data-theme="light">Light</a>
+                            <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300" data-theme="dark">Dark</a>
+                            <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300" data-theme="system">System</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="products-container flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4 mb-8">
+                <h1 id="college-name-heading" class="text-2xl sm:text-3xl font-serif font-bold text-gray-900 dark:text-white">Deals</h1>
+                
+                <div class="flex items-center gap-4 w-full md:w-auto">
+                    <select id="category-filter" class="w-full sm:w-auto px-4 py-2 text-sm bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="all products">All Categories</option>
+                        <option value="furniture">Furniture</option>
+                        <option value="electronics">Electronics</option>
+                        <option value="education">Education</option>
+                        <option value="cooler">Cooler</option>
+                        <option value="home">Home</option>
+                        <option value="other">Other</option>
+                    </select>
+                    <a id="redirect-button" class="flex-shrink-0 inline-flex items-center justify-center px-4 py-2 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-md transition-colors">
+                        + Add Product
+                    </a>
+                </div>
+            </div>
+            
+            <div class="product-grid grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"></div>
+        </main>
+
+        <footer class="w-full bg-white dark:bg-slate-900 border-t border-gray-200 dark:border-slate-700 mt-auto">
+            <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+                <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+                    <p class="text-sm text-gray-500 dark:text-gray-400">&copy; 2025 Dorm Deals | All rights reserved.</p>
+                    <div class="flex space-x-6">
+                        <a href="mailto:prakharmishraa30@gmail.com" class="text-sm text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">Contact</a>
+                        <a href="https://github.com/prakharmi" target="_blank" rel="noopener noreferrer" class="text-sm text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">About Us</a>
+                        <a href="https://github.com/prakharmi/Dormdeals" target="_blank" rel="noopener noreferrer" class="text-sm text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">GitHub</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
     </div>
     
-    <div class="copyright">
-      <p>© 2025 Dorm Deals | All rights reserved.</p>
-    </div>
-  </footer>
+    <script src="productlisting.js" defer></script>
+    <script>
+        // --- Dark Mode Logic ---
+        const themeMenuButton = document.getElementById('theme-menu-button');
+        if(themeMenuButton){
+            const themeMenu = document.getElementById('theme-menu');
+            const applyTheme = (theme) => { document.documentElement.classList.toggle('dark', theme === 'dark'); };
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) { applyTheme(savedTheme); } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) { applyTheme('dark'); }
+            themeMenuButton.addEventListener('click', (e) => { e.stopPropagation(); themeMenu.classList.toggle('hidden'); });
+            themeMenu.querySelectorAll('[data-theme]').forEach(el => el.addEventListener('click', (e) => {
+                e.preventDefault();
+                const theme = e.target.getAttribute('data-theme');
+                if(theme === 'system'){ localStorage.removeItem('theme'); applyTheme(window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'); }
+                else{ localStorage.setItem('theme', theme); applyTheme(theme); }
+            }));
+            window.addEventListener('click', () => themeMenu.classList.add('hidden'));
+        }
+    </script>
 </body>
 </html>
