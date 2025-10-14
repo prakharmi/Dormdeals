@@ -1,100 +1,86 @@
-const API_BASE_URL = 'https://dormdeals-backend.onrender.com';
-
-window.onload = function () {
-  const email = localStorage.getItem("userEmail");
-  const name = localStorage.getItem("userName");
-
-  const nameField = document.getElementById("name");
-  if (nameField && name) {
-    nameField.value = name;
-  }
-
-  let emailField = document.getElementById("email");
+document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("user-details-form");
-  if (!emailField && form) {
-    emailField = document.createElement("input");
-    emailField.type = "hidden";
-    emailField.id = "email";
-    emailField.name = "email";
-    form.appendChild(emailField);
-  }
+  const nameInput = document.getElementById("name");
+  const emailInput = document.getElementById("email");
+  const submitButton = document.getElementById("submit-button");
 
-  if (emailField && email) {
-    emailField.value = email;
-  } else if (!email) {
-      console.error("User email not found in localStorage. Cannot submit form.");
-      const submitButton = form ? form.querySelector('button[type="submit"]') : null;
-      if (submitButton) {
-          submitButton.disabled = true;
-          submitButton.textContent = "Login Required";
+  // 1. Fetch temporary user data from the server session to pre-fill the form
+  fetch("/api/users/new-user-info")
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error("Session expired or invalid.");
       }
-  }
-};
+      return res.json();
+    })
+    .then((data) => {
+      nameInput.value = data.name || "";
+      emailInput.value = data.email || "";
+    })
+    .catch((error) => {
+      console.error("Failed to get new user info:", error);
+      alert(
+        "Your registration session has expired. Please log in again to continue.",
+      );
+      // Redirect to homepage to restart the login process
+      window.location.href = "/";
+    });
 
-document
-  .getElementById("user-details-form")
-  .addEventListener("submit", function (event) {
+  // 2. Handle the form submission
+  form.addEventListener("submit", (event) => {
     event.preventDefault();
 
-    const nameInput = document.getElementById("name");
     const collegeInput = document.getElementById("college");
     const mobileInput = document.getElementById("mobile");
-    const emailInput = document.getElementById("email");
 
-    if (!nameInput || !collegeInput || !mobileInput || !emailInput) {
-        console.error("One or more form fields are missing.");
-        alert("An error occurred. Please refresh the page.");
-        return;
-    }
-
-    const name = nameInput.value.trim();
-    const college = collegeInput.value.trim();
-    const mobile = mobileInput.value.trim();
-    const email = emailInput.value;
-    
-    if (!name || !college || !mobile || !email) {
-        alert("Please fill in all required fields.");
-        return;
-    }
-
-    if (!/^[0-9]{10}$/.test(mobile)) {
+    // Basic validation
+    if (!/^[0-9]{10}$/.test(mobileInput.value.trim())) {
       alert("Please enter a valid 10-digit mobile number.");
       return;
     }
 
-    const submitButton = event.target.querySelector('button[type="submit"]');
-    if(submitButton) {
-        submitButton.disabled = true;
-        submitButton.textContent = 'Submitting...';
+    if (!collegeInput.value) {
+      alert("Please select your college.");
+      return;
     }
 
-    fetch(`${API_BASE_URL}/submit-form`, {
+    // Disable button to prevent multiple submissions
+    submitButton.disabled = true;
+    submitButton.textContent = "Submitting...";
+
+    const formData = {
+      name: nameInput.value.trim(),
+      college: collegeInput.value,
+      mobile: mobileInput.value.trim(),
+    };
+
+    // 3. Send data to the registration endpoint
+    fetch("/api/users/register", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ name, college, mobile, email }),
+      body: JSON.stringify(formData),
     })
-      .then(async (response) => { 
-          const responseData = await response.json();
-          if (!response.ok) {
-              throw new Error(responseData.message || `HTTP error! status: ${response.status}`);
-          }
-          return responseData;
+      .then(async (response) => {
+        const responseData = await response.json();
+        if (!response.ok) {
+          throw new Error(
+            responseData.message || `HTTP error! Status: ${response.status}`,
+          );
+        }
+        return responseData;
       })
       .then((data) => {
-        console.log("Response from server:", data);
-        alert(data.message || "Details submitted successfully!"); 
-        localStorage.setItem("userCollege", college);
-        localStorage.setItem("userName", name);
-        window.location.href = "../Product%20Listing/productlisting.html";
+        alert(data.message || "Registration successful!");
+        // Redirect to the page specified by the backend
+        window.location.href = data.redirectTo || "/products";
       })
       .catch((error) => {
-          console.error("Error submitting form:", error);
-          alert(`Error submitting form: ${error.message}`);
-          if(submitButton) {
-              submitButton.disabled = false;
-              submitButton.textContent = 'Submit';
-          }
+        console.error("Error submitting form:", error);
+        alert(`Registration failed: ${error.message}`);
+        // Re-enable button on failure
+        submitButton.disabled = false;
+        submitButton.textContent = "Submit and Continue";
       });
   });
+});

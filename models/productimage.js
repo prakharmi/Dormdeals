@@ -1,6 +1,7 @@
 const db = require("../config/database").pool;
 
 class ProductImage {
+  // Creates a single record linking an image URL to a product.
   static async create(productId, imageUrl) {
     try {
       const [result] = await db.query(
@@ -13,6 +14,7 @@ class ProductImage {
     }
   }
 
+  // Creates multiple image records in a single, efficient query.
   static async createMany(imageData) {
     try {
       const [result] = await db.query(
@@ -25,6 +27,7 @@ class ProductImage {
     }
   }
 
+  // Finds all image URLs associated with a given product ID.
   static async findByProductId(productId) {
     try {
       const [rows] = await db.query(

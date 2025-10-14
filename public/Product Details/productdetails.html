@@ -1,116 +1,306 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Add Product</title>
-    <link rel="stylesheet" href="productdetails.css" />
+    <title>Add a New Product - Dorm Deals</title>
+    <style>
+      body {
+        background-color: #f8f9fa;
+        background-image: linear-gradient(
+            rgba(0, 0, 0, 0.05) 1px,
+            transparent 1px
+          ),
+          linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+        background-size: 20px 20px;
+      }
+      .dark body {
+        background-color: #0f172a;
+        background-image: linear-gradient(
+            rgba(255, 255, 255, 0.05) 1px,
+            transparent 1px
+          ),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+      }
+    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Inter", "sans-serif"],
+              serif: ["Lora", "serif"],
+            },
+          },
+        },
+      };
+    </script>
   </head>
-  <body>
-    <header>
-      <a href="../Main Page/mainpage.html" style="display: flex; align-items: center; gap: 10px; text-decoration: none;">
-        <img src="dormdealslogo.png" alt="Logo" class="logo" />
-        <span class="navbar-text">DormDeals</span>
-      </a>
+  <body
+    class="bg-gray-50 dark:bg-slate-900 text-gray-800 dark:text-gray-200 antialiased flex flex-col min-h-screen"
+  >
+    <header
+      class="w-full px-4 sm:px-8 py-3 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border-b border-gray-200 dark:border-slate-700 sticky top-0 z-50"
+    >
+      <div class="max-w-7xl mx-auto flex items-center justify-between">
+        <a href="/" class="flex items-center space-x-2">
+          <img
+            src="/assets/images/dormdealslogo.png"
+            alt="DormDeals Logo"
+            class="h-7 w-7 sm:h-8 sm:w-8"
+          />
+          <span
+            class="font-bold text-lg sm:text-xl text-gray-900 dark:text-white"
+            >DormDeals</span
+          >
+        </a>
+        <div class="flex items-center space-x-2">
+          <div
+            id="auth-container"
+            class="flex items-center justify-center"
+          ></div>
+          <div class="relative">
+            <button
+              type="button"
+              id="theme-menu-button"
+              class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-slate-700"
+            >
+              <svg
+                class="h-5 w-5 sm:h-6 sm:w-6 text-gray-600 dark:text-gray-400"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+                />
+              </svg>
+            </button>
+            <div
+              id="theme-menu"
+              class="hidden absolute right-0 mt-2 w-36 bg-white dark:bg-slate-800 rounded-md shadow-lg ring-1 ring-black dark:ring-white ring-opacity-5 py-1 z-10"
+            >
+              <a
+                href="#"
+                class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300"
+                data-theme="light"
+                >Light</a
+              >
+              <a
+                href="#"
+                class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300"
+                data-theme="dark"
+                >Dark</a
+              >
+              <a
+                href="#"
+                class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300"
+                data-theme="system"
+                >System</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
     </header>
-    <main>
-      <div class="form-container">
-        <h1>Add a New Product</h1>
-        <form id="product-form">
-          <label for="productName">Product Name:</label>
-          <input
-            type="text"
-            id="productName"
-            name="productName"
-            placeholder="Enter product name"
-            required
-          />
 
-          <label for="category">Category:</label>
-          <select id="category" name="category" required>
-            <option value="" disabled selected>Select a category</option>
-            <option value="furniture">Furniture</option>
-            <option value="electronics">Electronics</option>
-            <option value="education">Books, Notes</option>
-            <option value="cooler">Cooler, Fan, AC</option>
-            <option value="home">Home</option>
-            <option value="other">Other</option>
-          </select>
-
-          <label for="description">Description:</label>
-          <textarea
-            id="description"
-            name="description"
-            placeholder="Enter product description"
-            required
-          ></textarea>
-
-          <label for="price">Price:</label>
-          <input
-            type="number"
-            id="price"
-            name="price"
-            placeholder="Enter product price"
-            required
-          />
-
-          <label for="photos">Upload Product Images (Max 10):</label>
-          <input
-            type="file"
-            id="photos"
-            name="photos"
-            accept="image/*"
-            multiple
-            required
-          />
-          <p id="file-limit-message" style="color: red; display: none">
-            You can upload up to 10 images only.
-          </p>
-          <div id="image-preview"></div>
-
-          <button type="submit">Add Product</button>
+    <main class="flex-grow w-full max-w-2xl mx-auto px-4 py-8 sm:py-12">
+      <div class="bg-white dark:bg-slate-800 p-6 sm:p-8 rounded-xl shadow-lg">
+        <h1
+          class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white text-center mb-6"
+        >
+          Add a New Product
+        </h1>
+        <form id="product-form" class="space-y-6">
+          <div>
+            <label
+              for="productName"
+              class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+              >Product Name</label
+            >
+            <input
+              type="text"
+              id="productName"
+              name="productName"
+              placeholder="e.g., Study Lamp"
+              required
+              class="w-full px-4 py-2 bg-gray-50 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+          <div>
+            <label
+              for="category"
+              class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+              >Category</label
+            >
+            <select
+              id="category"
+              name="category"
+              required
+              class="w-full px-4 py-2 bg-gray-50 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="" disabled selected>Select a category</option>
+              <option value="furniture">Furniture</option>
+              <option value="electronics">Electronics</option>
+              <option value="education">Books & Notes</option>
+              <option value="cooler">Cooler, Fan, AC</option>
+              <option value="home">Home Essentials</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div>
+            <label
+              for="description"
+              class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+              >Description</label
+            >
+            <textarea
+              id="description"
+              name="description"
+              placeholder="Describe the item's condition, features, etc."
+              required
+              rows="4"
+              class="w-full px-4 py-2 bg-gray-50 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            ></textarea>
+          </div>
+          <div>
+            <label
+              for="price"
+              class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+              >Price (₹)</label
+            >
+            <input
+              type="number"
+              id="price"
+              name="price"
+              placeholder="e.g., 500"
+              required
+              class="w-full px-4 py-2 bg-gray-50 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+          <div>
+            <label
+              for="photos"
+              class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+              >Upload Product Images (Max 10)</label
+            >
+            <input
+              type="file"
+              id="photos"
+              name="photos"
+              accept="image/*"
+              multiple
+              required
+              class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 dark:file:bg-slate-700 dark:file:text-slate-300 dark:hover:file:bg-slate-600"
+            />
+            <p
+              id="file-limit-message"
+              class="text-sm text-red-500 mt-1"
+              style="display: none"
+            >
+              You can upload up to 10 images only.
+            </p>
+            <div
+              id="image-preview"
+              class="mt-4 grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-4"
+            ></div>
+          </div>
+          <button
+            type="submit"
+            id="submit-button"
+            class="w-full px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors disabled:opacity-50"
+          >
+            Add Product
+          </button>
         </form>
       </div>
     </main>
 
-    <footer>
-      <div class="footer-content">
-        <div class="footer-column">
-          <h3>Information</h3>
-          <ul>
-            <li><a href="#">FAQ</a></li>
-            <li><a href="#">Terms and Conditions</a></li>
-            <li><a href="#">Privacy Policy</a></li>
-          </ul>
+    <footer
+      class="w-full bg-white dark:bg-slate-900 border-t border-gray-200 dark:border-slate-700 mt-auto"
+    >
+      <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+        <div
+          class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0"
+        >
+          <p class="text-sm text-gray-500 dark:text-gray-400">
+            &copy; 2025 Dorm Deals | All rights reserved.
+          </p>
+          <div class="flex space-x-6">
+            <a
+              href="mailto:prakharmishraa30@gmail.com"
+              class="text-sm text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+              >Contact</a
+            >
+            <a
+              href="https://github.com/prakharmi"
+              target="_blank"
+              class="text-sm text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+              >About Us</a
+            >
+            <a
+              href="https://github.com/prakharmi/Dormdeals"
+              target="_blank"
+              class="text-sm text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+              >GitHub</a
+            >
+          </div>
         </div>
-
-        <div class="footer-column">
-          <h3>Company</h3>
-          <ul>
-            <li><a href="mailto:prakharmishraa30@gmail.com">Contact Us</a></li>
-            <li><a href="https://github.com/prakharmi">About Us</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-column">
-          <h3>Socials</h3>
-          <ul>
-            <li>
-              <a href="https://www.linkedin.com/in/prakhar-mishraa">LinkedIn</a>
-            </li>
-            <li>
-              <a href="https://www.instagram.com/prakharmishraaaa">Instagram</a>
-            </li>
-            <li><a href="https://github.com/prakharmi/Dormdeals">Github</a></li>
-          </ul>
-        </div>
-      </div>
-      
-      <div class="copyright">
-        <p>© 2025 Dorm Deals | All rights reserved.</p>
       </div>
     </footer>
 
-    <script src="productdetails.js"></script>
+    <script src="/Product Details/productdetails.js"></script>
+    <script>
+      // Dark Mode Logic
+      const themeMenuButton = document.getElementById("theme-menu-button");
+      if (themeMenuButton) {
+        const themeMenu = document.getElementById("theme-menu");
+        const applyTheme = (theme) => {
+          document.documentElement.classList.toggle("dark", theme === "dark");
+        };
+        const savedTheme = localStorage.getItem("theme");
+        if (savedTheme) {
+          applyTheme(savedTheme);
+        } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+          applyTheme("dark");
+        }
+        themeMenuButton.addEventListener("click", (e) => {
+          e.stopPropagation();
+          themeMenu.classList.toggle("hidden");
+        });
+        themeMenu.querySelectorAll("[data-theme]").forEach((el) =>
+          el.addEventListener("click", (e) => {
+            e.preventDefault();
+            const theme = e.target.getAttribute("data-theme");
+            if (theme === "system") {
+              localStorage.removeItem("theme");
+              applyTheme(
+                window.matchMedia("(prefers-color-scheme: dark)").matches
+                  ? "dark"
+                  : "light",
+              );
+            } else {
+              localStorage.setItem("theme", theme);
+              applyTheme(theme);
+            }
+          }),
+        );
+        window.addEventListener("click", () =>
+          themeMenu.classList.add("hidden"),
+        );
+      }
+    </script>
   </body>
 </html>

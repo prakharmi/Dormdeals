@@ -1,85 +1,111 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Details Form</title>
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <style>
-        /* A little custom style to replicate the grid background */
-        body {
-            background-color: #ffffff;
-            background-image: 
-                linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
-            background-size: 20px 20px;
-        }
-    </style>
-</head>
-<body class="flex items-center justify-center min-h-screen p-4 sm:p-8">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Complete Your Profile - Dorm Deals</title>
 
-    <div class="w-full max-w-md p-8 space-y-6 bg-white border border-gray-200 rounded-xl shadow-lg">
-        
-        <div class="text-left">
-            <h1 class="text-2xl font-bold text-gray-900">User Details</h1>
-            <p class="mt-1 text-sm text-gray-600">Please fill out your information below.</p>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+      body {
+        background-color: #f8f9fa;
+        background-image: linear-gradient(
+            rgba(0, 0, 0, 0.05) 1px,
+            transparent 1px
+          ),
+          linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+        background-size: 20px 20px;
+      }
+    </style>
+  </head>
+  <body class="flex items-center justify-center min-h-screen p-4 sm:p-8">
+    <div
+      class="w-full max-w-md p-8 space-y-6 bg-white border border-gray-200 rounded-xl shadow-lg"
+    >
+      <div class="text-center">
+        <h1 class="text-2xl font-bold text-gray-900">Almost There!</h1>
+        <p class="mt-1 text-sm text-gray-600">
+          Please provide a few more details to complete your profile.
+        </p>
+      </div>
+
+      <form id="user-details-form" class="space-y-6">
+        <div>
+          <label for="name" class="block text-sm font-medium text-gray-700"
+            >Name</label
+          >
+          <input
+            type="text"
+            id="name"
+            name="name"
+            placeholder="Enter your full name"
+            required
+            class="block w-full px-3 py-2 mt-1 bg-gray-50 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+          />
         </div>
 
-        <form id="user-details-form" class="space-y-6">
-            
-            <div>
-                <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
-                <input 
-                    type="text" 
-                    id="name" 
-                    name="name" 
-                    placeholder="Enter your full name" 
-                    required
-                    class="block w-full px-3 py-2 mt-1 bg-gray-50 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-            </div>
+        <div>
+          <label for="email" class="block text-sm font-medium text-gray-700"
+            >Email</label
+          >
+          <input
+            type="email"
+            id="email"
+            name="email"
+            readonly
+            class="block w-full px-3 py-2 mt-1 bg-gray-200 border border-gray-300 rounded-md shadow-sm text-gray-500 cursor-not-allowed sm:text-sm"
+          />
+        </div>
 
-            <div>
-                <label for="college" class="block text-sm font-medium text-gray-700">College</label>
-                <select 
-                    id="college" 
-                    name="college" 
-                    required
-                    class="block w-full px-3 py-2 mt-1 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-                    <option value="" disabled selected>Select your college</option>
-                    <option value="IIIT Surat">IIIT Surat</option>
-                    <option value="IIIT Pune">IIIT Pune</option>
-                    <option value="IIIT Bhopal">IIIT Bhopal</option>
-                    <option value="IIIT Nagpur">IIIT Nagpur</option>
-                    <option value="IIIT Vadodara">IIIT Vadodara</option>
-                </select>
-            </div>
+        <div>
+          <label for="college" class="block text-sm font-medium text-gray-700"
+            >College</label
+          >
+          <select
+            id="college"
+            name="college"
+            required
+            class="block w-full px-3 py-2 mt-1 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+          >
+            <option value="" disabled selected>Select your college</option>
+            <option value="IIIT Surat">IIIT Surat</option>
+            <option value="IIIT Pune">IIIT Pune</option>
+            <option value="IIIT Bhopal">IIIT Bhopal</option>
+            <option value="IIIT Nagpur">IIIT Nagpur</option>
+            <option value="IIIT Vadodara">IIIT Vadodara</option>
+          </select>
+        </div>
 
-            <div>
-                <label for="mobile" class="block text-sm font-medium text-gray-700">Whatsapp Mobile Number</label>
-                <input 
-                    type="tel" 
-                    id="mobile" 
-                    name="mobile" 
-                    placeholder="Enter your mobile number" 
-                    required 
-                    pattern="[0-9]{10}"
-                    class="block w-full px-3 py-2 mt-1 bg-gray-50 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-            </div>
+        <div>
+          <label for="mobile" class="block text-sm font-medium text-gray-700"
+            >WhatsApp Mobile Number</label
+          >
+          <input
+            type="tel"
+            id="mobile"
+            name="mobile"
+            placeholder="Enter your 10-digit mobile number"
+            required
+            pattern="[0-9]{10}"
+            class="block w-full px-3 py-2 mt-1 bg-gray-50 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+          />
+        </div>
 
-            <hr class="border-gray-200">
+        <hr class="border-gray-200" />
 
-            <div>
-                <button 
-                    type="submit"
-                    class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-700">
-                    Submit
-                </button>
-            </div>
-        </form>
+        <div>
+          <button
+            type="submit"
+            id="submit-button"
+            class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-700 disabled:opacity-50"
+          >
+            Submit and Continue
+          </button>
+        </div>
+      </form>
     </div>
 
-    <script src="userinfo.js"></script>
-</body>
+    <script src="/User Info/userinfo.js"></script>
+  </body>
 </html>

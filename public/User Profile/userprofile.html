@@ -1,146 +1,395 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>User Profile - DormDeals</title>
-    <link rel="stylesheet" href="userprofile.css" />
+    <title>My Profile - DormDeals</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Inter", "sans-serif"],
+              serif: ["Lora", "serif"],
+            },
+          },
+        },
+      };
+    </script>
+
+    <style>
+      body {
+        background-color: #f8f9fa;
+        background-image: linear-gradient(
+            rgba(0, 0, 0, 0.03) 1px,
+            transparent 1px
+          ),
+          linear-gradient(90deg, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+        background-size: 25px 25px;
+      }
+      .dark body {
+        background-color: #0f172a;
+        background-image: linear-gradient(
+            rgba(255, 255, 255, 0.05) 1px,
+            transparent 1px
+          ),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+      }
+      .tab-button {
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+        font-weight: 500;
+        transition: background-color 0.2s;
+      }
+      .tab-button.active {
+        background-color: white;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      }
+      .dark .tab-button.active {
+        background-color: #0f172a;
+      }
+    </style>
   </head>
-  <body>
-    <header>
-      <a href="../Main Page/mainpage.html" style="display: flex; align-items: center; gap: 10px; text-decoration: none;">
-        <img src="../Product Listing/dormdealslogo.png" alt="Logo" class="logo" />
-        <span class="navbar-text">DormDeals</span>
-      </a>
-      <div class="search-container">
-        <input
-          type="text"
-          class="search-bar"
-          placeholder="Search your products..."
-        />
-      </div>
-      <div id="google-signin-button"></div>
-    </header>
-
-    <main class="profile-container">
-      <div class="profile-header">
-        <div class="user-info">
-          <h1 id="user-name">User Profile</h1>
-          <p id="user-college">Loading college information...</p>
-          <p id="user-email">Loading email...</p>
-        </div>
-        <div class="profile-actions">
-          <a href="../Product Details/productdetails.html" class="action-button add-product-btn">Add New Product</a>
-          <a href="../Product Listing/productlisting.html" class="action-button browse-btn">Browse Products</a>
-        </div>
-      </div>
-
-      <div class="content-wrapper">
-        <div class="filter-tabs">
-          <button class="tab-button active" data-filter="all">All Products</button>
-          <button class="tab-button" data-filter="available">Available</button>
-          <button class="tab-button" data-filter="sold">Sold</button>
-        </div>
-
-        <div class="product-section">
-          <h2>My Products</h2>
-          <div id="user-products-container" class="product-grid">
-            <!-- Products will be loaded here -->
-            <div class="loading-spinner">Loading your products...</div>
-          </div>
-        </div>
-
-        <!-- Edit Product Modal -->
-        <div id="edit-modal" class="modal">
-          <div class="modal-content">
-            <span class="close-button">&times;</span>
-            <h2>Edit Product</h2>
-            <form id="edit-product-form">
-              <input type="hidden" id="edit-product-id">
-              <div class="form-group">
-                <label for="edit-product-name">Product Name:</label>
-                <input type="text" id="edit-product-name" name="productName" required>
-              </div>
-              <div class="form-group">
-                <label for="edit-category">Category:</label>
-                <select id="edit-category" name="category" required>
-                  <option value="" disabled>Select a category</option>
-                  <option value="furniture">Furniture</option>
-                  <option value="electronics">Electronics</option>
-                  <option value="education">Books, Notes</option>
-                  <option value="cooler">Cooler, Fan, AC</option>
-                  <option value="home">Home</option>
-                  <option value="other">Other</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="edit-description">Description:</label>
-                <textarea id="edit-description" name="description" required></textarea>
-              </div>
-              <div class="form-group">
-                <label for="edit-price">Price:</label>
-                <input type="number" id="edit-price" name="price" required>
-              </div>
-              <div class="form-actions">
-                <button type="submit" class="save-button">Save Changes</button>
-              </div>
-            </form>
-          </div>
-        </div>
-
-        <!-- Confirmation Modal -->
-        <div id="confirm-modal" class="modal">
-          <div class="modal-content confirm-content">
-            <h2>Confirm Action</h2>
-            <p id="confirm-message">Are you sure you want to proceed?</p>
-            <div class="confirm-actions">
-              <button id="confirm-cancel" class="cancel-button">Cancel</button>
-              <button id="confirm-proceed" class="proceed-button">Proceed</button>
+  <body
+    class="bg-gray-50 dark:bg-slate-900 text-gray-800 dark:text-gray-200 flex flex-col min-h-screen"
+  >
+    <header
+      class="w-full px-4 sm:px-8 py-3 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border-b border-gray-200 dark:border-slate-700 sticky top-0 z-50"
+    >
+      <div class="max-w-7xl mx-auto flex items-center justify-between">
+        <a href="/" class="flex items-center space-x-2"
+          ><img
+            src="/assets/images/dormdealslogo.png"
+            alt="DormDeals Logo"
+            class="h-7 w-7 sm:h-8 sm:w-8"
+          /><span
+            class="font-bold text-lg sm:text-xl text-gray-900 dark:text-white"
+            >DormDeals</span
+          ></a
+        >
+        <div class="flex items-center space-x-2">
+          <div
+            id="auth-container"
+            class="flex items-center justify-center"
+          ></div>
+          <div class="relative">
+            <button
+              type="button"
+              id="theme-menu-button"
+              class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-slate-700"
+            >
+              <svg
+                class="h-5 w-5 sm:h-6 sm:w-6 text-gray-600 dark:text-gray-400"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+                />
+              </svg>
+            </button>
+            <div
+              id="theme-menu"
+              class="hidden absolute right-0 mt-2 w-36 bg-white dark:bg-slate-800 rounded-md shadow-lg ring-1 ring-black dark:ring-white ring-opacity-5 py-1 z-10"
+            >
+              <a
+                href="#"
+                class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300"
+                data-theme="light"
+                >Light</a
+              >
+              <a
+                href="#"
+                class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300"
+                data-theme="dark"
+                >Dark</a
+              >
+              <a
+                href="#"
+                class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300"
+                data-theme="system"
+                >System</a
+              >
             </div>
           </div>
         </div>
       </div>
-    </main>
+    </header>
 
-<footer>
-      <div class="footer-content">
-        <div class="footer-column">
-          <h3>Information</h3>
-          <ul>
-            <li><a href="#">FAQ</a></li>
-            <li><a href="#">Terms and Conditions</a></li>
-            <li><a href="#">Privacy Policy</a></li>
-          </ul>
+    <main class="w-full max-w-7xl mx-auto px-4 py-8 sm:py-12 flex-grow">
+      <div
+        class="bg-white dark:bg-slate-800 p-6 sm:p-8 rounded-xl shadow-lg mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
+      >
+        <div>
+          <h1
+            id="user-name"
+            class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white"
+          >
+            Loading...
+          </h1>
+          <p id="user-college" class="text-gray-500 dark:text-gray-400">
+            Loading college...
+          </p>
+          <p id="user-email" class="text-gray-500 dark:text-gray-400">
+            Loading email...
+          </p>
         </div>
-
-        <div class="footer-column">
-          <h3>Company</h3>
-          <ul>
-            <li><a href="mailto:prakharmishraa30@gmail.com">Contact Us</a></li>
-            <li><a href="https://github.com/prakharmi">About Us</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-column">
-          <h3>Socials</h3>
-          <ul>
-            <li>
-              <a href="https://www.linkedin.com/in/prakhar-mishraa">LinkedIn</a>
-            </li>
-            <li>
-              <a href="https://www.instagram.com/prakharmishraaaa">Instagram</a>
-            </li>
-            <li><a href="https://github.com/prakharmi/Dormdeals">Github</a></li>
-          </ul>
+        <div
+          class="flex-shrink-0 w-full sm:w-auto flex flex-col sm:flex-row gap-3"
+        >
+          <a
+            href="/add-product"
+            class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md text-center"
+            >Add New Product</a
+          >
+          <a
+            id="browse-products-btn"
+            href="/products"
+            class="px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-800 font-semibold rounded-lg border border-gray-300 dark:bg-slate-700 dark:text-gray-200 dark:border-slate-600 text-center"
+            >Browse Products</a
+          >
         </div>
       </div>
-      
-      <div class="copyright">
-        <p>© 2025 Dorm Deals | All rights reserved.</p>
+
+      <div class="bg-white dark:bg-slate-800 p-6 sm:p-8 rounded-xl shadow-lg">
+        <div
+          class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4"
+        >
+          <h2 class="text-xl font-bold text-gray-900 dark:text-white">
+            My Products
+          </h2>
+          <div
+            class="flex items-center gap-2 bg-gray-100 dark:bg-slate-700 p-1 rounded-lg"
+          >
+            <button class="tab-button active" data-filter="all">All</button>
+            <button class="tab-button" data-filter="available">
+              Available
+            </button>
+            <button class="tab-button" data-filter="sold">Sold</button>
+          </div>
+        </div>
+        <div
+          id="user-products-grid"
+          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+        ></div>
+      </div>
+    </main>
+
+    <div
+      id="edit-modal"
+      class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4"
+    >
+      <div
+        class="bg-white dark:bg-slate-800 rounded-lg shadow-xl p-6 max-w-lg w-full"
+      >
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-xl font-bold text-gray-900 dark:text-white">
+            Edit Product
+          </h2>
+          <button class="close-modal text-gray-500 hover:text-gray-800">
+            &times;
+          </button>
+        </div>
+        <form id="edit-product-form" class="space-y-4">
+          <input type="hidden" id="edit-product-id" name="id" />
+
+          <div>
+            <label
+              for="edit-product-name"
+              class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+              >Product Name</label
+            >
+            <input
+              type="text"
+              id="edit-product-name"
+              name="name"
+              required
+              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm dark:bg-slate-700 dark:border-slate-600"
+            />
+          </div>
+          <div>
+            <label
+              for="edit-category"
+              class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+              >Category</label
+            >
+            <select
+              id="edit-category"
+              name="category"
+              required
+              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm dark:bg-slate-700 dark:border-slate-600"
+            >
+              <option value="furniture">Furniture</option>
+              <option value="electronics">Electronics</option>
+              <option value="education">Education</option>
+              <option value="cooler">Cooler</option>
+              <option value="home">Home</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div>
+            <label
+              for="edit-description"
+              class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+              >Description</label
+            >
+            <textarea
+              id="edit-description"
+              name="description"
+              rows="3"
+              required
+              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm dark:bg-slate-700 dark:border-slate-600"
+            ></textarea>
+          </div>
+          <div>
+            <label
+              for="edit-price"
+              class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+              >Price (₹)</label
+            >
+            <input
+              type="number"
+              id="edit-price"
+              name="price"
+              required
+              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm dark:bg-slate-700 dark:border-slate-600"
+            />
+          </div>
+          <div class="pt-4 flex justify-end gap-3">
+            <button
+              type="button"
+              class="close-modal px-4 py-2 bg-gray-200 text-gray-800 rounded-lg"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              class="px-4 py-2 bg-blue-600 text-white rounded-lg"
+            >
+              Save Changes
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div
+      id="confirm-modal"
+      class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4"
+    >
+      <div
+        class="bg-white dark:bg-slate-800 rounded-lg shadow-xl p-8 max-w-sm w-full text-center"
+      >
+        <h2 class="text-xl font-bold text-gray-900 dark:text-white">
+          Confirm Action
+        </h2>
+        <p id="confirm-message" class="my-4 text-gray-600 dark:text-gray-300">
+          Are you sure?
+        </p>
+        <div class="flex justify-center gap-4">
+          <button
+            id="confirm-cancel"
+            class="px-6 py-2 bg-gray-200 dark:bg-slate-700 rounded-lg"
+          >
+            Cancel
+          </button>
+          <button
+            id="confirm-proceed"
+            class="px-6 py-2 bg-red-600 text-white rounded-lg"
+          >
+            Proceed
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <footer
+      class="w-full bg-white dark:bg-slate-900 border-t border-gray-200 dark:border-slate-700 mt-auto"
+    >
+      <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+        <div
+          class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0"
+        >
+          <p class="text-sm text-gray-500 dark:text-gray-400">
+            &copy; 2025 Dorm Deals | All rights reserved.
+          </p>
+          <div class="flex space-x-6">
+            <a
+              href="mailto:prakharmishraa30@gmail.com"
+              class="text-sm text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+              >Contact</a
+            >
+            <a
+              href="https://github.com/prakharmi"
+              target="_blank"
+              class="text-sm text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+              >About Us</a
+            >
+            <a
+              href="https://github.com/prakharmi/Dormdeals"
+              target="_blank"
+              class="text-sm text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+              >GitHub</a
+            >
+          </div>
+        </div>
       </div>
     </footer>
 
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
-    <script src="userprofile.js"></script>
+    <script src="/User Profile/userprofile.js"></script>
+    <script>
+      // Dark Mode Logic
+      const themeMenuButton = document.getElementById("theme-menu-button");
+      if (themeMenuButton) {
+        const themeMenu = document.getElementById("theme-menu");
+        const applyTheme = (theme) => {
+          document.documentElement.classList.toggle("dark", theme === "dark");
+        };
+        const savedTheme = localStorage.getItem("theme");
+        if (savedTheme) {
+          applyTheme(savedTheme);
+        } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+          applyTheme("dark");
+        }
+        themeMenuButton.addEventListener("click", (e) => {
+          e.stopPropagation();
+          themeMenu.classList.toggle("hidden");
+        });
+        themeMenu.querySelectorAll("[data-theme]").forEach((el) =>
+          el.addEventListener("click", (e) => {
+            e.preventDefault();
+            const theme = e.target.getAttribute("data-theme");
+            if (theme === "system") {
+              localStorage.removeItem("theme");
+              applyTheme(
+                window.matchMedia("(prefers-color-scheme: dark)").matches
+                  ? "dark"
+                  : "light",
+              );
+            } else {
+              localStorage.setItem("theme", theme);
+              applyTheme(theme);
+            }
+          }),
+        );
+        window.addEventListener("click", () =>
+          themeMenu.classList.add("hidden"),
+        );
+      }
+    </script>
   </body>
 </html>

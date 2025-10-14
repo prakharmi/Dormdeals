@@ -1,124 +1,317 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Product Details - Dorm Deals</title>
-    <link rel="stylesheet" href="productpage.css" />
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
-    <script src="productpage.js" defer></script>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Inter", "sans-serif"],
+              serif: ["Lora", "serif"],
+            },
+          },
+        },
+      };
+    </script>
+
+    <style>
+      body {
+        background-color: #f8f9fa;
+        background-image: linear-gradient(
+            rgba(0, 0, 0, 0.05) 1px,
+            transparent 1px
+          ),
+          linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+        background-size: 20px 20px;
+      }
+      .dark body {
+        background-color: #0f172a;
+        background-image: linear-gradient(
+            rgba(255, 255, 255, 0.05) 1px,
+            transparent 1px
+          ),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+      }
+    </style>
   </head>
-  <body>
-    <header>
-      <div class="navbar-brand">
-        <a href="../Main Page/mainpage.html" style="display: flex; align-items: center; gap: 10px; text-decoration: none;">
-          <img src="dormdealslogo.png" alt="Logo" class="logo" />
-          <span class="navbar-text">DormDeals</span>
+  <body
+    class="bg-gray-50 dark:bg-slate-900 text-gray-800 dark:text-gray-200 antialiased flex flex-col min-h-screen"
+  >
+    <header
+      class="w-full px-4 sm:px-8 py-3 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border-b border-gray-200 dark:border-slate-700 sticky top-0 z-50"
+    >
+      <div class="max-w-7xl mx-auto flex items-center justify-between">
+        <a href="/" class="flex items-center space-x-2">
+          <img
+            src="/assets/images/dormdealslogo.png"
+            alt="DormDeals Logo"
+            class="h-7 w-7 sm:h-8 sm:w-8"
+          />
+          <span
+            class="font-bold text-lg sm:text-xl text-gray-900 dark:text-white"
+            >DormDeals</span
+          >
         </a>
+        <div class="flex items-center space-x-2">
+          <div
+            id="auth-container"
+            class="flex items-center justify-center"
+          ></div>
+          <div class="relative">
+            <button
+              type="button"
+              id="theme-menu-button"
+              class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-slate-700"
+            >
+              <svg
+                class="h-5 w-5 sm:h-6 sm:w-6 text-gray-600 dark:text-gray-400"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+                />
+              </svg>
+            </button>
+            <div
+              id="theme-menu"
+              class="hidden absolute right-0 mt-2 w-36 bg-white dark:bg-slate-800 rounded-md shadow-lg ring-1 ring-black dark:ring-white ring-opacity-5 py-1 z-10"
+            >
+              <a
+                href="#"
+                class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300"
+                data-theme="light"
+                >Light</a
+              >
+              <a
+                href="#"
+                class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300"
+                data-theme="dark"
+                >Dark</a
+              >
+              <a
+                href="#"
+                class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300"
+                data-theme="system"
+                >System</a
+              >
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="search-container">
-        <input
-          type="text"
-          class="search-bar"
-          placeholder="Search for products..."
-        />
-      </div>
-      <div id="google-signin-button"></div>
     </header>
 
-    <main class="product-container">
-      <div class="breadcrumb">
-        <a href="../Product%20Listing/productlisting.html">Home</a> &gt;
-        <span id="product-category">Category</span> &gt;
-        <span id="product-name-breadcrumb">Product Name</span>
-      </div>
-
-      <div class="product-details">
-        <div class="product-images">
-          <div class="main-image-container">
-            <img
-              id="main-product-image"
-              src="placeholder.jpg"
-              alt="Product Image"
-            />
-          </div>
-          <div class="thumbnail-container" id="thumbnail-container"></div>
-        </div>
-
-        <div class="product-info">
-          <h1 id="product-name">Product Name</h1>
-          <div class="product-meta">
-            <p class="product-price" id="product-price">Rs 0.00</p>
-            <p class="product-category-tag" id="product-category-tag">
-              Category
-            </p>
-          </div>
-
-          <div class="seller-info">
-            <p>College: <span id="product-college">College Name</span></p>
-          </div>
-
-          <div class="description-container">
-            <h2>Description</h2>
-            <p id="product-description">Loading product description...</p>
-          </div>
-
-          <div class="action-buttons">
-            <button class="contact-seller-btn">Contact Seller</button>
-            <button
-              class="back-btn"
-              onclick="window.location.href='../Product%20Listing/productlisting.html'"
+    <main class="w-full max-w-6xl mx-auto px-4 py-8 sm:py-12 flex-grow">
+      <div class="bg-white dark:bg-slate-800 p-4 sm:p-6 rounded-xl shadow-lg">
+        <div class="flex flex-col lg:flex-row gap-8">
+          <div class="lg:w-1/2">
+            <div
+              class="h-96 w-full bg-gray-100 dark:bg-slate-700 rounded-lg overflow-hidden mb-4"
             >
-              Back to Products
-            </button>
+              <img
+                id="main-product-image"
+                src="/assets/images/placeholder.jpg"
+                alt="Product Image"
+                class="w-full h-full object-contain"
+              />
+            </div>
+            <div
+              id="thumbnail-container"
+              class="flex items-center justify-center gap-2"
+            ></div>
+          </div>
+          <div class="lg:w-1/2 flex flex-col">
+            <div class="flex justify-between items-start mb-2">
+              <h1
+                id="product-name"
+                class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white truncate"
+              >
+                Loading...
+              </h1>
+              <span
+                id="product-category-tag"
+                class="flex-shrink-0 ml-4 px-3 py-1 bg-blue-100 text-blue-800 text-sm font-medium rounded-full dark:bg-blue-900 dark:text-blue-200"
+                >Category</span
+              >
+            </div>
+            <p
+              id="product-price"
+              class="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-4"
+            >
+              ₹--
+            </p>
+            <div
+              class="border-t border-gray-200 dark:border-slate-700 pt-4 mb-4"
+            >
+              <h2 class="text-sm font-medium text-gray-500 dark:text-gray-400">
+                SELLER INFORMATION
+              </h2>
+              <p class="mt-1 text-gray-800 dark:text-gray-200">
+                College: <span id="product-college">Loading...</span>
+              </p>
+              <p class="mt-1 text-gray-800 dark:text-gray-200">
+                Seller: <span id="product-seller">Loading...</span>
+              </p>
+            </div>
+            <div
+              class="border-t border-gray-200 dark:border-slate-700 pt-4 mb-6"
+            >
+              <h2 class="text-sm font-medium text-gray-500 dark:text-gray-400">
+                DESCRIPTION
+              </h2>
+              <p
+                id="product-description"
+                class="mt-2 text-gray-600 dark:text-gray-300 whitespace-pre-wrap max-h-32 overflow-y-auto break-words"
+              >
+                Loading description...
+              </p>
+            </div>
+            <div class="mt-auto flex flex-col sm:flex-row gap-4">
+              <button
+                id="contact-seller-btn"
+                class="w-full px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md transition-colors"
+              >
+                Contact Seller
+              </button>
+              <button
+                id="back-to-products-btn"
+                class="w-full px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-800 font-semibold rounded-lg border border-gray-300 dark:bg-slate-700 dark:hover:bg-slate-600 dark:text-gray-200 dark:border-slate-600 transition-colors"
+              >
+                Back to Products
+              </button>
+            </div>
           </div>
         </div>
       </div>
-
-      <div class="similar-products">
-        <h2>Similar Products</h2>
+      <div id="similar-products-section" class="mt-12">
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">
+          Similar Products
+        </h2>
         <div
-          class="similar-products-grid"
-          id="similar-products-container"
+          id="similar-products-grid"
+          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
         ></div>
       </div>
     </main>
-    <footer>
-      <div class="footer-content">
-        <div class="footer-column">
-          <h3>Information</h3>
-          <ul>
-            <li><a href="#">FAQ</a></li>
-            <li><a href="#">Terms and Conditions</a></li>
-            <li><a href="#">Privacy Policy</a></li>
-          </ul>
-        </div>
 
-        <div class="footer-column">
-          <h3>Company</h3>
-          <ul>
-            <li><a href="mailto:prakharmishraa30@gmail.com">Contact Us</a></li>
-            <li><a href="https://github.com/prakharmi">About Us</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-column">
-          <h3>Socials</h3>
-          <ul>
-            <li>
-              <a href="https://www.linkedin.com/in/prakhar-mishraa">LinkedIn</a>
-            </li>
-            <li>
-              <a href="https://www.instagram.com/prakharmishraaaa">Instagram</a>
-            </li>
-            <li><a href="https://github.com/prakharmi/Dormdeals">Github</a></li>
-          </ul>
-        </div>
+    <div
+      id="login-modal"
+      class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4"
+    >
+      <div
+        class="bg-white dark:bg-slate-800 rounded-lg shadow-xl p-8 max-w-sm w-full text-center"
+      >
+        <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-2">
+          Login Required
+        </h2>
+        <p class="text-gray-600 dark:text-gray-300 mb-6">
+          You need to be logged in to contact the seller.
+        </p>
+        <a
+          href="/api/auth/google"
+          class="w-full block px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md transition-colors mb-2"
+          >Login with Google</a
+        >
+        <button
+          id="close-modal-btn"
+          class="text-sm text-gray-500 hover:underline"
+        >
+          Cancel
+        </button>
       </div>
-      
-      <div class="copyright">
-        <p>© 2025 Dorm Deals | All rights reserved.</p>
+    </div>
+
+    <footer
+      class="w-full bg-white dark:bg-slate-900 border-t border-gray-200 dark:border-slate-700 mt-auto"
+    >
+      <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+        <div
+          class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0"
+        >
+          <p class="text-sm text-gray-500 dark:text-gray-400">
+            &copy; 2025 Dorm Deals | All rights reserved.
+          </p>
+          <div class="flex space-x-6">
+            <a
+              href="mailto:prakharmishraa30@gmail.com"
+              class="text-sm text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+              >Contact</a
+            >
+            <a
+              href="https://github.com/prakharmi"
+              target="_blank"
+              class="text-sm text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+              >About Us</a
+            >
+            <a
+              href="https://github.com/prakharmi/Dormdeals"
+              target="_blank"
+              class="text-sm text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+              >GitHub</a
+            >
+          </div>
+        </div>
       </div>
     </footer>
+
+    <script src="/Product Page/productpage.js"></script>
+    <script>
+      // Dark Mode Logic
+      const themeMenuButton = document.getElementById("theme-menu-button");
+      if (themeMenuButton) {
+        const themeMenu = document.getElementById("theme-menu");
+        const applyTheme = (theme) => {
+          document.documentElement.classList.toggle("dark", theme === "dark");
+        };
+        const savedTheme = localStorage.getItem("theme");
+        if (savedTheme) {
+          applyTheme(savedTheme);
+        } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+          applyTheme("dark");
+        }
+        themeMenuButton.addEventListener("click", (e) => {
+          e.stopPropagation();
+          themeMenu.classList.toggle("hidden");
+        });
+        themeMenu.querySelectorAll("[data-theme]").forEach((el) =>
+          el.addEventListener("click", (e) => {
+            e.preventDefault();
+            const theme = e.target.getAttribute("data-theme");
+            if (theme === "system") {
+              localStorage.removeItem("theme");
+              applyTheme(
+                window.matchMedia("(prefers-color-scheme: dark)").matches
+                  ? "dark"
+                  : "light",
+              );
+            } else {
+              localStorage.setItem("theme", theme);
+              applyTheme(theme);
+            }
+          }),
+        );
+        window.addEventListener("click", () =>
+          themeMenu.classList.add("hidden"),
+        );
+      }
+    </script>
   </body>
 </html>

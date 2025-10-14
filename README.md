@@ -5,6 +5,7 @@ A modern marketplace platform designed specifically for college students to buy 
 ## 🌟 Features
 
 ### Core Functionality
+
 - **College-Specific Marketplace**: Students can only view and interact with listings from their own college
 - **User Authentication**: Secure Google OAuth integration for seamless login
 - **Product Management**: Full CRUD operations for product listings
@@ -13,6 +14,7 @@ A modern marketplace platform designed specifically for college students to buy 
 - **User Profiles**: Manage personal information and view listing history
 
 ### User Experience
+
 - **Responsive Design**: Mobile-friendly interface
 - **Intuitive Navigation**: Clean, modern UI with easy-to-use controls
 - **Seller Information**: Direct access to seller contact details
@@ -27,6 +29,7 @@ A modern marketplace platform designed specifically for college students to buy 
 ## 🛠️ Tech Stack
 
 ### Backend
+
 - **Node.js** - Runtime environment
 - **Express.js** - Web framework
 - **MySQL** - Database
@@ -35,12 +38,14 @@ A modern marketplace platform designed specifically for college students to buy 
 - **Multer** - File upload handling
 
 ### Frontend
+
 - **HTML5** - Structure
 - **CSS3** - Styling
 - **JavaScript** - Client-side functionality
 - **Google Sign-In API** - Authentication
 
 ### DevOps & Deployment
+
 - **Render** - Cloud hosting platform
 - **Environment Variables** - Configuration management
 
@@ -86,23 +91,27 @@ dormdeals/
 ## 🔧 Installation & Setup
 
 ### Prerequisites
+
 - Node.js (v16 or higher)
 - MySQL database
 - Cloudinary account
 - Google OAuth credentials
 
 ### 1. Clone the Repository
+
 ```bash
 git clone https://github.com/prakharmishra/dormdeals.git
 cd dormdeals
 ```
 
 ### 2. Install Dependencies
+
 ```bash
 npm install
 ```
 
 ### 3. Environment Configuration
+
 Create a `.env` file in the root directory:
 
 ```env
@@ -125,6 +134,7 @@ UPLOAD_PATH=uploads
 ```
 
 ### 4. Database Setup
+
 Create the required MySQL tables:
 
 ```sql
@@ -163,6 +173,7 @@ CREATE TABLE product_images (
 ```
 
 ### 5. Start the Application
+
 ```bash
 # Development mode
 npm run dev
@@ -176,16 +187,19 @@ The application will be available at `http://localhost:5000`
 ## 📚 API Documentation
 
 ### Authentication
+
 - `GET /check-user/:email` - Check if user exists
 - `POST /submit-form` - Create new user
 - `GET /user/:email` - Get user details
 
 ### Products
+
 - `GET /products?college=:college&category=:category` - Get products by college
 - `GET /product/:id` - Get specific product details
 - `POST /submit-product` - Create new product listing
 
 ### User Products
+
 - `GET /user-products?email=:email` - Get user's products
 - `PUT /product/:id` - Update product details
 - `PUT /product/:id/status` - Toggle product sold status
@@ -216,10 +230,10 @@ The application will be available at `http://localhost:5000`
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-
 ## 👨‍💻 Author
 
 **Prakhar Mishra**
+
 - LinkedIn: [prakhar-mishraa](https://www.linkedin.com/in/prakhar-mishraa)
 - Instagram: [prakharmishraaaa](https://www.instagram.com/prakharmishraaaa)
 - GitHub: [prakharmi](https://github.com/prakharmi)

@@ -1,79 +1,80 @@
 const ProductService = require("../services/productService");
 
 class ProductController {
+  // Creates a new product listing. Requires user to be authenticated.
   static async submitProduct(req, res) {
     try {
-      const productData = req.body;
-      const files = req.files;
-  
-      // Make sure the user's email is included
-      if (!productData.email) {
-        return res.status(400).json({ error: "User email is required" });
+      const { email, college } = req.user;
+
+      if (!email || !college) {
+        return res
+          .status(400)
+          .json({
+            message:
+              "User information is incomplete. Please complete your profile.",
+          });
       }
 
-      // Validate email domain
-      if (!productData.email.endsWith("@iiitsurat.ac.in")) {
-        return res.status(403).json({ 
-          error: "Only users with @iiitsurat.ac.in email addresses can add products" 
-        });
-      }
-  
-      console.log("Creating product with email:", productData.email);
-      
-      // Pass the email directly to ensure it's used correctly
+      const productData = {
+        ...req.body, // Contains productName, category, description, price
+        email, // Add email from session
+        college, // Add college from session
+      };
+
+      const files = req.files; // Files are now in memory buffers
+
+      // The productService will now handle the buffers for direct Cloudinary upload
       await ProductService.createProduct(productData, files);
-      return res.status(200).json({ message: "Product added successfully" });
+
+      res.status(201).json({ message: "Product added successfully!" });
     } catch (error) {
       console.error("Error creating product:", error);
-      return res.status(error.message.includes("required") ? 400 : 500).json({
-        message: error.message || "Database error",
-      });
+      // Check if it's a validation error from the service
+      if (error.message.includes("required")) {
+        return res.status(400).json({ message: error.message });
+      }
+      res
+        .status(500)
+        .json({ message: "An error occurred while creating the product." });
     }
   }
 
+  // Fetches all non-sold products for a given college.
   static async getProducts(req, res) {
     try {
       const { college, category } = req.query;
 
       if (!college) {
-        return res.status(400).json({ error: "College is required" });
+        return res
+          .status(400)
+          .json({ error: "College is a required query parameter." });
       }
 
       const products = await ProductService.getProductsByCollege(
         college,
         category,
       );
-      return res.json(products);
+      res.status(200).json(products);
     } catch (error) {
       console.error("Error fetching products:", error);
-      return res.status(500).json({
-        error: "Internal Server Error",
-        details: error.message,
-      });
+      res.status(500).json({ message: "Internal Server Error" });
     }
   }
 
+  // Fetches a single product by its ID. Publicly accessible.
   static async getProductById(req, res) {
     try {
-      const productId = req.params.id;
-
-      if (!productId) {
-        return res.status(400).json({ error: "Product ID is required" });
-      }
-
-      const product = await ProductService.getProductById(productId);
+      const { id } = req.params;
+      const product = await ProductService.getProductById(id);
 
       if (!product) {
-        return res.status(404).json({ error: "Product not found" });
+        return res.status(404).json({ message: "Product not found." });
       }
 
-      return res.json(product);
+      res.status(200).json(product);
     } catch (error) {
-      console.error("Error fetching product:", error);
-      return res.status(500).json({
-        error: "Internal Server Error",
-        details: error.message,
-      });
+      console.error("Error fetching product by ID:", error);
+      res.status(500).json({ message: "Internal Server Error" });
     }
   }
 }

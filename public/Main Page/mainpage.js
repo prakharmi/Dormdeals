@@ -1,94 +1,73 @@
-function handleCredentialResponse(response) {
-  console.log("Encoded JWT ID token: " + response.credential);
+document.addEventListener("DOMContentLoaded", () => {
+  const params = new URLSearchParams(window.location.search);
+  const error = params.get("error");
+  if (error) {
+    alert(error); // Display the error message from the URL in an alert
+    // Clean the URL to remove the error message
+    window.history.replaceState({}, document.title, "/");
+  }
+  const authContainer = document.getElementById("auth-container");
+  const seeResultsButton = document.getElementById("see-results-btn");
+  const collegeSelect = document.getElementById("college");
 
-  const payload = JSON.parse(atob(response.credential.split(".")[1]));
-  console.log("User Info:", payload);
-
-  localStorage.setItem("userToken", response.credential);
-  localStorage.setItem("userEmail", payload.email);
-  localStorage.setItem("userName", payload.name);
-
-  const API_BASE_URL = 'https://dormdeals-backend.onrender.com';
-
-  fetch(`${API_BASE_URL}/check-user/${encodeURIComponent(payload.email)}`)
-    .then((response) => response.json())
+  // 1. Check user's login status from our backend
+  fetch("/api/users/status")
+    .then((res) => res.json())
     .then((data) => {
-      if (data.exists) {
-        localStorage.setItem("userCollege", data.user.college);
-        window.location.href = "../Product Listing/productlisting.html";
+      if (data.isAuthenticated) {
+        // If user is logged in, show a profile button and a logout link
+        authContainer.innerHTML = `
+          <div class="relative">
+            <button id="profile-menu-button" type="button" class="flex items-center rounded-full focus:outline-none">
+              <img class="h-8 w-8 rounded-full object-cover" src="${data.user.picture}" alt="User profile">
+            </button>
+            <div id="profile-menu" class="hidden absolute right-0 mt-2 w-48 bg-white dark:bg-slate-800 rounded-md shadow-lg ring-1 ring-black dark:ring-white ring-opacity-5 py-1 z-20">
+              <a href="/profile" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700">My Profile</a>
+              <a href="/api/users/logout" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700">Logout</a>
+            </div>
+          </div>
+        `;
+
+        // Add event listener for the new profile menu
+        const profileMenuButton = document.getElementById(
+          "profile-menu-button",
+        );
+        const profileMenu = document.getElementById("profile-menu");
+        if (profileMenuButton) {
+          profileMenuButton.addEventListener("click", (e) => {
+            e.stopPropagation();
+            profileMenu.classList.toggle("hidden");
+          });
+          window.addEventListener("click", () =>
+            profileMenu.classList.add("hidden"),
+          );
+        }
       } else {
-        window.location.href = "../User Info/userinfo.html";
+        // If user is not logged in, show a Google Sign-In button
+        authContainer.innerHTML = `
+          <a href="/api/auth/google" class="px-4 py-2 text-sm font-medium text-white bg-gray-800 rounded-md hover:bg-gray-900 dark:bg-blue-600 dark:hover:bg-blue-700">
+            Login with Google
+          </a>
+        `;
       }
     })
     .catch((error) => {
-      console.error("Error checking user:", error);
-      window.location.href = "../User Info/userinfo.html";
+      console.error("Error fetching auth status:", error);
+      authContainer.innerHTML = `<p class="text-sm text-red-500">Session Error</p>`;
     });
-}
 
-function checkUserAuthStatus() {
-  const userToken = localStorage.getItem("userToken");
-
-  if (userToken) {
-    const userCollege = localStorage.getItem("userCollege");
-    if (userCollege) {
-      window.location.href = "../Product Listing/productlisting.html";
-    } else {
-      window.location.href = "../User Info/userinfo.html";
-    }
-    return true;
-  }
-  return false;
-}
-
-function initializeGoogleSignIn() {
-  if (checkUserAuthStatus()) {
-    return;
-  }
-  
-  if (typeof google === 'undefined' || typeof google.accounts === 'undefined') {
-      setTimeout(initializeGoogleSignIn, 100);
-      return;
-  }
-
-  google.accounts.id.initialize({
-    client_id:
-      "866863334708-6o7pat7hkajrhve0s50tv1cpks0fnvbu.apps.googleusercontent.com",
-    callback: handleCredentialResponse,
-  });
-
-  const signInButton = document.getElementById("google-signin-button");
-  if (signInButton) {
-    google.accounts.id.renderButton(signInButton, {
-      theme: "outline",
-      // Changed to 'medium' for a good balance on all screen sizes
-      size: "medium", 
-    });
-    google.accounts.id.prompt();
-  } else {
-      // If the user is logged in, show their profile button
-      const authContainer = document.getElementById("auth-container");
-      if(authContainer) {
-          authContainer.innerHTML = `<a href="../User Profile/userprofile.html" class="px-3 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 dark:bg-slate-700 dark:text-gray-200 dark:hover:bg-slate-600">My Profile</a>`;
-      }
-  }
-}
-
-window.onload = () => {
-  initializeGoogleSignIn();
-  
-  const collegeSelect = document.querySelector("#college");
-  const seeResultsButton = document.querySelector("#see-results-btn");
-
+  // 2. Handle the "See Results" button click
   if (seeResultsButton) {
-      seeResultsButton.addEventListener("click", () => {
-        const selectedCollege = collegeSelect.value;
-        if (!selectedCollege) {
-          alert("Please select a college first!");
-          return;
-        }
-        localStorage.setItem("userCollege", selectedCollege);
-        window.location.href = `../Product Listing/productlisting.html?college=${encodeURIComponent(selectedCollege)}`;
-      });
+    seeResultsButton.addEventListener("click", () => {
+      const selectedCollege = collegeSelect.value;
+      if (!selectedCollege) {
+        alert("Please select a college first!");
+        return;
+      }
+      // Navigate to the products page using a URL query parameter
+      window.location.href = `/products?college=${encodeURIComponent(
+        selectedCollege,
+      )}`;
+    });
   }
-};
+});

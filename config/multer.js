@@ -1,25 +1,22 @@
 const multer = require("multer");
 const path = require("path");
-require("dotenv").config();
+const storage = multer.memoryStorage();
 
-// Configure temporary storage
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'tmp/uploads'); // Store temporarily before uploading to Cloudinary
-  },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(null, uniqueSuffix + path.extname(file.originalname));
-  },
-});
-
-// File filter function
 const fileFilter = (req, file, cb) => {
-  // Accept images only
-  if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
-    return cb(new Error("Only image files are allowed!"), false);
+  // Define the allowed file extensions
+  const allowedFileTypes = /jpeg|jpg|png|gif/;
+  // Check if the file's mimetype and originalname match the allowed types
+  const mimetype = allowedFileTypes.test(file.mimetype);
+  const extname = allowedFileTypes.test(
+    path.extname(file.originalname).toLowerCase(),
+  );
+
+  if (mimetype && extname) {
+    // If the file type is valid, allow the upload
+    return cb(null, true);
   }
-  cb(null, true);
+  // If the file type is invalid, reject the file
+  cb(new Error("File type not supported. Please upload an image."), false);
 };
 
 // Create multer upload instance

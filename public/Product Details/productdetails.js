@@ -1,57 +1,66 @@
-const API_BASE_URL = 'https://dormdeals-backend.onrender.com';
-
 document.addEventListener("DOMContentLoaded", () => {
+  const productForm = document.getElementById("product-form");
   const fileInput = document.getElementById("photos");
   const previewContainer = document.getElementById("image-preview");
   const fileLimitMessage = document.getElementById("file-limit-message");
-  const productForm = document.getElementById("product-form");
+  const submitButton = document.getElementById("submit-button");
+  const authContainer = document.getElementById("auth-container");
 
-  fileInput.addEventListener("change", function () {
-    const files = fileInput.files;
-    if (files.length + previewContainer.childElementCount > 10) {
-      fileInput.value = "";
+  let userCollege = null;
+
+  // 1. Check user authentication status and get their college
+  fetch("/api/users/status")
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.isAuthenticated) {
+        userCollege = data.user.college;
+        authContainer.innerHTML = `
+          <a href="/profile" class="flex items-center rounded-full">
+            <img class="h-8 w-8 rounded-full object-cover" src="${data.user.picture}" alt="User profile">
+          </a>
+        `;
+      } else {
+        alert("You must be logged in to add a product.");
+        window.location.href = "/";
+      }
+    })
+    .catch((error) => {
+      console.error("Authentication check failed:", error);
+      alert("Session error. Please try logging in again.");
+      window.location.href = "/";
+    });
+
+  // 2. Handle image previews
+  fileInput.addEventListener("change", () => {
+    previewContainer.innerHTML = "";
+    const files = Array.from(fileInput.files);
+    if (files.length > 10) {
       fileLimitMessage.style.display = "block";
+      fileInput.value = "";
       return;
-    } else {
-      fileLimitMessage.style.display = "none";
     }
-
-    Array.from(files).forEach((file) => {
+    fileLimitMessage.style.display = "none";
+    files.forEach((file) => {
       const reader = new FileReader();
       reader.onload = (e) => {
-        addImage(e.target.result);
+        const img = document.createElement("img");
+        img.src = e.target.result;
+        img.className = "w-full h-20 object-cover rounded-md";
+        previewContainer.appendChild(img);
       };
       reader.readAsDataURL(file);
     });
   });
 
-  productForm.addEventListener("submit", async function (event) {
+  // 3. Handle form submission
+  productForm.addEventListener("submit", async (event) => {
     event.preventDefault();
-
-    if (!validateForm()) return;
-
-    const formData = new FormData(this);
-
-    const college = localStorage.getItem("userCollege");
-    const email = localStorage.getItem("userEmail"); 
-
-    if (!college) {
-      alert(
-        "College information is missing. Please select your college again.",
-      );
-      return;
-    }
-  
-    if (!email) {
-      alert("User email is missing. Please login again.");
-      return;
-    }
-
-    formData.append("college", college);
-    formData.append("email", email);
+    submitButton.disabled = true;
+    submitButton.textContent = "Submitting...";
+    const formData = new FormData(productForm);
 
     try {
-      const response = await fetch(`${API_BASE_URL}/submit-product`, {
+      const response = await fetch("/api/submit-product", {
         method: "POST",
         body: formData,
       });
@@ -60,67 +69,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (response.ok) {
         alert("Product added successfully!");
-        productForm.reset();
-        previewContainer.innerHTML = "";
-        window.location.href = "../Product%20Listing/productlisting.html";
+        if (userCollege) {
+          window.location.href = `/products?college=${encodeURIComponent(userCollege)}`;
+        } else {
+          window.location.href = "/products"; // Fallback just in case
+        }
       } else {
-        alert("Error: " + result.message);
+        throw new Error(result.message || "Failed to add product.");
       }
     } catch (error) {
       console.error("Error submitting product:", error);
-      alert("An error occurred. Please try again.");
+      alert(`Error: ${error.message}`);
+      submitButton.disabled = false;
+      submitButton.textContent = "Add Product";
     }
   });
 });
-
-function addImage(src) {
-  const previewContainer = document.getElementById("image-preview");
-
-  if (previewContainer.childElementCount >= 10) {
-    alert("Maximum of 10 images allowed.");
-    return;
-  }
-
-  const imageWrapper = document.createElement("div");
-  imageWrapper.classList.add("image-wrapper");
-
-  const img = document.createElement("img");
-  img.src = src;
-  img.classList.add("preview-image");
-  img.style.width = "100px";
-  img.style.margin = "5px";
-
-  const deleteButton = document.createElement("button");
-  deleteButton.textContent = "X";
-  deleteButton.style.backgroundColor = "#ff4d4d";
-  deleteButton.classList.add("delete-button");
-  deleteButton.onclick = () => {
-    imageWrapper.remove();
-    document.getElementById("file-limit-message").style.display = "none";
-  };
-
-  imageWrapper.appendChild(img);
-  imageWrapper.appendChild(deleteButton);
-  previewContainer.appendChild(imageWrapper);
-}
-
-function validateForm() {
-  const productName = document.getElementById("productName").value.trim();
-  const category = document.getElementById("category").value;
-  const description = document.getElementById("description").value.trim();
-  const price = document.getElementById("price").value.trim();
-  const imagePreview =
-    document.getElementById("image-preview").childElementCount;
-
-  if (
-    !productName ||
-    !category ||
-    !description ||
-    !price ||
-    imagePreview === 0
-  ) {
-    alert("Please fill in all required fields and upload at least one image.");
-    return false;
-  }
-  return true;
-}
