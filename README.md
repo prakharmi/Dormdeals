@@ -1,153 +1,105 @@
 # DormDeals 🏠
 
-A modern marketplace platform designed specifically for college students to buy and sell items within their campus community. Built with Node.js, Express, and MySQL, featuring Google OAuth authentication and Cloudinary integration for image management.
+A modern marketplace for college students to buy and sell items on campus. Built with Node.js, Express, and MySQL, now featuring a secure Passport.js Google OAuth flow and direct-to-Cloudinary image uploads.
 
-## 🌟 Features
-
-### Core Functionality
-
-- **College-Specific Marketplace**: Students can only view and interact with listings from their own college
-- **User Authentication**: Secure Google OAuth integration for seamless login
-- **Product Management**: Full CRUD operations for product listings
-- **Image Upload**: Multiple image support with Cloudinary integration
-- **Real-time Filtering**: Filter products by category and college
-- **User Profiles**: Manage personal information and view listing history
-
-### User Experience
-
-- **Responsive Design**: Mobile-friendly interface
-- **Intuitive Navigation**: Clean, modern UI with easy-to-use controls
-- **Seller Information**: Direct access to seller contact details
-- **Product Status**: Mark items as sold/available
-- **Search & Filter**: Find products by category and college
-
-## 🚀 Live Demo
-
-- **Frontend**: [https://dormdeals.onrender.com](https://dormdeals.onrender.com)
-- **Backend API**: [https://dormdeals-backend.onrender.com](https://dormdeals-backend.onrender.com)
+---
 
 ## 🛠️ Tech Stack
 
 ### Backend
-
-- **Node.js** - Runtime environment
-- **Express.js** - Web framework
-- **MySQL** - Database
-- **Cloudinary** - Image storage and management
-- **Google OAuth** - Authentication
-- **Multer** - File upload handling
+- **Node.js** & **Express.js**
+- **MySQL**
+- **Passport.js** (for Google OAuth 2.0)
+- **Cloudinary** (for image storage)
+- **Multer** (for handling uploads in memory)
+- **Express Session** (for session management)
 
 ### Frontend
+- **HTML5**
+- **Tailwind CSS** (via CDN)
+- **JavaScript**
 
-- **HTML5** - Structure
-- **CSS3** - Styling
-- **JavaScript** - Client-side functionality
-- **Google Sign-In API** - Authentication
-
-### DevOps & Deployment
-
-- **Render** - Cloud hosting platform
-- **Environment Variables** - Configuration management
+---
 
 ## 📁 Project Structure
-
 ```
 dormdeals/
-├── config/                 # Configuration files
-│   ├── cloudinary.js       # Cloudinary setup
-│   ├── database.js         # MySQL connection
-│   └── multer.js           # File upload configuration
-├── controllers/            # Request handlers
+├── config/
+│   ├── cloudinary.js
+│   ├── database.js
+│   ├── multer.js
+│   └── passport.js
+├── controllers/
 │   ├── productController.js
 │   ├── userController.js
 │   └── userProductController.js
-├── models/                 # Data models
+├── middleware/
+│   ├── authMiddleware.js
+│   ├── errorHandler.js
+│   └── redirectMiddleware.js
+├── models/
 │   ├── product.js
 │   ├── productimage.js
 │   └── user.js
-├── routes/                 # API routes
-│   ├── productRoutes.js
-│   ├── userRoutes.js
-│   └── userProductRoutes.js
-├── services/               # Business logic
-│   ├── productService.js
-│   └── userService.js
-├── middleware/             # Custom middleware
-│   └── errorHandler.js
-├── public/                 # Static files
+├── public/
+│   ├── assets/
 │   ├── Main Page/
-│   ├── Product Detials/
-│   ├── Product Listing/
-│   ├── Product Page/
-│   ├── User Info/
-│   ├── USer Profile/
-│   └── index.html
-├── tmp/                    # Temporary file storage
-├── app.js                  # Express app configuration
-├── index.js                # Server entry point
+│   └── ... (other pages)
+├── routes/
+│   ├── productRoutes.js
+│   ├── userProductRoutes.js
+│   └── userRoutes.js
+├── services/
+│   ├── productService.js
+│   └── userProductService.js
+├── app.js
+├── index.js
 └── package.json
 ```
 
-## 🔧 Installation & Setup
+---
 
-### Prerequisites
+## 🔧 Setup
 
-- Node.js (v16 or higher)
-- MySQL database
-- Cloudinary account
-- Google OAuth credentials
-
-### 1. Clone the Repository
-
-```bash
-git clone https://github.com/prakharmishra/dormdeals.git
-cd dormdeals
-```
-
-### 2. Install Dependencies
-
-```bash
-npm install
-```
-
-### 3. Environment Configuration
-
-Create a `.env` file in the root directory:
+### 1. Environment Variables
+Create a `.env` file in the root directory.
 
 ```env
-# Database Configuration
+# Server
+PORT=8080
+NODE_ENV=development
+SESSION_SECRET=your_super_secret_key
+
+# Database
 DB_HOST=your_mysql_host
 DB_USER=your_mysql_user
 DB_PASSWORD=your_mysql_password
 DB_NAME=dormdeals
 
-# Cloudinary Configuration
-CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
-CLOUDINARY_API_KEY=your_cloudinary_api_key
-CLOUDINARY_API_SECRET=your_cloudinary_api_secret
+# Google OAuth
+GOOGLE_CLIENT_ID=your_google_client_id
+GOOGLE_CLIENT_SECRET=your_google_client_secret
 
-# Server Configuration
-PORT=5000
-NODE_ENV=development
-CORS_ORIGIN=http://localhost:5000
-UPLOAD_PATH=uploads
+# Cloudinary
+CLOUDINARY_CLOUD_NAME=your_cloudinary_name
+CLOUDINARY_API_KEY=your_cloudinary_key
+CLOUDINARY_API_SECRET=your_cloudinary_secret
 ```
 
-### 4. Database Setup
-
-Create the required MySQL tables:
+### 2. Database Schema
 
 ```sql
--- Users table
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    college VARCHAR(255) NOT NULL,
-    mobile_number VARCHAR(15) NOT NULL,
+    college VARCHAR(255) NULL,
+    mobile_number VARCHAR(15) NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
+    googleId VARCHAR(255) UNIQUE NULL,
+    picture VARCHAR(500) NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
+```
 -- Products table
 CREATE TABLE products (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -172,38 +124,40 @@ CREATE TABLE product_images (
 );
 ```
 
-### 5. Start the Application
-
+### 3. Run the App
 ```bash
-# Development mode
+# Install dependencies
+npm install
+
+# Run for development
 npm run dev
-
-# Production mode
-npm start
 ```
+The app will be available at `http://localhost:8080`.
 
-The application will be available at `http://localhost:5000`
+---
 
-## 📚 API Documentation
+## 📚 API Routes
+All API routes are prefixed with `/api`.
 
-### Authentication
+### Auth
+- `GET /auth/google` - Initiates Google login.
+- `GET /auth/google/callback` - Callback URL for Google.
+- `GET /users/logout` - Logs the user out.
+- `GET /users/status` - Checks if a user is currently logged in.
 
-- `GET /check-user/:email` - Check if user exists
-- `POST /submit-form` - Create new user
-- `GET /user/:email` - Get user details
+### User
+- `POST /users/register` - Finishes registration for a new user.
 
 ### Products
+- `GET /products` - Get products by college.
+- `GET /product/:id` - Get a single product.
+- `POST /submit-product` - **(Protected)** Create a new product.
 
-- `GET /products?college=:college&category=:category` - Get products by college
-- `GET /product/:id` - Get specific product details
-- `POST /submit-product` - Create new product listing
-
-### User Products
-
-- `GET /user-products?email=:email` - Get user's products
-- `PUT /product/:id` - Update product details
-- `PUT /product/:id/status` - Toggle product sold status
-- `DELETE /product/:id` - Delete product
+### User's Products
+- `GET /user-products` - **(Protected)** Get the logged-in user's products.
+- `PUT /product/:id` - **(Protected)** Update one of your products.
+- `DELETE /product/:id` - **(Protected)** Delete one of your products.
+- `PUT /product/:id/status` - **(Protected)** Mark a product as sold/available.
 
 ## 🎯 Supported Colleges
 
@@ -213,15 +167,6 @@ The application will be available at `http://localhost:5000`
 - IIIT Nagpur
 - IIIT Vadodara
 
-## 🔒 Security Features
-
-- Google OAuth authentication
-- Input validation and sanitization
-- File type and size restrictions
-- CORS configuration
-- Environment variable protection
-- SQL injection prevention
-
 ## 🤝 Contributing
 
 1. Fork the repository
@@ -230,20 +175,13 @@ The application will be available at `http://localhost:5000`
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
+
 ## 👨‍💻 Author
 
 **Prakhar Mishra**
-
 - LinkedIn: [prakhar-mishraa](https://www.linkedin.com/in/prakhar-mishraa)
 - Instagram: [prakharmishraaaa](https://www.instagram.com/prakharmishraaaa)
 - GitHub: [prakharmi](https://github.com/prakharmi)
-
-## 🙏 Acknowledgments
-
-- Google OAuth for authentication services
-- Cloudinary for image management
-- Render for hosting services
-- MySQL for database management
 
 ## 📞 Support
 
