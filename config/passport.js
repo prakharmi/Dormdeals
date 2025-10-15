@@ -5,10 +5,10 @@ require("dotenv").config();
 
 // (The callbackURL and ALLOWED_DOMAINS constants remain the same)
 // Determine the callback URL based on the environment
+
 const callbackURL =
   process.env.NODE_ENV === "production"
-    ? // Use the base URL for production and append the same path as development
-      `https://dormdeals-backend.onrender.com/api/auth/google/callback`
+    ? `${process.env.BACKEND_URL_PROD}/api/auth/google/callback` // Use the environment variable
     : `http://localhost:8080/api/auth/google/callback`;
 
 const ALLOWED_DOMAINS = [
