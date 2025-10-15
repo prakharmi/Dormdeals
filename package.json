@@ -19,6 +19,9 @@
   ],
   "author": "Prakhar Mishra",
   "license": "ISC",
+  "overrides": {
+    "iconv-lite": "0.6.3"
+  },
   "dependencies": {
     "cloudinary": "^2.7.0",
     "cors": "^2.8.5",
