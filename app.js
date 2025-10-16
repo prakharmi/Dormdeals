@@ -52,6 +52,10 @@ app.use("/api", userRoutes);
 app.use("/api", productRoutes);
 app.use("/api", userProductRoutes);
 
+app.get('/pleasedontsleep', (req, res) => {
+  res.status(200).send('OK');
+});
+
 // Root URL serves the main page
 app.get("/", redirectToProductsIfLoggedIn, (req, res) => {
   res.sendFile(path.join(__dirname, "public", "Main Page", "mainpage.html"));
