@@ -14,8 +14,8 @@ const callbackURL =
 const ALLOWED_DOMAINS = [
   "iiitsurat.ac.in",
   "iiitbhopal.ac.in",
-  "iiitpune.ac.in",
-  "iiitnagpur.ac.in",
+  "iiitp.ac.in",
+  "iiitn.ac.in",
   "iiitvadodara.ac.in",
 ];
 
