@@ -1,4 +1,6 @@
 const mysql = require("mysql2");
+const fs = require("fs");
+const path = require("path");
 require("dotenv").config();
 
 // Create connection pool
@@ -10,6 +12,10 @@ const pool = mysql.createPool({
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
+  ssl: {
+      ca: fs.readFileSync(path.join(__dirname, "ca.pem")),
+      rejectUnauthorized: true,
+    },
 });
 
 // Convert pool to use promises
