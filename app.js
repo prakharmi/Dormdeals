@@ -44,6 +44,10 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.get('/pleasedontsleep', (req, res) => {
+  res.status(200).send('OK');
+});
+
 // Serve static files (CSS, JS, images) from the "public" directory
 app.use(express.static(path.join(__dirname, "public")));
 
@@ -52,9 +56,6 @@ app.use("/api", userRoutes);
 app.use("/api", productRoutes);
 app.use("/api", userProductRoutes);
 
-app.get('/pleasedontsleep', (req, res) => {
-  res.status(200).send('OK');
-});
 
 // Root URL serves the main page
 app.get("/", redirectToProductsIfLoggedIn, (req, res) => {
